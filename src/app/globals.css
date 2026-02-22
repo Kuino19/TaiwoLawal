@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-cormorant);
+  --color-gold-50: #fffbeb;
+  --color-gold-100: #fef3c7;
+  --color-gold-200: #fde68a;
+  --color-gold-300: #fcd34d;
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b;
+  --color-gold-600: #d97706;
+  --color-gold-700: #b45309;
+  --color-gold-800: #92400e;
+  --color-gold-900: #78350f;
+  --color-royal-50: #f5f3ff;
+  --color-royal-100: #ede9fe;
+  --color-royal-200: #ddd6fe;
+  --color-royal-300: #c4b5fd;
+  --color-royal-400: #a78bfa;
+  --color-royal-500: #8b5cf6;
+  --color-royal-600: #7c3aed;
+  --color-royal-700: #6d28d9;
+  --color-royal-800: #5b21b6;
+  --color-royal-900: #4c1d95;
+  --color-royal-950: #2e1065;
+}
+
+@layer base {
+  body {
+    @apply antialiased text-gray-900 bg-white;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif;
+  }
+}
+
+@layer utilities {
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #f59e0b, #d97706, #fbbf24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-royal {
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-shine {
+    background: linear-gradient(135deg, #1e0a4e 0%, #2e1065 40%, #1a1040 100%);
+  }
+
+  .gold-border {
+    border-image: linear-gradient(135deg, #f59e0b, #d97706) 1;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-2xl hover:-translate-y-1;
+  }
+
+  .btn-gold {
+    @apply bg-gradient-to-r from-gold-400 to-gold-600 text-white font-semibold rounded-full px-8 py-3 hover:from-gold-500 hover:to-gold-700 transition-all shadow-lg hover:shadow-gold-500/30 hover:shadow-xl transform hover:-translate-y-0.5;
+  }
+
+  .btn-outline-gold {
+    @apply border-2 border-gold-400 text-gold-400 font-semibold rounded-full px-8 py-3 hover:bg-gold-400/10 transition-all;
+  }
+
+  .section-label {
+    @apply text-xs font-bold tracking-[0.3em] uppercase text-gold-500;
+  }
+}

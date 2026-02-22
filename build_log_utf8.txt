@@ -1,0 +1,197 @@
+
+> web@0.1.0 build
+> next build
+
+??? Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+node.exe : ??? The 
+"middleware" file 
+convention is deprecated. 
+Please use "proxy" 
+instead. Learn more: https
+://nextjs.org/docs/message
+s/middleware-to-proxy
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (?  
+  ?? The "middle...lewa   
+ re-to-proxy:String) [    
+], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+  Creating an optimized production build ...
+Error: Cannot apply 
+unknown utility class 
+`text-gray-900`. Are you 
+using CSS modules or 
+similar and missing 
+`@reference`? https://tail
+windcss.com/docs/functions
+-and-directives#reference-
+directive
+    [2m[at 
+onInvalidCandidate 
+(C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\node_modules\tailwin
+dcss\dist\lib.js:21:1314)]
+[0m
+    [2m[at Ee 
+(C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\node_modules\tailwin
+dcss\dist\lib.js:16:37066)
+][0m
+    [2m[at 
+C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\node_modules\tailwin
+dcss\dist\lib.js:21:355][
+0m
+    [2m[at Pr 
+(C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\node_modules\tailwin
+dcss\dist\lib.js:3:1733)]
+[0m
+    [2m[at _ 
+(C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\node_modules\tailwin
+dcss\dist\lib.js:3:1377)]
+[0m
+    [2m[at Te 
+(C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\node_modules\tailwin
+dcss\dist\lib.js:21:172)]
+[0m
+    [2m[at pn 
+(C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\node_modules\tailwin
+dcss\dist\lib.js:38:294)]
+[0m
+    [2m[at process.proces
+sTicksAndRejections (node:
+internal/process/task_queu
+es:104:5)][0m
+    [2m[at async dn 
+(C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\node_modules\tailwin
+dcss\dist\lib.js:38:631)]
+[0m
+    [2m[at async Xr 
+(C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\node_modules\@tailwi
+ndcss\node\dist\index.js:1
+0:3417)][0m
+
+> Build error occurred
+Error: Turbopack build 
+failed with 1 errors:
+./src/app/globals.css
+Error evaluating Node.js 
+code
+CssSyntaxError: 
+tailwindcss: 
+C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\src\app\globals.css:
+1:1: Cannot apply unknown 
+utility class 
+`text-gray-900`. Are you 
+using CSS modules or 
+similar and missing 
+`@reference`? https://tail
+windcss.com/docs/functions
+-and-directives#reference-
+directive
+    at Input.error (node_m
+odules/postcss/lib/input.j
+s:135:16) 
+[C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\.next\build\chunks\n
+ode_modules_fe693df6._.js:
+4651:22]
+    at Root.error (node_mo
+dules/postcss/lib/node.js:
+146:32) [C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\.next\build\chunks\n
+ode_modules_fe693df6._.js:
+928:38]
+    [at Object.Once 
+(C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\node_modules\@tailwi
+ndcss\postcss\dist\index.j
+s:10:6913)]
+    [at process.processTic
+ksAndRejections (node:inte
+rnal/process/task_queues:1
+04:5)]
+    at async 
+LazyResult.runAsync (node_
+modules/postcss/lib/lazy-r
+esult.js:293:11) 
+[C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\.next\build\chunks\n
+ode_modules_fe693df6._.js:
+6206:21]
+    at async transform (tu
+rbopack:///[turbopack-node
+]/transforms/postcss.ts:70
+:34) [C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\.next\build\chunks\[
+root-of-the-server]__51225
+daf._.js:146:36]
+    at async run (turbopac
+k:///[turbopack-node]/ipc/
+evaluate.ts:92:23) 
+[C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\.next\build\chunks\[
+root-of-the-server]__97494
+1ed._.js:443:31]
+
+Import trace:
+  Client Component 
+Browser:
+    ./src/app/globals.css 
+[Client Component Browser]
+    ./src/app/layout.tsx 
+[Server Component]
+
+
+    at async transform (tu
+rbopack:///[turbopack-node
+]/transforms/postcss.ts:70
+:34) [C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\.next\build\chunks\[
+root-of-the-server]__51225
+daf._.js:146:36])
+    at async run (turbopac
+k:///[turbopack-node]/ipc/
+evaluate.ts:92:23) 
+[C:\Users\IFEDAYO 
+LAWAL\Documents\TAIWO LAWA
+L\web\.next\build\chunks\[
+root-of-the-server]__97494
+1ed._.js:443:31])
