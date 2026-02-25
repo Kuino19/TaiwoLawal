@@ -24,6 +24,13 @@
   --color-royal-800: #5b21b6;
   --color-royal-900: #4c1d95;
   --color-royal-950: #2e1065;
+  --animate-shimmer: shimmer 1.5s infinite;
+
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
 }
 
 @layer base {

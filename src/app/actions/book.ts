@@ -5,7 +5,7 @@ import { adminDatabases, adminStorage } from '@/lib/server/appwrite';
 import { redirect } from 'next/navigation';
 
 const DB_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'main-db';
-const BUCKET_ID = 'books'; // Single bucket for all book-related files
+const BUCKET_ID = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || '699b30ce001bfec8ad88'; // Single bucket for all book-related files
 
 export async function createBookAction(formData: FormData) {
     const title = formData.get('title') as string;

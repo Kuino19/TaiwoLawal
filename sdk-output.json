@@ -1,0 +1,14 @@
+{
+  "buckets": [
+    {
+      "name": "books",
+      "id": "699b30ce001bfec8ad88"
+    }
+  ],
+  "databases": [
+    {
+      "name": "Main Database",
+      "id": "main-db"
+    }
+  ]
+}

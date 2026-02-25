@@ -2,11 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, BookOpen, Trophy, Settings } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Trophy, Settings, Users } from 'lucide-react';
 
 const navigation = [
     { name: 'Overview', href: '/admin', icon: LayoutDashboard },
     { name: 'Books', href: '/admin/books', icon: BookOpen },
+    { name: 'Events', href: '/admin/events', icon: Users },
     { name: 'Quizzes', href: '/admin/quizzes', icon: Trophy },
     { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
