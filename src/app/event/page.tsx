@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, User, Phone, Mail, CheckCircle2, AlertCircle } from 'lucide-react';
+import { BookOpen, User, Phone, Mail, CheckCircle2, AlertCircle, Building, MapPin, Map } from 'lucide-react';
 import { registerForEventAction } from '@/app/actions/event';
 import toast from 'react-hot-toast';
 
@@ -58,6 +58,9 @@ export default function EventRegistrationPage() {
                     </h1>
                     <p className="text-lg text-slate-300 leading-relaxed max-w-lg mx-auto">
                         Be among the selected few to experience our newest masterpiece. <span className="text-amber-400 font-semibold border-b border-amber-400/50">The first 50 registrations will receive the book absolutely FREE.</span>
+                    </p>
+                    <p className="text-md text-amber-200/90 leading-relaxed max-w-lg mx-auto mt-2 italic">
+                        The form is to encourage churches without bible clubs with the free books.
                     </p>
                 </div>
 
@@ -150,6 +153,60 @@ export default function EventRegistrationPage() {
                                         name="email"
                                         required
                                         placeholder="you@example.com"
+                                        className="w-full bg-black/20 border border-white/10 rounded-xl px-12 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#c5a059]/50 focus:border-[#c5a059] transition-all"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* District Input */}
+                            <div className="space-y-2 group">
+                                <label htmlFor="district" className="text-sm font-medium text-slate-300 block ml-1 transition-colors group-hover:text-amber-200">
+                                    District
+                                </label>
+                                <div className="relative">
+                                    <Map className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-hover:text-amber-400 transition-colors" />
+                                    <input
+                                        type="text"
+                                        id="district"
+                                        name="district"
+                                        required
+                                        placeholder="Enter your district"
+                                        className="w-full bg-black/20 border border-white/10 rounded-xl px-12 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#c5a059]/50 focus:border-[#c5a059] transition-all"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Zone Input */}
+                            <div className="space-y-2 group">
+                                <label htmlFor="zone" className="text-sm font-medium text-slate-300 block ml-1 transition-colors group-hover:text-amber-200">
+                                    Zone
+                                </label>
+                                <div className="relative">
+                                    <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-hover:text-amber-400 transition-colors" />
+                                    <input
+                                        type="text"
+                                        id="zone"
+                                        name="zone"
+                                        required
+                                        placeholder="Enter your zone"
+                                        className="w-full bg-black/20 border border-white/10 rounded-xl px-12 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#c5a059]/50 focus:border-[#c5a059] transition-all"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Church Input */}
+                            <div className="space-y-2 group">
+                                <label htmlFor="church" className="text-sm font-medium text-slate-300 block ml-1 transition-colors group-hover:text-amber-200">
+                                    Church Name
+                                </label>
+                                <div className="relative">
+                                    <Building className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-hover:text-amber-400 transition-colors" />
+                                    <input
+                                        type="text"
+                                        id="church"
+                                        name="church"
+                                        required
+                                        placeholder="Enter your church name"
                                         className="w-full bg-black/20 border border-white/10 rounded-xl px-12 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#c5a059]/50 focus:border-[#c5a059] transition-all"
                                     />
                                 </div>

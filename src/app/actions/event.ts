@@ -10,8 +10,11 @@ export async function registerForEventAction(formData: FormData) {
     const name = formData.get('name') as string;
     const whatsapp = formData.get('whatsapp') as string;
     const email = formData.get('email') as string;
+    const district = formData.get('district') as string;
+    const zone = formData.get('zone') as string;
+    const church = formData.get('church') as string;
 
-    if (!name || !whatsapp || !email) {
+    if (!name || !whatsapp || !email || !district || !zone || !church) {
         throw new Error('Required fields missing');
     }
 
@@ -40,6 +43,9 @@ export async function registerForEventAction(formData: FormData) {
                 name,
                 whatsapp,
                 email,
+                district,
+                zone,
+                church,
                 gets_free_book: getsFreeBook,
             }
         );
