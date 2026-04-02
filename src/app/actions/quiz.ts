@@ -79,6 +79,7 @@ export async function submitQuizAction(formData: FormData) {
     const participantName = formData.get('participantName') as string;
     const score = parseInt(formData.get('score') as string);
     const total = parseInt(formData.get('total') as string);
+    const userAnswers = formData.get('userAnswers') as string;
 
     console.log('Submitting Quiz Result to DB:', DB_ID, 'Collection: attempts');
 
@@ -93,7 +94,8 @@ export async function submitQuizAction(formData: FormData) {
         score,
         total,
         percentage: Math.round((score / total) * 100),
+        user_answers: userAnswers,
     });
 
-    redirect(`/quiz/${quizId}/result?name=${encodeURIComponent(participantName)}&score=${score}&total=${total}`);
+    redirect(`/quiz/${quizId}/result?name=${encodeURIComponent(participantName)}&score=${score}&total=${total}&answers=${encodeURIComponent(userAnswers)}`);
 }

@@ -71,6 +71,7 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
         formData.append('participantName', participantName);
         formData.append('score', String(score));
         formData.append('total', String(questions.length));
+        formData.append('userAnswers', JSON.stringify(answers));
 
         const { submitQuizAction } = await import('@/app/actions/quiz');
         await submitQuizAction(formData);

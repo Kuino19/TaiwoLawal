@@ -5,6 +5,8 @@ import Link from 'next/link';
 
 const DB_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'main-db';
 
+export const dynamic = 'force-dynamic';
+
 interface Attempt {
     $id: string;
     participant_name: string;

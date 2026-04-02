@@ -1,18 +1,40 @@
-import { CheckCircle2, XCircle, Trophy, RotateCcw } from 'lucide-react';
+import { CheckCircle2, XCircle, Trophy, RotateCcw, ChevronDown, ChevronUp } from 'lucide-react';
 import Link from 'next/link';
+import { adminDatabases } from '@/lib/server/appwrite';
+import { Query } from 'node-appwrite';
+
+const DB_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'main-db';
+
+async function getQuestions(quizId: string) {
+    try {
+        const res = await adminDatabases.listDocuments(DB_ID, 'questions', [
+            Query.equal('quiz_id', quizId),
+            Query.limit(100)
+        ]);
+        return res.documents;
+    } catch (error) {
+        console.error('Failed to fetch questions for review:', error);
+        return [];
+    }
+}
 
 export default async function QuizResultPage({
     params,
     searchParams,
 }: {
     params: Promise<{ id: string }>;
-    searchParams: Promise<{ name?: string; score?: string; total?: string }>;
+    searchParams: Promise<{ name?: string; score?: string; total?: string; answers?: string }>;
 }) {
-    const { name: nameParam, score: scoreParam, total: totalParam } = await searchParams;
+    const { id: quizId } = await params;
+    const { name: nameParam, score: scoreParam, total: totalParam, answers: answersParam } = await searchParams;
+    
     const name = nameParam || 'Participant';
     const score = parseInt(scoreParam || '0');
     const total = parseInt(totalParam || '0');
     const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+    const userAnswers = answersParam ? JSON.parse(decodeURIComponent(answersParam)) : [];
+    
+    const questions = await getQuestions(quizId);
 
     const passed = percentage >= 50;
     const grade =
@@ -22,11 +44,12 @@ export default async function QuizResultPage({
                     'Keep Practicing!';
 
     return (
-        <div className="min-h-screen flex items-start justify-center p-4 pt-32 pb-20"
+        <div className="min-h-screen flex flex-col items-center p-4 pt-32 pb-20"
             style={{ background: 'linear-gradient(135deg, #1e0a4e 0%, #2e1065 100%)' }}>
-            <div className="w-full max-w-lg">
+            
+            <div className="w-full max-w-lg mb-12">
                 {/* Glow */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="absolute inset-0 flex items-start justify-center pointer-events-none mt-20">
                     <div className="w-96 h-96 rounded-full blur-3xl opacity-20"
                         style={{ background: passed ? '#f59e0b' : '#6d28d9' }} />
                 </div>
@@ -103,6 +126,74 @@ export default async function QuizResultPage({
                     </div>
                 </div>
             </div>
+
+            {/* Question Review Section */}
+            {questions.length > 0 && userAnswers.length > 0 && (
+                <div className="w-full max-w-2xl px-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+                    <h2 className="font-serif font-bold text-2xl text-white mb-6 flex items-center gap-3">
+                        <CheckCircle2 className="w-6 h-6 text-gold-400" />
+                        Question Review
+                    </h2>
+                    
+                    <div className="space-y-4">
+                        {questions.slice(0, total).map((question: any, idx: number) => {
+                            const userAnswer = userAnswers[idx];
+                            const isCorrect = userAnswer === question.correct_index;
+                            
+                            return (
+                                <div key={question.$id} className="rounded-2xl border border-white/10 overflow-hidden"
+                                    style={{ background: 'rgba(255,255,255,0.03)' }}>
+                                    <div className="p-6">
+                                        <div className="flex items-start justify-between gap-4 mb-4">
+                                            <span className="text-xs font-bold font-mono text-white/30 uppercase">Question {idx + 1}</span>
+                                            {isCorrect ? (
+                                                <span className="flex items-center gap-1.5 text-emerald-400 text-xs font-bold bg-emerald-400/10 px-2.5 py-1 rounded-full border border-emerald-400/20">
+                                                    <CheckCircle2 className="w-3.5 h-3.5" /> Correct
+                                                </span>
+                                            ) : (
+                                                <span className="flex items-center gap-1.5 text-rose-400 text-xs font-bold bg-rose-400/10 px-2.5 py-1 rounded-full border border-rose-400/20">
+                                                    <XCircle className="w-3.5 h-3.5" /> Incorrect
+                                                </span>
+                                            )}
+                                        </div>
+                                        
+                                        <p className="text-white font-medium text-lg leading-snug mb-6">{question.text}</p>
+                                        
+                                        <div className="grid gap-2">
+                                            {question.options.map((option: string, i: number) => {
+                                                const isUserChoice = userAnswer === i;
+                                                const isCorrectChoice = question.correct_index === i;
+                                                
+                                                let stateStyles = 'bg-white/5 border-white/10 text-white/60';
+                                                if (isCorrectChoice) {
+                                                    stateStyles = 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400';
+                                                } else if (isUserChoice && !isCorrect) {
+                                                    stateStyles = 'bg-rose-500/10 border-rose-500/30 text-rose-400';
+                                                }
+
+                                                return (
+                                                    <div key={i} className={`flex items-center gap-3 px-4 py-3 rounded-xl border text-sm transition-all ${stateStyles}`}>
+                                                        <span className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-bold border ${
+                                                            isCorrectChoice ? 'bg-emerald-500/20 border-emerald-500/40' : 
+                                                            isUserChoice && !isCorrect ? 'bg-rose-500/20 border-rose-500/40' :
+                                                            'bg-white/10 border-white/10'
+                                                        }`}>
+                                                            {String.fromCharCode(65 + i)}
+                                                        </span>
+                                                        <span className="flex-1">{option}</span>
+                                                        {isCorrectChoice && <CheckCircle2 className="w-4 h-4" />}
+                                                        {isUserChoice && !isCorrect && <XCircle className="w-4 h-4" />}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

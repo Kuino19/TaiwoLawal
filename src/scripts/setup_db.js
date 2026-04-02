@@ -100,6 +100,7 @@ const COLLECTIONS = [
             { key: 'score', type: 'integer', required: true },
             { key: 'total', type: 'integer', required: true },
             { key: 'percentage', type: 'integer', required: true },
+            { key: 'user_answers', type: 'string', size: 5000, required: false },
         ],
         permissions: [
             Permission.read(Role.any()),

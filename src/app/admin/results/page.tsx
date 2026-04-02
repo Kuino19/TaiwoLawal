@@ -120,7 +120,12 @@ export default async function AdminResultsPage() {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 text-right">
-                                                <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-royal-400 transition-colors inline" />
+                                                <Link 
+                                                    href={`/admin/results/${result.$id}`}
+                                                    className="inline-flex items-center gap-1 text-xs font-bold text-royal-600 hover:text-royal-700 bg-royal-50 px-3 py-1.5 rounded-lg border border-royal-100 transition-colors"
+                                                >
+                                                    Review <ChevronRight className="w-3 h-3" />
+                                                </Link>
                                             </td>
                                         </tr>
                                     );
