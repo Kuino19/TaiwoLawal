@@ -73,7 +73,23 @@ const COLLECTIONS = [
             Permission.read(Role.users()), // Users can read their orders (needs row level security really)
             Permission.write(Role.any()), // Public can create orders (initially)
         ]
-    }
+    },
+    {
+        id: 'attempts',
+        name: 'Attempts',
+        attributes: [
+            { key: 'quiz_id', type: 'string', size: 50, required: true },
+            { key: 'quiz_title', type: 'string', size: 255, required: true },
+            { key: 'participant_name', type: 'string', size: 255, required: true },
+            { key: 'score', type: 'integer', required: true },
+            { key: 'total', type: 'integer', required: true },
+            { key: 'percentage', type: 'integer', required: true },
+        ],
+        permissions: [
+            Permission.read(Role.any()),
+            Permission.write(Role.any()), // Allow public to create attempts
+        ]
+    },
 ];
 
 async function setupDatabase() {

@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, BookOpen, Trophy, Settings, Users } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Trophy, Settings, Users, ClipboardList } from 'lucide-react';
 
 const navigation = [
     { name: 'Overview', href: '/admin', icon: LayoutDashboard },
     { name: 'Books', href: '/admin/books', icon: BookOpen },
     { name: 'Events', href: '/admin/events', icon: Users },
     { name: 'Quizzes', href: '/admin/quizzes', icon: Trophy },
+    { name: 'Results', href: '/admin/results', icon: ClipboardList },
     { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
