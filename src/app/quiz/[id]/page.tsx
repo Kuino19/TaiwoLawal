@@ -5,6 +5,8 @@ import { ArrowLeft, ArrowRight, CheckCircle2, Clock, AlertCircle } from 'lucide-
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+import { submitQuizAction } from '@/app/actions/quiz';
+
 interface Question {
     $id: string;
     text: string;
@@ -63,18 +65,28 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
     const handleSubmit = useCallback(async (auto = false) => {
         if (submitting) return;
         setSubmitting(true);
-        const score = answers.reduce((s, a, i) => (a === questions[i]?.correct_index ? s + 1 : s), 0);
+        
+        try {
+            const score = answers.reduce((s, a, i) => (a === questions[i]?.correct_index ? s + 1 : s), 0);
 
-        const formData = new FormData();
-        formData.append('quizId', quizId);
-        formData.append('quizTitle', quiz?.title || '');
-        formData.append('participantName', participantName);
-        formData.append('score', String(score));
-        formData.append('total', String(questions.length));
-        formData.append('userAnswers', JSON.stringify(answers));
+            const formData = new FormData();
+            formData.append('quizId', quizId);
+            formData.append('quizTitle', quiz?.title || '');
+            formData.append('participantName', participantName);
+            formData.append('score', String(score));
+            formData.append('total', String(questions.length));
+            formData.append('userAnswers', JSON.stringify(answers));
 
-        const { submitQuizAction } = await import('@/app/actions/quiz');
-        await submitQuizAction(formData);
+            await submitQuizAction(formData);
+        } catch (error: any) {
+            // Let NEXT_REDIRECT errors propagate
+            if (error?.message?.includes('NEXT_REDIRECT')) {
+                throw error;
+            }
+            console.error('Quiz submission failed:', error);
+            alert(error.message || 'Failed to submit quiz. Please check your connection and try again.');
+            setSubmitting(false);
+        }
     }, [answers, questions, participantName, quizId, quiz, submitting]);
 
     // Countdown timer

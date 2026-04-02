@@ -1,15 +1,27 @@
-import { CheckCircle2, XCircle, Trophy, RotateCcw, ChevronDown, ChevronUp } from 'lucide-react';
+import { CheckCircle2, XCircle, Trophy, RotateCcw } from 'lucide-react';
 import Link from 'next/link';
+import QuestionReviewModal from '../QuestionReviewModal';
 import { adminDatabases } from '@/lib/server/appwrite';
 import { Query } from 'node-appwrite';
 
 const DB_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'main-db';
 
+async function getAttempt(attemptId: string) {
+    try {
+        const attempt = await adminDatabases.getDocument(DB_ID, 'attempts', attemptId);
+        return attempt;
+    } catch (error) {
+        console.error('Failed to fetch attempt:', error);
+        return null;
+    }
+}
+
 async function getQuestions(quizId: string) {
     try {
         const res = await adminDatabases.listDocuments(DB_ID, 'questions', [
             Query.equal('quiz_id', quizId),
-            Query.limit(100)
+            Query.limit(100),
+            Query.orderAsc('$createdAt')
         ]);
         return res.documents;
     } catch (error) {
@@ -23,18 +35,44 @@ export default async function QuizResultPage({
     searchParams,
 }: {
     params: Promise<{ id: string }>;
-    searchParams: Promise<{ name?: string; score?: string; total?: string; answers?: string }>;
+    searchParams: Promise<{ attemptId?: string; name?: string; score?: string; total?: string; answers?: string }>;
 }) {
     const { id: quizId } = await params;
-    const { name: nameParam, score: scoreParam, total: totalParam, answers: answersParam } = await searchParams;
+    const { attemptId, name: nameParam, score: scoreParam, total: totalParam, answers: answersParam } = await searchParams;
     
-    const name = nameParam || 'Participant';
-    const score = parseInt(scoreParam || '0');
-    const total = parseInt(totalParam || '0');
+    let name = 'Participant';
+    let score = 0;
+    let total = 0;
+    let userAnswers: number[] = [];
+
+    // Try to fetch from database first (new flow)
+    if (attemptId) {
+        const attempt = await getAttempt(attemptId);
+        if (attempt) {
+            name = attempt.participant_name;
+            score = attempt.score;
+            total = attempt.total;
+            userAnswers = JSON.parse(attempt.user_answers);
+        }
+    }
+    // Fallback to URL params (legacy support)
+    else if (nameParam && scoreParam && totalParam) {
+        name = nameParam;
+        score = parseInt(scoreParam);
+        total = parseInt(totalParam);
+        userAnswers = answersParam ? JSON.parse(decodeURIComponent(answersParam)) : [];
+    }
+
     const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
-    const userAnswers = answersParam ? JSON.parse(decodeURIComponent(answersParam)) : [];
-    
     const questions = await getQuestions(quizId);
+    
+    // Convert Appwrite documents to plain objects for client component
+    const plainQuestions = questions.map((q: any) => ({
+        $id: q.$id,
+        text: q.text,
+        options: q.options,
+        correct_index: q.correct_index,
+    }));
 
     const passed = percentage >= 50;
     const grade =
@@ -127,73 +165,8 @@ export default async function QuizResultPage({
                 </div>
             </div>
 
-            {/* Question Review Section */}
-            {questions.length > 0 && userAnswers.length > 0 && (
-                <div className="w-full max-w-2xl px-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
-                    <h2 className="font-serif font-bold text-2xl text-white mb-6 flex items-center gap-3">
-                        <CheckCircle2 className="w-6 h-6 text-gold-400" />
-                        Question Review
-                    </h2>
-                    
-                    <div className="space-y-4">
-                        {questions.slice(0, total).map((question: any, idx: number) => {
-                            const userAnswer = userAnswers[idx];
-                            const isCorrect = userAnswer === question.correct_index;
-                            
-                            return (
-                                <div key={question.$id} className="rounded-2xl border border-white/10 overflow-hidden"
-                                    style={{ background: 'rgba(255,255,255,0.03)' }}>
-                                    <div className="p-6">
-                                        <div className="flex items-start justify-between gap-4 mb-4">
-                                            <span className="text-xs font-bold font-mono text-white/30 uppercase">Question {idx + 1}</span>
-                                            {isCorrect ? (
-                                                <span className="flex items-center gap-1.5 text-emerald-400 text-xs font-bold bg-emerald-400/10 px-2.5 py-1 rounded-full border border-emerald-400/20">
-                                                    <CheckCircle2 className="w-3.5 h-3.5" /> Correct
-                                                </span>
-                                            ) : (
-                                                <span className="flex items-center gap-1.5 text-rose-400 text-xs font-bold bg-rose-400/10 px-2.5 py-1 rounded-full border border-rose-400/20">
-                                                    <XCircle className="w-3.5 h-3.5" /> Incorrect
-                                                </span>
-                                            )}
-                                        </div>
-                                        
-                                        <p className="text-white font-medium text-lg leading-snug mb-6">{question.text}</p>
-                                        
-                                        <div className="grid gap-2">
-                                            {question.options.map((option: string, i: number) => {
-                                                const isUserChoice = userAnswer === i;
-                                                const isCorrectChoice = question.correct_index === i;
-                                                
-                                                let stateStyles = 'bg-white/5 border-white/10 text-white/60';
-                                                if (isCorrectChoice) {
-                                                    stateStyles = 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400';
-                                                } else if (isUserChoice && !isCorrect) {
-                                                    stateStyles = 'bg-rose-500/10 border-rose-500/30 text-rose-400';
-                                                }
-
-                                                return (
-                                                    <div key={i} className={`flex items-center gap-3 px-4 py-3 rounded-xl border text-sm transition-all ${stateStyles}`}>
-                                                        <span className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-bold border ${
-                                                            isCorrectChoice ? 'bg-emerald-500/20 border-emerald-500/40' : 
-                                                            isUserChoice && !isCorrect ? 'bg-rose-500/20 border-rose-500/40' :
-                                                            'bg-white/10 border-white/10'
-                                                        }`}>
-                                                            {String.fromCharCode(65 + i)}
-                                                        </span>
-                                                        <span className="flex-1">{option}</span>
-                                                        {isCorrectChoice && <CheckCircle2 className="w-4 h-4" />}
-                                                        {isUserChoice && !isCorrect && <XCircle className="w-4 h-4" />}
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            )}
+            {/* Question Review Modal */}
+            <QuestionReviewModal questions={plainQuestions} userAnswers={userAnswers} total={total} />
         </div>
     );
 }

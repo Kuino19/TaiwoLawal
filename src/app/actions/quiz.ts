@@ -81,21 +81,38 @@ export async function submitQuizAction(formData: FormData) {
     const total = parseInt(formData.get('total') as string);
     const userAnswers = formData.get('userAnswers') as string;
 
-    console.log('Submitting Quiz Result to DB:', DB_ID, 'Collection: attempts');
+    console.log('--- STARTING QUIZ SUBMISSION ---');
+    console.log('Quiz ID:', quizId);
+    console.log('Participant:', participantName);
+    console.log('Score:', score, '/', total);
 
     if (!quizId || !participantName || score === undefined || !total) {
+        console.error('Submission failed: Missing required fields');
         throw new Error('Missing required fields');
     }
 
-    await adminDatabases.createDocument(DB_ID, 'attempts', ID.unique(), {
-        quiz_id: quizId,
-        quiz_title: quizTitle,
-        participant_name: participantName,
-        score,
-        total,
-        percentage: Math.round((score / total) * 100),
-        user_answers: userAnswers,
-    });
+    let attemptId: string;
+    try {
+        console.log('Creating document in database:', DB_ID);
+        const attempt = await adminDatabases.createDocument(DB_ID, 'attempts', ID.unique(), {
+            quiz_id: quizId,
+            quiz_title: quizTitle,
+            participant_name: participantName,
+            score,
+            total,
+            percentage: Math.round((score / total) * 100),
+            user_answers: userAnswers,
+        });
+        console.log('Document created successfully!');
+        attemptId = attempt.$id;
+    } catch (error: any) {
+        console.error('--- APPWRITE CREATE DOCUMENT ERROR ---');
+        console.error('Code:', error.code);
+        console.error('Message:', error.message);
+        console.error('Type:', error.type);
+        throw new Error(`Database error: ${error.message}`);
+    }
 
-    redirect(`/quiz/${quizId}/result?name=${encodeURIComponent(participantName)}&score=${score}&total=${total}&answers=${encodeURIComponent(userAnswers)}`);
+    console.log('Redirecting to results page...');
+    redirect(`/quiz/${quizId}/result?attemptId=${attemptId}`);
 }
