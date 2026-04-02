@@ -1,0 +1,222 @@
+[
+    {
+        "text": "In the book of Numbers, where were the Israelites when God commanded Moses to take a census of the whole Israelite community?",
+        "options": ["Mount Sinai", "Moab", "Kadesh Barnea", "The Desert of Sinai"],
+        "correct_index": 3
+    },
+    {
+        "text": "At what age were the men of Israel counted for the army during the first census?",
+        "options": ["18 years old and upward", "20 years old and upward", "30 years old and upward", "25 years old and upward"],
+        "correct_index": 1
+    },
+    {
+        "text": "Which tribe was NOT included in the general census of the fighting men?",
+        "options": ["Benjamin", "Dan", "Levi", "Gad"],
+        "correct_index": 2
+    },
+    {
+        "text": "Who was appointed from the tribe of Judah to help Moses with the census?",
+        "options": ["Nahshon son of Amminadab", "Elizur son of Shedeur", "Shelumiel son of Zurishaddai", "Eliasaph son of Deuel"],
+        "correct_index": 0
+    },
+    {
+        "text": "What was the total number of fighting men counted in the first census of Israel?",
+        "options": ["603,550", "500,000", "750,000", "601,730"],
+        "correct_index": 0
+    },
+    {
+        "text": "Which tribe was assigned to camp on the east side of the Tabernacle, toward the sunrise?",
+        "options": ["Ephraim", "Judah", "Reuben", "Dan"],
+        "correct_index": 1
+    },
+    {
+        "text": "Who were the four sons of Aaron mentioned in Numbers chapter 3?",
+        "options": ["Nadab, Abihu, Eleazar, Ithamar", "Caleb, Joshua, Korah, Dathan", "Gershon, Kohath, Merari, Levi", "Mahlon, Chilion, Boaz, Jesse"],
+        "correct_index": 0
+    },
+    {
+        "text": "What happened to Nadab and Abihu when they offered 'unauthorized fire' before the Lord?",
+        "options": ["They were struck with leprosy", "They fell dead before the Lord", "They were exiled from the camp", "They lost their priesthood"],
+        "correct_index": 1
+    },
+    {
+        "text": "To whom did the Lord give the Levites as a gift for the service of the Tabernacle?",
+        "options": ["To the people of Israel", "To Moses", "To Aaron and his sons", "To the tribe of Judah"],
+        "correct_index": 2
+    },
+    {
+        "text": "What was the total number of firstborn males in Israel that exceeded the number of Levites during the redemption?",
+        "options": ["100", "273", "500", "1,000"],
+        "correct_index": 1
+    },
+    {
+        "text": "Which clan of the Levites was responsible for the care of the Most Holy things, including the Ark?",
+        "options": ["Gershonites", "Merarites", "Kohathites", "Izharites"],
+        "correct_index": 2
+    },
+    {
+        "text": "At what age were the Levites required to enter the service of the Tabernacle for heavy work in the first census?",
+        "options": ["20 to 50", "25 to 50", "30 to 50", "18 to 40"],
+        "correct_index": 2
+    },
+    {
+        "text": "What were the Kohathites forbidden from doing upon penalty of death when the camp moved?",
+        "options": ["Touching the holy things", "Singing in the Tabernacle", "Entering the camp of Judah", "Carrying the Ark"],
+        "correct_index": 0
+    },
+    {
+        "text": "Which Levite clan was responsible for the curtains, coverings, and ropes of the Tabernacle?",
+        "options": ["Merarites", "Kohathites", "Gershonites", "Amramites"],
+        "correct_index": 2
+    },
+    {
+        "text": "Which Levite clan was responsible for the frames, crossbars, posts, and bases of the Tabernacle?",
+        "options": ["Gershonites", "Kohathites", "Merarites", "Hebronites"],
+        "correct_index": 2
+    },
+    {
+        "text": "What was the procedure for a person who had some skin disease or a discharge in Numbers 5?",
+        "options": ["They were to stay in the Tabernacle", "They were sent outside the camp", "They were to wash and return immediately", "They were to offer a sacrifice only"],
+        "correct_index": 1
+    },
+    {
+        "text": "In the 'test for an unfaithful wife', what did the priest mix with water from the holy basin?",
+        "options": ["Salt", "Oil", "Dust from the Tabernacle floor", "Ashes of a heifer"],
+        "correct_index": 2
+    },
+    {
+        "text": "What was the specific name for the special vow mentioned in Numbers 6?",
+        "options": ["Levite Vow", "High Priest Vow", "Nazirite Vow", "Elders Vow"],
+        "correct_index": 2
+    },
+    {
+        "text": "Which of these was a restriction for a Nazirite during their period of dedication?",
+        "options": ["No eating meat", "No cutting of their hair", "No marriage", "No speaking to strangers"],
+        "correct_index": 1
+    },
+    {
+        "text": "What famous blessing ends with 'the Lord lift up his countenance upon you and give you peace'?",
+        "options": ["The Mosaic Blessing", "The Priestly Blessing (Aaronic Blessing)", "The Davidic Blessing", "The Levite Song"],
+        "correct_index": 1
+    },
+    {
+        "text": "How many days did it take for the leaders of the 12 tribes to complete their offerings for the dedication of the altar?",
+        "options": ["7 days", "12 days", "40 days", "10 days"],
+        "correct_index": 1
+    },
+    {
+        "text": "In Numbers 8, what was the symbolic meaning of Aaron setting up the seven lamps?",
+        "options": ["To provide light for the priests to read", "To shed light on the area in front of the lampstand", "To represent the 7 days of creation", "To frighten away intruders"],
+        "correct_index": 1
+    },
+    {
+        "text": "At what age were Levites permitted to BEGIN their service in the Tabernacle according to Numbers 8?",
+        "options": ["20 years old", "25 years old", "30 years old", "18 years old"],
+        "correct_index": 1
+    },
+    {
+        "text": "At what age were the Levites required to retire from their regular service?",
+        "options": ["60 years old", "55 years old", "50 years old", "45 years old"],
+        "correct_index": 2
+    },
+    {
+        "text": "What provision did God make for people who were ceremoniallly unclean or on a journey during the Passover?",
+        "options": ["They were exempt from it forever", "They could celebrate it one month later", "They had to offer a double sacrifice", "They were punished"],
+        "correct_index": 1
+    },
+    {
+        "text": "What guided the Israelites and told them when to set out and when to camp?",
+        "options": ["The sound of a trumpet", "The position of the stars", "The cloud above the Tabernacle", "Moses' staff"],
+        "correct_index": 2
+    },
+    {
+        "text": "What material were the two trumpets made of that were used for calling the community together?",
+        "options": ["Gold", "Hammered silver", "Bronze", "Composites"],
+        "correct_index": 1
+    },
+    {
+        "text": "When the Ark set out, what did Moses say?",
+        "options": ["'Be still, O Lord'", "'Rise up, O Lord! May your enemies be scattered'", "'We are coming, O Lord'", "'Lead us to the promised land'"],
+        "correct_index": 1
+    },
+    {
+        "text": "What was the name of the place where fire from the Lord burned among the people because they complained?",
+        "options": ["Marah", "Taberah", "Rephidim", "Elim"],
+        "correct_index": 1
+    },
+    {
+        "text": "What food did the 'rabble' and the Israelites crave while in the desert?",
+        "options": ["Bread", "Meat", "Grapes", "Milk and Honey"],
+        "correct_index": 1
+    },
+    {
+        "text": "How many elders did God command Moses to bring to the Tent of Meeting to help carry the burden of the people?",
+        "options": ["12", "50", "70", "100"],
+        "correct_index": 2
+    },
+    {
+        "text": "Who were Eldad and Medad?",
+        "options": ["Spies sent to Canaan", "Priests who succeeded Aaron", "Two elders who prophesied in the camp", "Leaders of the rebellion"],
+        "correct_index": 2
+    },
+    {
+        "text": "What meat did God provide to the Israelites for a whole month until it 'came out of their nostrils'?",
+        "options": ["Manna", "Beef", "Quail", "Sheep"],
+        "correct_index": 2
+    },
+    {
+        "text": "Why did Miriam and Aaron speak against Moses in Numbers 12?",
+        "options": ["Because he didn't give them enough meat", "Because of his Cushite wife", "Because he was too slow", "Because they wanted to return to Egypt"],
+        "correct_index": 1
+    },
+    {
+        "text": "What happened to Miriam because of her opposition to Moses?",
+        "options": ["She was struck with leprosy", "She was exiled forever", "She lost her voice", "She was turned into a pillar of salt"],
+        "correct_index": 0
+    },
+    {
+        "text": "How many spies were sent to explore the land of Canaan?",
+        "options": ["2", "10", "12", "7"],
+        "correct_index": 2
+    },
+    {
+        "text": "What fruit did the spies bring back as evidence of the land's fertility?",
+        "options": ["Apples and pears", "Grapes, pomegranates, and figs", "Dates and olives", "Melons and cucumbers"],
+        "correct_index": 1
+    },
+    {
+        "text": "How many days did the spies explore the land of Canaan?",
+        "options": ["7 days", "30 days", "40 days", "10 days"],
+        "correct_index": 2
+    },
+    {
+        "text": "Which two spies gave a positive report and encouraged the people to take the land?",
+        "options": ["Moses and Aaron", "Joshua and Caleb", "Dathan and Abiram", "Nadab and Abihu"],
+        "correct_index": 1
+    },
+    {
+        "text": "How did the majority of the spies describe the inhabitants of Canaan?",
+        "options": ["As giants and themselves as grasshoppers", "As weak and easily defeated", "As peaceful and welcoming", "As being only a few in number"],
+        "correct_index": 0
+    },
+    {
+        "text": "What was the people's reaction to the bad report of the spies?",
+        "options": ["They celebrated", "They wept aloud and grumbled against Moses", "They immediately attacked Canaan", "They asked for more information"],
+        "correct_index": 1
+    },
+    {
+        "text": "What was God's judgment on the generation that grumbled and refused to enter the land?",
+        "options": ["They would return to Egypt", "They would wander 40 years and die in the wilderness", "They would be struck by a plague immediately", "They would be enslaved by the Canaanites"],
+        "correct_index": 1
+    },
+    {
+        "text": "Who were the only adults from the rebellious generation promised to enter the Promised Land?",
+        "options": ["Moses and Aaron", "Joshua and Caleb", "Eleazar and Ithamar", "Gershon and Kohath"],
+        "correct_index": 1
+    },
+    {
+        "text": "What was the purpose of the blue tassels on the corners of the Israelites' garments?",
+        "options": ["To show their wealth", "To remind them of the Lord's commandments", "To identify their tribe", "To protect them from heat"],
+        "correct_index": 1
+    }
+]

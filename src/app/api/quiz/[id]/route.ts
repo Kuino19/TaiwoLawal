@@ -1,4 +1,4 @@
-import { databases } from '@/lib/appwrite';
+import { adminDatabases } from '@/lib/server/appwrite';
 import { NextResponse } from 'next/server';
 
 const DB_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'main-db';
@@ -9,7 +9,7 @@ export async function GET(
 ) {
     const { id } = await context.params;
     try {
-        const quiz = await databases.getDocument(DB_ID, 'quizzes', id);
+        const quiz = await adminDatabases.getDocument(DB_ID, 'quizzes', id);
         return NextResponse.json(quiz);
     } catch {
         return NextResponse.json({ error: 'Not found' }, { status: 404 });

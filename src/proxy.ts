@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     // Check if we are in admin routes
@@ -12,7 +12,7 @@ export function middleware(request: NextRequest) {
         }
 
         /* 
-           NOTE: Middleware check is disabled for localhost development.
+           NOTE: Middleware (now Proxy) check is disabled for localhost development.
            Appwrite Cloud session cookies are not sent to localhost, so this 
            check will always fail even if you are logged in.
            The robust client-side guard in admin/layout.tsx handles the protection.

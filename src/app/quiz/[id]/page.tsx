@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, use } from 'react';
 import { ArrowLeft, ArrowRight, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -34,7 +34,8 @@ async function fetchQuizData(quizId: string): Promise<{ quiz: QuizData; question
     }
 }
 
-export default function QuizInterface({ params }: { params: { id: string } }) {
+export default function QuizInterface({ params }: { params: Promise<{ id: string }> }) {
+    const { id: quizId } = use(params);
     const router = useRouter();
     const [quiz, setQuiz] = useState<QuizData | null>(null);
     const [questions, setQuestions] = useState<Question[]>([]);
@@ -48,7 +49,7 @@ export default function QuizInterface({ params }: { params: { id: string } }) {
     const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
-        fetchQuizData(params.id).then((data) => {
+        fetchQuizData(quizId).then((data) => {
             if (data) {
                 setQuiz(data.quiz);
                 setQuestions(data.questions);
@@ -57,7 +58,7 @@ export default function QuizInterface({ params }: { params: { id: string } }) {
             }
             setLoading(false);
         });
-    }, [params.id]);
+    }, [quizId]);
 
     const handleSubmit = useCallback(async (auto = false) => {
         if (submitting) return;
@@ -65,7 +66,7 @@ export default function QuizInterface({ params }: { params: { id: string } }) {
         const score = answers.reduce((s, a, i) => (a === questions[i]?.correct_index ? s + 1 : s), 0);
 
         const formData = new FormData();
-        formData.append('quizId', params.id);
+        formData.append('quizId', quizId);
         formData.append('quizTitle', quiz?.title || '');
         formData.append('participantName', participantName);
         formData.append('score', String(score));
@@ -73,7 +74,7 @@ export default function QuizInterface({ params }: { params: { id: string } }) {
 
         const { submitQuizAction } = await import('@/app/actions/quiz');
         await submitQuizAction(formData);
-    }, [answers, questions, participantName, params.id, quiz, submitting]);
+    }, [answers, questions, participantName, quizId, quiz, submitting]);
 
     // Countdown timer
     useEffect(() => {

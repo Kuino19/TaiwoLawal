@@ -6,6 +6,8 @@ import { deleteQuizAction } from '@/app/actions/quiz';
 
 const DB_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'main-db';
 
+export const dynamic = 'force-dynamic';
+
 async function getQuizzes() {
     try {
         const r = await adminDatabases.listDocuments(DB_ID, 'quizzes', [Query.orderDesc('$createdAt')]);

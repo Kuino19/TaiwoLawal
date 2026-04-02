@@ -38,6 +38,7 @@ const COLLECTIONS = [
             { key: 'description', type: 'string', size: 1000, required: true },
             { key: 'duration', type: 'integer', required: true }, // in minutes
             { key: 'is_active', type: 'boolean', required: true, default: true },
+            { key: 'question_count', type: 'integer', required: false, default: 0 },
         ],
         permissions: [
             Permission.read(Role.any()),

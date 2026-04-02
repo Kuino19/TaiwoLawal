@@ -5,6 +5,8 @@ import { Trophy, Zap } from 'lucide-react';
 
 const DB_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'main-db';
 
+export const dynamic = 'force-dynamic';
+
 async function getQuizzes(): Promise<Quiz[]> {
     try {
         const res = await databases.listDocuments(DB_ID, 'quizzes', [

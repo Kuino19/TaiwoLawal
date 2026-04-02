@@ -1,0 +1,282 @@
+[
+    {
+        "text": "What was the name of the prince of the tribe of Issachar who brought his offering on the second day in Numbers 7?",
+        "options": ["Nethanel son of Zuar", "Eliab son of Helon", "Abidan son of Gideoni", "Pagiel son of Ocran"],
+        "correct_index": 0
+    },
+    {
+        "text": "Each tribe's leader offered one silver platter and one silver bowl. What were these vessels filled with?",
+        "options": ["Gold coins", "Fine flour mixed with olive oil for a grain offering", "Pure water", "Incense only"],
+        "correct_index": 1
+    },
+    {
+        "text": "What was the weight of the silver platter offered by each leader in Numbers 7?",
+        "options": ["70 shekels", "100 shekels", "130 shekels", "50 shekels"],
+        "correct_index": 2
+    },
+    {
+        "text": "What was the weight of the silver bowl offered by each leader?",
+        "options": ["70 shekels", "50 shekels", "30 shekels", "10 shekels"],
+        "correct_index": 0
+    },
+    {
+        "text": "Each leader also offered one gold dish. How much did it weigh?",
+        "options": ["10 shekels", "20 shekels", "50 shekels", "5 shekels"],
+        "correct_index": 0
+    },
+    {
+        "text": "What was the gold dish filled with in the offerings of the leaders?",
+        "options": ["Wine", "Grain", "Incense", "Olive oil"],
+        "correct_index": 2
+    },
+    {
+        "text": "In Numbers 7, what did the Lord say to Moses when he entered the Tent of Meeting to speak with the Lord?",
+        "options": ["He heard the voice speaking to him from between the two cherubim", "He saw a burning bush", "He heard a loud trumpet", "He saw an angel with a sword"],
+        "correct_index": 0
+    },
+    {
+        "text": "How many wagons were given to the Gershonites for their service?",
+        "options": ["Two", "Four", "Six", "Eight"],
+        "correct_index": 0
+    },
+    {
+        "text": "How many wagons were given to the Merarites for their service?",
+        "options": ["Two", "Four", "Six", "Eight"],
+        "correct_index": 1
+    },
+    {
+        "text": "Why were NO wagons given to the Kohathites?",
+        "options": ["They were not strong enough", "They had to carry the holy things on their shoulders", "They were the smallest clan", "They refused to use them"],
+        "correct_index": 1
+    },
+    {
+        "text": "Which tribe's leader brought his offering on the 10th day?",
+        "options": ["Dan", "Asher", "Naphtali", "Zebulun"],
+        "correct_index": 1
+    },
+    {
+        "text": "What was the total number of bulls offered as a burnt offering by all the leaders combined in Numbers 7?",
+        "options": ["12", "24", "6", "36"],
+        "correct_index": 0
+    },
+    {
+        "text": "In Numbers 8, when the Levites were purified, what was used to shave their whole bodies?",
+        "options": ["A knife", "A razor", "A stone", "They didn't shave"],
+        "correct_index": 1
+    },
+    {
+        "text": "What was the symbolic act the Israelites performed by laying their hands on the Levites?",
+        "options": ["To bless them", "To present them as a wave offering from the Israelites", "To heal them", "To mark them as leaders"],
+        "correct_index": 1
+    },
+    {
+        "text": "According to Numbers 9, why did the cloud cover the Tabernacle by day and look like fire by night?",
+        "options": ["To provide warmth", "To show the presence of the Lord", "To keep away animals", "To signal the Egyptians"],
+        "correct_index": 1
+    },
+    {
+        "text": "If the cloud stayed over the Tabernacle for a long time, what did the Israelites do?",
+        "options": ["They stayed in camp and obeyed the Lord's order", "They moved anyway", "They held a feast", "They asked Moses for a change"],
+        "correct_index": 0
+    },
+    {
+        "text": "Who was the father of Joshua (originally Hoshea) according to Numbers 13?",
+        "options": ["Nun", "Jephunneh", "Amminadab", "Shedeur"],
+        "correct_index": 0
+    },
+    {
+        "text": "In what season did the spies go up to Canaan?",
+        "options": ["Spring", "The season of the first ripe grapes", "Winter", "Mid-summer"],
+        "correct_index": 1
+    },
+    {
+        "text": "What was the name of the valley where the spies cut a cluster of grapes so large it took two men to carry on a pole?",
+        "options": ["Valley of Salt", "Valley of Eshkol", "Valley of Jezreel", "Valley of Achor"],
+        "correct_index": 1
+    },
+    {
+        "text": "Which spy was from the tribe of Judah?",
+        "options": ["Joshua", "Caleb", "Palti", "Gaddi"],
+        "correct_index": 1
+    },
+    {
+        "text": "How did the Israelite community respond when Joshua and Caleb tried to encourage them in Numbers 14?",
+        "options": ["They cheered", "They talked about stoning them", "They ignored them", "They began to pray"],
+        "correct_index": 1
+    },
+    {
+        "text": "In Numbers 14, how did Moses intercede for the people when God threatened to strike them with a plague?",
+        "options": ["He offered a sacrifice", "He appealed to God's reputation among the nations and His great love", "He blamed Aaron", "He asked to be killed instead"],
+        "correct_index": 1
+    },
+    {
+        "text": "What happened to the ten spies who brought the bad report and caused the community to grumble?",
+        "options": ["They were forgiven", "They were struck down and died by a plague before the Lord", "They were made leaders of the tribes", "They were lost in the desert"],
+        "correct_index": 1
+    },
+    {
+        "text": "What happened when the Israelites tried to invade the hill country of Canaan WITHOUT the Ark or Moses after God's judgment?",
+        "options": ["They won a great victory", "They were defeated and beaten back by Amalekites and Canaanites", "They found the land empty", "They got lost"],
+        "correct_index": 1
+    },
+    {
+        "text": "In Numbers 15, what was the requirement for native-born Israelites and foreigners regarding the Lord's laws?",
+        "options": ["Different laws for each", "The same laws and regulations apply to both", "Foreigners had more restrictions", "Israelites had fewer duties"],
+        "correct_index": 1
+    },
+    {
+        "text": "What happened to the man found gathering wood on the Sabbath in Numbers 15?",
+        "options": ["He was fined", "He was put out of the camp for a day", "He was stoned to death as the Lord commanded", "He was given a warning"],
+        "correct_index": 2
+    },
+    {
+        "text": "What color was the thread used for the tassels on the Israelites' garments?",
+        "options": ["Red", "Purple", "Blue", "Gold"],
+        "correct_index": 2
+    },
+    {
+        "text": "What was the purpose of the tassel according to Numbers 15:39?",
+        "options": ["For fashion", "To remember the Lord's commands and NOT follow your own heart and eyes", "To distinguish them from Egyptians", "To keep the garment from fraying"],
+        "correct_index": 1
+    },
+    {
+        "text": "How many years did the Israelites stay in the wilderness for each day the spies were in the land?",
+        "options": ["One year for each day", "One month for each day", "Seven years for each day", "Ten years for each day"],
+        "correct_index": 0
+    },
+    {
+        "text": "Which tribe was the largest in the first census?",
+        "options": ["Judah", "Dan", "Reuben", "Ephraim"],
+        "correct_index": 0
+    },
+    {
+        "text": "Which tribe was the smallest in the first census (excluding the Levites)?",
+        "options": ["Manasseh", "Benjamin", "Asher", "Gad"],
+        "correct_index": 0
+    },
+    {
+        "text": "What was the total number of the tribe of Judah in the first census?",
+        "options": ["74,600", "50,000", "40,500", "54,400"],
+        "correct_index": 0
+    },
+    {
+        "text": "Who was the leader of the tribe of Ephraim in Numbers 2?",
+        "options": ["Elishama son of Ammihud", "Gamaliel son of Pedahzur", "Abidan son of Gideoni", "Ahira son of Enan"],
+        "correct_index": 0
+    },
+    {
+        "text": "In the arrangement of the camp, which tribes were on the South side?",
+        "options": ["Reuben, Simeon, Gad", "Judah, Issachar, Zebulun", "Ephraim, Manasseh, Benjamin", "Dan, Asher, Naphtali"],
+        "correct_index": 0
+    },
+    {
+        "text": "In the arrangement of the camp, which tribes were on the West side?",
+        "options": ["Ephraim, Manasseh, Benjamin", "Reuben, Simeon, Gad", "Judah, Issachar, Zebulun", "Dan, Asher, Naphtali"],
+        "correct_index": 0
+    },
+    {
+        "text": "In the arrangement of the camp, which tribes were on the North side?",
+        "options": ["Dan, Asher, Naphtali", "Judah, Issachar, Zebulun", "Reuben, Simeon, Gad", "Ephraim, Manasseh, Benjamin"],
+        "correct_index": 0
+    },
+    {
+        "text": "Who was the father of Eleazar and Ithamar?",
+        "options": ["Aaron", "Moses", "Amram", "Korah"],
+        "correct_index": 0
+    },
+    {
+        "text": "What was the number of Levites counted from one month old and upward in Numbers 3?",
+        "options": ["22,000", "8,580", "12,000", "30,000"],
+        "correct_index": 0
+    },
+    {
+        "text": "How many firstborn males of Israel were there from one month old and upward in Numbers 3?",
+        "options": ["22,273", "20,000", "22,000", "25,000"],
+        "correct_index": 0
+    },
+    {
+        "text": "What was the price set for the redemption of the extra firstborn males of Israel?",
+        "options": ["Five shekels each", "Ten shekels each", "One shekel each", "Fifty shekels each"],
+        "correct_index": 0
+    },
+    {
+        "text": "Which clan of the Levites had 7,500 males and camped on the West behind the Tabernacle?",
+        "options": ["Gershonites", "Merarites", "Kohathites", "Izharites"],
+        "correct_index": 0
+    },
+    {
+        "text": "Who was the leader of the Gershonites in Numbers 3?",
+        "options": ["Eliasaph son of Lael", "Elizaphan son of Uzziel", "Zuriel son of Abihail", "Eleazar son of Aaron"],
+        "correct_index": 0
+    },
+    {
+        "text": "Which clan of the Levites had 8,600 males and camped on the South side?",
+        "options": ["Kohathites", "Gershonites", "Merarites", "Hebronites"],
+        "correct_index": 0
+    },
+    {
+        "text": "Which clan of the Levites had 6,200 males and camped on the North side?",
+        "options": ["Merarites", "Kohathites", "Gershonites", "Libnites"],
+        "correct_index": 0
+    },
+    {
+        "text": "Who was the leader of the Kohathites in Numbers 3?",
+        "options": ["Elizaphan son of Uzziel", "Eliasaph son of Lael", "Zuriel son of Abihail", "Ahira son of Enan"],
+        "correct_index": 0
+    },
+    {
+        "text": "Who was the leader of the Merarites in Numbers 3?",
+        "options": ["Zuriel son of Abihail", "Eleazar son of Aaron", "Elizaphan son of Uzziel", "Eliasaph son of Lael"],
+        "correct_index": 0
+    },
+    {
+        "text": "Who was placed in charge of all the Levite leaders?",
+        "options": ["Eleazar son of Aaron", "Moses", "Joshua", "Caleb"],
+        "correct_index": 0
+    },
+    {
+        "text": "Who was responsible for the oil for the light, the fragrant incense, and the anointing oil?",
+        "options": ["Eleazar son of Aaron", "Ithamar son of Aaron", "Moses", "Joshua"],
+        "correct_index": 0
+    },
+    {
+        "text": "Who was responsible for directing the Gershonites and Merarites in their work?",
+        "options": ["Ithamar son of Aaron", "Eleazar son of Aaron", "Moses", "Joshua"],
+        "correct_index": 0
+    },
+    {
+        "text": "What was the total number of Levites between 30 and 50 years old fit for work in the Tabernacle?",
+        "options": ["8,580", "22,000", "12,000", "5,000"],
+        "correct_index": 0
+    },
+    {
+        "text": "What was the grain offering that accompanied the Nazirite's sacrifice at the end of their vow?",
+        "options": ["A basket of unleavened bread", "Two loaves of common bread", "Fine flour and wine", "Nothing"],
+        "correct_index": 0
+    },
+    {
+        "text": "In Numbers 10, when only one trumpet was blown, who was supposed to assemble?",
+        "options": ["The leaders, the heads of the clans of Israel", "The whole community", "The priests only", "The army only"],
+        "correct_index": 0
+    },
+    {
+        "text": "In Numbers 10, what was the signal for the camps to set out?",
+        "options": ["A trumpet blast", "A trumpet alarm (short blasts)", "The cloud moving", "Moses shouting"],
+        "correct_index": 1
+    },
+    {
+        "text": "Which tribe always set out first when the Israelites moved?",
+        "options": ["Judah", "Reuben", "Ephraim", "Dan"],
+        "correct_index": 0
+    },
+    {
+        "text": "Who was Moses' father-in-law (or relative) that Moses asked to stay with them as 'eyes' in the desert?",
+        "options": ["Hobab son of Reuel", "Jethro", "Balaam", "Zipporah"],
+        "correct_index": 0
+    },
+    {
+        "text": "When the Ark came to rest, what did Moses say?",
+        "options": ["'Return, Lord, to the countless thousands of Israel'", "'Stay where you are'", "'Be praised, O Lord'", "'Give us rest'"],
+        "correct_index": 0
+    }
+]
