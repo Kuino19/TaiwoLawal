@@ -80,6 +80,8 @@ export async function submitQuizAction(formData: FormData) {
     const score = parseInt(formData.get('score') as string);
     const total = parseInt(formData.get('total') as string);
 
+    console.log('Submitting Quiz Result to DB:', DB_ID, 'Collection: attempts');
+
     if (!quizId || !participantName || score === undefined || !total) {
         throw new Error('Missing required fields');
     }

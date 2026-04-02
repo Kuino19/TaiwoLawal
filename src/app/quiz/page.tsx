@@ -9,10 +9,15 @@ export const dynamic = 'force-dynamic';
 
 async function getQuizzes(): Promise<Quiz[]> {
     try {
+        console.log('--- FETCHING QUIZZES ---');
+        console.log('Using DB_ID:', DB_ID);
+        
         const res = await databases.listDocuments(DB_ID, 'quizzes', [
             Query.equal('is_active', true),
             Query.orderDesc('$createdAt'),
         ]);
+        
+        console.log(`Found ${res.total} active quizzes.`);
         return res.documents.map((doc) => ({
             id: doc.$id,
             title: doc.title,
@@ -21,7 +26,8 @@ async function getQuizzes(): Promise<Quiz[]> {
             questionCount: doc.question_count || 0,
             is_active: doc.is_active,
         }));
-    } catch {
+    } catch (error: any) {
+        console.error('Failed to fetch quizzes:', error.message);
         return [];
     }
 }

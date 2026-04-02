@@ -22,7 +22,7 @@ export default async function QuizResultPage({
                     'Keep Practicing!';
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4"
+        <div className="min-h-screen flex items-start justify-center p-4 pt-32 pb-20"
             style={{ background: 'linear-gradient(135deg, #1e0a4e 0%, #2e1065 100%)' }}>
             <div className="w-full max-w-lg">
                 {/* Glow */}

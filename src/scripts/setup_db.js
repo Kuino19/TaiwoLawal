@@ -12,10 +12,26 @@ const client = new Client()
 
 const databases = new Databases(client);
 
-const DB_ID = 'main-db';
+const DB_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '699760600036a00287';
+
 const COLLECTIONS = [
     {
-        id: 'books',
+        id: 'quizzes',
+        name: 'Quizzes',
+        attributes: [
+            { key: 'title', type: 'string', size: 255, required: true },
+            { key: 'description', type: 'string', size: 1000, required: true },
+            { key: 'duration', type: 'integer', required: true },
+            { key: 'is_active', type: 'boolean', required: true, default: true },
+            { key: 'question_count', type: 'integer', required: false, default: 0 },
+        ],
+        permissions: [
+            Permission.read(Role.any()),
+            Permission.write(Role.users()),
+        ]
+    },
+    {
+        id: 'questions',
         name: 'Books',
         attributes: [
             { key: 'title', type: 'string', size: 255, required: true },
