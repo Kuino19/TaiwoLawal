@@ -108,7 +108,7 @@ export default function QuizCard({ quiz, index = 0 }: { quiz: Quiz; index?: numb
                     <div className="flex items-center gap-1.5 text-xs font-sans px-2.5 py-1.5 rounded-lg"
                         style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.55)' }}>
                         <Clock className="w-3.5 h-3.5" />
-                        <span>{quiz.duration} mins</span>
+                        <span>{Math.round(quiz.duration / 60)} mins</span>
                     </div>
                     <div className="flex items-center gap-1.5 text-xs font-sans px-2.5 py-1.5 rounded-lg"
                         style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.55)' }}>

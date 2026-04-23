@@ -183,7 +183,7 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                         {/* Stats */}
                         <div className="grid grid-cols-2 gap-3 mb-8">
                             {[
-                                { icon: Clock, label: 'Duration', value: `${quiz.duration} min` },
+                                { icon: Clock, label: 'Duration', value: `${Math.round(quiz.duration / 60)} min` },
                                 { icon: BookOpen, label: 'Questions', value: `${questions.length} total` },
                             ].map(({ icon: Icon, label, value }) => (
                                 <div key={label} className="rounded-2xl p-4 text-center"

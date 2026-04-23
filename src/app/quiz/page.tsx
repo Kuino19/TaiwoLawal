@@ -76,7 +76,7 @@ export default async function QuizPage() {
                         <div className="inline-flex items-center gap-6 flex-wrap justify-center">
                             {[
                                 { icon: BookOpen, label: `${quizzes.length} Active ${quizzes.length === 1 ? 'Quiz' : 'Quizzes'}` },
-                                { icon: Clock, label: `Up to ${totalTime} mins` },
+                                { icon: Clock, label: `Up to ${Math.round(totalTime / 60)} mins` },
                                 { icon: Trophy, label: 'Win Prizes' },
                             ].map(({ icon: Icon, label }) => (
                                 <div key={label} className="flex items-center gap-2 text-sm font-sans"
