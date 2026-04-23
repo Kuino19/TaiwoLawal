@@ -2,120 +2,128 @@
 
 import { useCart } from '@/store/useCart';
 import Link from 'next/link';
-import { Trash2 } from 'lucide-react';
+import { Trash2, ShoppingCart, ArrowRight, BookOpen, Minus, Plus } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function CartPage() {
     const { items, removeItem, updateQuantity, total } = useCart();
 
     if (items.length === 0) {
         return (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
-                <h2 className="text-3xl font-extrabold text-gray-900 mb-4">Your cart is empty</h2>
-                <p className="text-lg text-gray-500 mb-8">Looks like you haven't added any books yet.</p>
-                <Link href="/store" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                    Go to Store
-                </Link>
+            <div className="min-h-screen flex items-center justify-center px-4 pt-20"
+                style={{ background: '#0d0520' }}>
+                <div className="text-center">
+                    <div className="w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center"
+                        style={{ background: 'rgba(109,40,217,0.1)', border: '1px solid rgba(109,40,217,0.2)' }}>
+                        <ShoppingCart className="w-10 h-10 text-royal-400" />
+                    </div>
+                    <h2 className="font-serif font-bold text-3xl text-white mb-3">Your cart is empty</h2>
+                    <p className="text-white/40 font-sans mb-8">Looks like you haven't added any books yet.</p>
+                    <Link href="/store" className="btn-gold">Browse Books</Link>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="bg-white">
-            <div className="max-w-7xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:px-8">
-                <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">Shopping Cart</h1>
+        <div className="min-h-screen pt-28 pb-24 px-4" style={{ background: '#0d0520' }}>
+            <div className="max-w-5xl mx-auto">
+                <div className="mb-10">
+                    <p className="section-label mb-1">Your Orders</p>
+                    <h1 className="font-serif font-bold text-4xl text-white">Shopping Cart</h1>
+                </div>
 
-                <div className="mt-12 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
-                    <section aria-labelledby="cart-heading" className="lg:col-span-7">
-                        <h2 id="cart-heading" className="sr-only">Items in your shopping cart</h2>
-
-                        <ul role="list" className="border-t border-b border-gray-200 divide-y divide-gray-200">
+                <div className="grid lg:grid-cols-3 gap-8 items-start">
+                    {/* Items */}
+                    <div className="lg:col-span-2 space-y-4">
+                        <AnimatePresence>
                             {items.map((item) => (
-                                <li key={item.$id} className="flex py-6 sm:py-10">
-                                    <div className="flex-shrink-0">
-                                        <div className="w-24 h-24 rounded-md overflow-hidden bg-gray-100 flex items-center justify-center text-gray-400">
-                                            {item.image_url ? (
-                                                <img src={item.image_url} alt={item.title} className="w-full h-full object-center object-cover" />
-                                            ) : (
-                                                <span>No Image</span>
-                                            )}
-                                        </div>
+                                <motion.div
+                                    key={item.$id}
+                                    layout
+                                    initial={{ opacity: 0, y: 12 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    className="rounded-2xl p-5 flex gap-5 items-center"
+                                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+                                >
+                                    {/* Cover thumb */}
+                                    <div className="w-16 h-20 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center"
+                                        style={{ background: 'linear-gradient(135deg, #2e1065, #6d28d9)' }}>
+                                        {item.image_url
+                                            ? <img src={item.image_url} alt={item.title} className="w-full h-full object-cover" />
+                                            : <BookOpen className="w-6 h-6 text-white/50" />}
                                     </div>
 
-                                    <div className="ml-4 flex-1 flex flex-col justify-between sm:ml-6">
-                                        <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
-                                            <div>
-                                                <div className="flex justify-between">
-                                                    <h3 className="text-sm">
-                                                        <Link href={`/store/${item.$id}`} className="font-medium text-gray-700 hover:text-gray-800">
-                                                            {item.title}
-                                                        </Link>
-                                                    </h3>
-                                                </div>
-                                                <div className="mt-1 flex text-sm">
-                                                    <p className="text-gray-500 capitalize">{item.type}</p>
-                                                </div>
-                                                <p className="mt-1 text-sm font-medium text-gray-900">₦{item.price.toLocaleString()}</p>
-                                            </div>
-
-                                            <div className="mt-4 sm:mt-0 sm:pr-9">
-                                                <label htmlFor={`quantity-${item.$id}`} className="sr-only">Quantity, {item.title}</label>
-                                                <select
-                                                    id={`quantity-${item.$id}`}
-                                                    name={`quantity-${item.$id}`}
-                                                    value={item.quantity}
-                                                    onChange={(e) => updateQuantity(item.$id, Number(e.target.value))}
-                                                    className="max-w-full rounded-md border border-gray-300 py-1.5 text-base leading-5 font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                >
-                                                    {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-                                                        <option key={num} value={num}>{num}</option>
-                                                    ))}
-                                                </select>
-
-                                                <div className="absolute top-0 right-0">
-                                                    <button
-                                                        type="button"
-                                                        className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
-                                                        onClick={() => removeItem(item.$id)}
-                                                    >
-                                                        <span className="sr-only">Remove</span>
-                                                        <Trash2 className="h-5 w-5" aria-hidden="true" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    {/* Info */}
+                                    <div className="flex-1 min-w-0">
+                                        <h3 className="font-serif font-bold text-white text-base leading-tight truncate">{item.title}</h3>
+                                        <p className="text-white/35 text-xs font-sans mt-0.5 capitalize">{item.type}</p>
+                                        <p className="font-bold text-gold-400 mt-2">₦{item.price.toLocaleString()}</p>
                                     </div>
-                                </li>
+
+                                    {/* Quantity controls */}
+                                    <div className="flex items-center gap-2 flex-shrink-0">
+                                        <button onClick={() => updateQuantity(item.$id, item.quantity - 1)}
+                                            className="w-7 h-7 rounded-full flex items-center justify-center transition-all hover:bg-white/10"
+                                            style={{ border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.6)' }}>
+                                            <Minus className="w-3 h-3" />
+                                        </button>
+                                        <span className="w-6 text-center text-white font-semibold text-sm">{item.quantity}</span>
+                                        <button onClick={() => updateQuantity(item.$id, item.quantity + 1)}
+                                            className="w-7 h-7 rounded-full flex items-center justify-center transition-all hover:bg-white/10"
+                                            style={{ border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.6)' }}>
+                                            <Plus className="w-3 h-3" />
+                                        </button>
+                                    </div>
+
+                                    {/* Subtotal + remove */}
+                                    <div className="text-right flex-shrink-0">
+                                        <p className="font-serif font-bold text-white text-base">₦{(item.price * item.quantity).toLocaleString()}</p>
+                                        <button onClick={() => removeItem(item.$id)}
+                                            className="mt-2 text-rose-400/60 hover:text-rose-400 transition-colors">
+                                            <Trash2 className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                </motion.div>
                             ))}
-                        </ul>
-                    </section>
+                        </AnimatePresence>
+                    </div>
 
-                    {/* Order summary */}
-                    <section
-                        aria-labelledby="summary-heading"
-                        className="mt-16 bg-gray-50 rounded-lg px-4 py-6 sm:p-6 lg:p-8 lg:mt-0 lg:col-span-5"
-                    >
-                        <h2 id="summary-heading" className="text-lg font-medium text-gray-900">Order summary</h2>
+                    {/* Order Summary */}
+                    <div className="rounded-2xl p-7 sticky top-24"
+                        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                        <h2 className="font-serif font-bold text-white text-xl mb-6">Order Summary</h2>
 
-                        <dl className="mt-6 space-y-4">
-                            <div className="flex items-center justify-between">
-                                <dt className="text-sm text-gray-600">Subtotal</dt>
-                                <dd className="text-sm font-medium text-gray-900">₦{total().toLocaleString()}</dd>
+                        <div className="space-y-3 mb-6">
+                            <div className="flex justify-between text-sm font-sans">
+                                <span className="text-white/45">Subtotal</span>
+                                <span className="text-white">₦{total().toLocaleString()}</span>
                             </div>
-                            <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
-                                <dt className="text-base font-medium text-gray-900">Order total</dt>
-                                <dd className="text-base font-medium text-gray-900">₦{total().toLocaleString()}</dd>
+                            <div className="flex justify-between text-sm font-sans">
+                                <span className="text-white/45">Delivery</span>
+                                <span className="text-white/45">Arranged on order</span>
                             </div>
-                        </dl>
-
-                        <div className="mt-6">
-                            <Link
-                                href="/checkout"
-                                className="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 block text-center"
-                            >
-                                Checkout
-                            </Link>
                         </div>
-                    </section>
+
+                        <div className="border-t border-white/8 pt-4 mb-6">
+                            <div className="flex justify-between items-center">
+                                <span className="font-semibold text-white">Total</span>
+                                <span className="font-serif font-bold text-2xl text-gold-400">₦{total().toLocaleString()}</span>
+                            </div>
+                        </div>
+
+                        <Link href="/checkout"
+                            className="w-full flex items-center justify-center gap-2 py-4 rounded-xl font-semibold text-white text-sm transition-all hover:opacity-90"
+                            style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)' }}>
+                            Proceed to Checkout <ArrowRight className="w-4 h-4" />
+                        </Link>
+                        <Link href="/store"
+                            className="w-full flex items-center justify-center py-3 mt-3 rounded-xl text-sm font-sans transition-colors hover:text-white"
+                            style={{ color: 'rgba(255,255,255,0.4)' }}>
+                            Continue Shopping
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

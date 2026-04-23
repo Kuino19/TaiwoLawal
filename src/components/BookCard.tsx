@@ -34,8 +34,15 @@ export default function BookCard({ book, index = 0 }: BookCardProps & { index?: 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            whileHover={{ y: -4 }}
             transition={{ duration: 0.5, delay: (index % 4) * 0.1 }}
-            className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-400 border border-gray-100 hover:border-royal-100 flex flex-col"
+            className="group rounded-2xl overflow-hidden flex flex-col"
+            style={{
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                backdropFilter: 'blur(12px)',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
+            }}
         >
             {/* Book Cover */}
             <Link href={`/store/${book.$id}`} className="block relative">
@@ -79,15 +86,15 @@ export default function BookCard({ book, index = 0 }: BookCardProps & { index?: 
             {/* Info */}
             <div className="p-5 flex flex-col flex-1">
                 <Link href={`/store/${book.$id}`}>
-                    <h3 className="font-serif font-bold text-gray-900 text-lg leading-tight group-hover:text-royal-700 transition-colors line-clamp-2 mb-1">
+                    <h3 className="font-serif font-bold text-white text-lg leading-tight group-hover:text-gold-300 transition-colors line-clamp-2 mb-1">
                         {book.title}
                     </h3>
                 </Link>
-                <p className="text-gray-500 text-sm font-sans leading-relaxed line-clamp-2 mb-4 flex-1">
+                <p className="text-white/40 text-sm font-sans leading-relaxed line-clamp-2 mb-4 flex-1">
                     {book.description}
                 </p>
-                <div className="flex items-center justify-between mt-auto">
-                    <span className="font-serif font-bold text-xl text-gray-900">
+                <div className="flex items-center justify-between mt-auto pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+                    <span className="font-serif font-bold text-xl text-white">
                         ₦{book.price.toLocaleString()}
                     </span>
                     <button

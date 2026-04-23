@@ -14,8 +14,27 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: 'Taiwo Funmilayo Lawal — Evangelist, Teacher & Author',
-  description: 'Official website of Taiwo Funmilayo Lawal. Raising a godly generation through books, competitions, and ministry.',
+  metadataBase: new URL('https://taiwolawal.com'),
+  title: {
+    default: 'Taiwo Funmilayo Lawal — Evangelist, Teacher & Author',
+    template: '%s | Taiwo Funmilayo Lawal',
+  },
+  description: 'Official website of Taiwo Funmilayo Lawal. Raising a godly generation through books, faith-based competitions, and children\'s ministry.',
+  keywords: ['children\'s evangelist', 'faith books', 'Bible quiz', 'children ministry', 'Taiwo Lawal', 'Lagos Nigeria'],
+  openGraph: {
+    type: 'website',
+    locale: 'en_NG',
+    siteName: 'Taiwo Funmilayo Lawal',
+    title: 'Taiwo Funmilayo Lawal — Raising a Godly Generation',
+    description: 'Children\'s evangelist, teacher, and author. Books, competitions, and ministry for children.',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Taiwo Funmilayo Lawal' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Taiwo Funmilayo Lawal',
+    description: 'Raising a Godly Generation — Books, Competitions & Ministry',
+    images: ['/og-image.png'],
+  },
 };
 
 export default function RootLayout({
