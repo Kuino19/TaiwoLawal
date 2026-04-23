@@ -57,7 +57,7 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                 setQuiz(data.quiz);
                 setQuestions(data.questions);
                 setAnswers(new Array(data.questions.length).fill(-1));
-                setTimeLeft(data.quiz.duration * 60);
+                setTimeLeft(data.quiz.duration); // duration stored in seconds already
             }
             setLoading(false);
         });
@@ -118,7 +118,7 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
     }, [nameEntered, currentQuestion, answers, questions]);
 
     const formatTime = (s: number) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
-    const timePercent = quiz ? (timeLeft / (quiz.duration * 60)) * 100 : 100;
+    const timePercent = quiz ? (timeLeft / quiz.duration) * 100 : 100;
     const progress = questions.length ? ((currentQuestion + 1) / questions.length) * 100 : 0;
     const answeredCount = answers.filter((a) => a !== -1).length;
     const isLowTime = timeLeft < 60;
