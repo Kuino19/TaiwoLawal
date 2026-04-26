@@ -118,23 +118,45 @@ export default function QuizCard({ quiz, index = 0 }: { quiz: Quiz; index?: numb
                 </div>
 
                 {/* CTA */}
-                <Link
-                    href={`/quiz/${quiz.id}`}
-                    className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-white text-sm transition-all duration-300 hover:shadow-lg group/btn"
-                    style={{
-                        background: `linear-gradient(135deg, ${pal.from}, ${pal.to})`,
-                        boxShadow: `0 0 0 0 ${pal.glow}`,
-                    }}
-                    onMouseEnter={(e) => {
-                        (e.currentTarget as HTMLElement).style.boxShadow = `0 6px 24px ${pal.glow}`;
-                    }}
-                    onMouseLeave={(e) => {
-                        (e.currentTarget as HTMLElement).style.boxShadow = '0 0 0 0 transparent';
-                    }}
-                >
-                    Start Quiz
-                    <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover/btn:translate-x-1" />
-                </Link>
+                <div className="flex flex-col gap-2">
+                    <Link
+                        href={`/quiz/${quiz.id}`}
+                        className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-white text-sm transition-all duration-300 hover:shadow-lg group/btn"
+                        style={{
+                            background: `linear-gradient(135deg, ${pal.from}, ${pal.to})`,
+                            boxShadow: `0 0 0 0 ${pal.glow}`,
+                        }}
+                        onMouseEnter={(e) => {
+                            (e.currentTarget as HTMLElement).style.boxShadow = `0 6px 24px ${pal.glow}`;
+                        }}
+                        onMouseLeave={(e) => {
+                            (e.currentTarget as HTMLElement).style.boxShadow = '0 0 0 0 transparent';
+                        }}
+                    >
+                        Start Quiz
+                        <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover/btn:translate-x-1" />
+                    </Link>
+                    <Link
+                        href={`/leaderboard?quiz=${quiz.id}`}
+                        className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300"
+                        style={{
+                            background: 'rgba(255,255,255,0.05)',
+                            border: '1px solid rgba(255,255,255,0.10)',
+                            color: 'rgba(255,255,255,0.55)',
+                        }}
+                        onMouseEnter={(e) => {
+                            (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.09)';
+                            (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.85)';
+                        }}
+                        onMouseLeave={(e) => {
+                            (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.05)';
+                            (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.55)';
+                        }}
+                    >
+                        <Users className="w-3.5 h-3.5" />
+                        Leaderboard
+                    </Link>
+                </div>
             </div>
         </motion.div>
     );

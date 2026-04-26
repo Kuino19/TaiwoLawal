@@ -31,7 +31,16 @@ async function getAttempts(): Promise<Attempt[]> {
             Query.orderDesc('score'),
             Query.limit(200),
         ]);
-        return res.documents as unknown as Attempt[];
+        return res.documents.map((d) => ({
+            $id: d.$id,
+            participant_name: d.participant_name as string,
+            quiz_title: d.quiz_title as string,
+            quiz_id: d.quiz_id as string,
+            score: d.score as number,
+            total: d.total as number,
+            percentage: d.percentage as number,
+            $createdAt: d.$createdAt,
+        }));
     } catch {
         return [];
     }
