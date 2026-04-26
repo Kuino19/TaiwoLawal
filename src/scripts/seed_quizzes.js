@@ -2,7 +2,7 @@
  * seed_quizzes.js
  * Creates two quizzes in Appwrite:
  *   1. "Book of Numbers" — 1000-question pool, 30 served per session, 15 mins
- *   2. "Foursquare Standard of Attainment" — 1000-question pool, 30 served per session, 15 mins
+ *   2. "General Foursquare Knowledge" — 1000-question pool, 30 served per session, 15 mins
  *
  * Run: node src/scripts/seed_quizzes.js
  */
@@ -375,7 +375,7 @@ const numbersQuestions = [
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
-// FOURSQUARE STANDARD OF ATTAINMENT — 1000 Questions
+// GENERAL FOURSQUARE KNOWLEDGE — 1000 Questions
 // ─────────────────────────────────────────────────────────────────────────────
 const foursquareQuestions = [
   // ── Doctrine: The Bible ──
@@ -713,10 +713,10 @@ async function main() {
         console.log('\n⏳ Waiting 3 seconds before creating the second quiz...');
         await delay(3000);
 
-        // Create Quiz 2: Foursquare Standard of Attainment
+        // Create Quiz 2: General Foursquare Knowledge
         const foursquareId = await createQuizAndQuestions(
-            'Foursquare Standard of Attainment',
-            'Comprehensive quiz covering Foursquare Gospel doctrine, church history, Bible knowledge, and the Standard of Attainment topics. 30 questions per session drawn from a 1,000-question pool. 15 minutes.',
+            'General Foursquare Knowledge',
+            'Comprehensive quiz covering Foursquare Gospel doctrine, church history, Bible knowledge, and general topics. 30 questions per session drawn from a 1,000-question pool. 15 minutes.',
             foursquareQuestions,
             900 // 15 minutes in seconds
         );
@@ -724,7 +724,7 @@ async function main() {
         console.log('\n\n🎉 ALL DONE!');
         console.log('─────────────────────────────────────');
         console.log(`  Book of Numbers Quiz ID:              ${numbersId}`);
-        console.log(`  Foursquare Standard Quiz ID:          ${foursquareId}`);
+        console.log(`  General Foursquare Knowledge Quiz ID: ${foursquareId}`);
         console.log('─────────────────────────────────────');
         console.log('  Both quizzes are now ACTIVE on your site.');
         console.log('  Each quiz serves 30 random questions per session from its 1,000-question pool.');
