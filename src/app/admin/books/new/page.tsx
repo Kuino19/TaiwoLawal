@@ -27,6 +27,11 @@ export default function AddBookPage() {
                 try {
                     await createBookAction(formData);
                 } catch (error: any) {
+                    // Next.js redirect() throws a NEXT_REDIRECT error internally — this is not a real error.
+                    // Re-throw it so the framework can handle navigation correctly.
+                    if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
+                        throw error;
+                    }
                     console.error(error);
                     alert(`Failed to save book: ${error?.message || 'Please check your storage settings.'}`);
                 } finally {
