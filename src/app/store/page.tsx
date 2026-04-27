@@ -15,6 +15,8 @@ export const metadata: Metadata = {
     },
 };
 
+export const dynamic = 'force-dynamic'; // Always fetch fresh books, never serve cached page
+
 const DB_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'main-db';
 
 async function getBooks(): Promise<Book[]> {
