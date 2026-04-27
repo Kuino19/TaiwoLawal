@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { databases } from '@/lib/appwrite';
-import { Query } from 'appwrite';
+import { adminDatabases } from '@/lib/server/appwrite';
+import { Query } from 'node-appwrite';
 import BookCard from '@/components/BookCard';
 import { Book } from '@/store/useCart';
 import { BookOpen } from 'lucide-react';
@@ -19,12 +19,13 @@ const DB_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'main-db';
 
 async function getBooks(): Promise<Book[]> {
     try {
-        const res = await databases.listDocuments(DB_ID, 'books', [
+        const res = await adminDatabases.listDocuments(DB_ID, 'books', [
             Query.orderDesc('$createdAt'),
             Query.limit(50),
         ]);
         return res.documents as unknown as Book[];
-    } catch {
+    } catch (e) {
+        console.error('Failed to fetch books:', e);
         return [];
     }
 }
