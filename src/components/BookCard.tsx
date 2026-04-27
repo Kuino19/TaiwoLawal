@@ -102,7 +102,13 @@ export default function BookCard({ book, index = 0 }: BookCardProps & { index?: 
                             href={book.download_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                toast.success('Downloaded successfully! 🎉', {
+                                    duration: 3000,
+                                    icon: '📥',
+                                });
+                            }}
                             className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white transition-all hover:scale-105"
                             style={{ background: 'linear-gradient(135deg, #065f46, #059669)' }}
                         >
