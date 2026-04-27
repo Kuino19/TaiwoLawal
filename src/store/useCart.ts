@@ -7,6 +7,7 @@ export interface Book {
     description: string;
     price: number;
     image_url: string;
+    download_url?: string; // Only present for digital books
     type: 'digital' | 'physical';
 }
 
