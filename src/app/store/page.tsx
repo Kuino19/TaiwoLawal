@@ -25,7 +25,15 @@ async function getBooks(): Promise<Book[]> {
             Query.orderDesc('$createdAt'),
             Query.limit(50),
         ]);
-        return res.documents as unknown as Book[];
+        return res.documents.map((doc) => ({
+            $id: doc.$id,
+            title: doc.title as string,
+            description: doc.description as string,
+            price: doc.price as number,
+            type: doc.type as string,
+            image_url: (doc.image_url as string) || '',
+            download_url: (doc.download_url as string) || '',
+        })) as Book[];
     } catch (e) {
         console.error('Failed to fetch books:', e);
         return [];
