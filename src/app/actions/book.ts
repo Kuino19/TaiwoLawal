@@ -17,7 +17,7 @@ export async function createBookAction(formData: FormData) {
     const coverFile = formData.get('cover-image') as File;
     const bookFile = formData.get('book-file') as File;
 
-    if (!title || !description || !price || !type) {
+    if (!title || !description || isNaN(price) || !type) {
         throw new Error('Required fields missing');
     }
 

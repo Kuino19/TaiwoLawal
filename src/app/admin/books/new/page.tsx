@@ -26,9 +26,9 @@ export default function AddBookPage() {
                 setLoading(true);
                 try {
                     await createBookAction(formData);
-                } catch (error) {
+                } catch (error: any) {
                     console.error(error);
-                    alert('Failed to save book. Please check your storage settings.');
+                    alert(`Failed to save book: ${error?.message || 'Please check your storage settings.'}`);
                 } finally {
                     setLoading(false);
                 }
@@ -57,9 +57,12 @@ export default function AddBookPage() {
                             name="price"
                             id="price"
                             required
+                            min="0"
+                            step="0.01"
                             placeholder="0.00"
                             className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:outline-none focus:border-royal-500 focus:ring-1 focus:ring-royal-500 transition-all"
                         />
+                        <p className="mt-1 text-xs text-gray-400">Enter 0 to make this a free book.</p>
                     </div>
 
                     <div>
