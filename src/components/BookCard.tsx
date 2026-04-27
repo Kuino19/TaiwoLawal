@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BookOpen, ShoppingCart, Star } from 'lucide-react';
+import { BookOpen, ShoppingCart, Star, Download } from 'lucide-react';
 import Link from 'next/link';
 import { useCart } from '@/store/useCart';
 import toast from 'react-hot-toast';
@@ -94,17 +94,31 @@ export default function BookCard({ book, index = 0 }: BookCardProps & { index?: 
                     {book.description}
                 </p>
                 <div className="flex items-center justify-between mt-auto pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-                    <span className="font-serif font-bold text-xl text-white">
-                        ₦{book.price.toLocaleString()}
+                    <span className="font-serif font-bold text-xl" style={{ color: book.price === 0 ? '#34d399' : '#fff' }}>
+                        {book.price === 0 ? 'FREE' : `₦${book.price.toLocaleString()}`}
                     </span>
-                    <button
-                        onClick={handleAddToCart}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white transition-all"
-                        style={{ background: 'linear-gradient(135deg, #2e1065, #6d28d9)' }}
-                    >
-                        <ShoppingCart className="w-4 h-4" />
-                        Add
-                    </button>
+                    {book.type === 'digital' && book.price === 0 && book.download_url ? (
+                        <a
+                            href={book.download_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white transition-all hover:scale-105"
+                            style={{ background: 'linear-gradient(135deg, #065f46, #059669)' }}
+                        >
+                            <Download className="w-4 h-4" />
+                            Download
+                        </a>
+                    ) : (
+                        <button
+                            onClick={handleAddToCart}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white transition-all hover:scale-105"
+                            style={{ background: 'linear-gradient(135deg, #2e1065, #6d28d9)' }}
+                        >
+                            <ShoppingCart className="w-4 h-4" />
+                            Add
+                        </button>
+                    )}
                 </div>
             </div>
         </motion.div>

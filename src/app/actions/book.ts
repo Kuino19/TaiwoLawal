@@ -3,6 +3,7 @@
 import { ID } from 'node-appwrite';
 import { adminDatabases, adminStorage } from '@/lib/server/appwrite';
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 const DB_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'main-db';
 const BUCKET_ID = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || '699b30ce001bfec8ad88'; // Single bucket for all book-related files
@@ -78,12 +79,19 @@ export async function createBookAction(formData: FormData) {
         throw new Error(error.message || 'Failed to create book and upload files');
     }
 
+    revalidatePath('/admin/books');
+    revalidatePath('/store');
+    revalidatePath('/');
     redirect('/admin/books');
 }
 
 export async function deleteBookAction(bookId: string) {
     try {
         await adminDatabases.deleteDocument(DB_ID, 'books', bookId);
+        // Refresh the admin list and public pages so the deleted book disappears immediately
+        revalidatePath('/admin/books');
+        revalidatePath('/store');
+        revalidatePath('/');
     } catch (error) {
         console.error('Failed to delete book:', error);
         throw new Error('Failed to delete book');

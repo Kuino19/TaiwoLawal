@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BookOpen, Star, ShoppingCart, ArrowRight } from 'lucide-react';
+import { BookOpen, Star, ShoppingCart, ArrowRight, Download } from 'lucide-react';
 import Link from 'next/link';
 import { useCart } from '@/store/useCart';
 import toast from 'react-hot-toast';
@@ -107,14 +107,29 @@ export default function FeaturedBooksClient({ books }: Props) {
                                         </h3>
                                     </Link>
                                     <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/8">
-                                        <span className="font-serif font-bold text-xl text-white">₦{book.price.toLocaleString()}</span>
-                                        <button
-                                            onClick={() => { addItem(book); toast.success(`"${book.title}" added!`); }}
-                                            className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-white transition-all hover:scale-105 hover:opacity-90"
-                                            style={{ background: `linear-gradient(135deg, ${col.from}, ${col.to})` }}
-                                        >
-                                            <ShoppingCart className="w-3.5 h-3.5" /> Add
-                                        </button>
+                                        <span className="font-serif font-bold text-xl" style={{ color: book.price === 0 ? '#34d399' : '#fff' }}>
+                                            {book.price === 0 ? 'FREE' : `₦${book.price.toLocaleString()}`}
+                                        </span>
+                                        {book.type === 'digital' && book.price === 0 && book.download_url ? (
+                                            <a
+                                                href={book.download_url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                onClick={(e) => e.stopPropagation()}
+                                                className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-white transition-all hover:scale-105"
+                                                style={{ background: 'linear-gradient(135deg, #065f46, #059669)' }}
+                                            >
+                                                <Download className="w-3.5 h-3.5" /> Download
+                                            </a>
+                                        ) : (
+                                            <button
+                                                onClick={() => { addItem(book); toast.success(`"${book.title}" added!`); }}
+                                                className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-white transition-all hover:scale-105"
+                                                style={{ background: `linear-gradient(135deg, ${col.from}, ${col.to})` }}
+                                            >
+                                                <ShoppingCart className="w-3.5 h-3.5" /> Add
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                             </motion.div>
