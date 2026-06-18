@@ -23,10 +23,12 @@ async function getQuiz(quizId: string) {
     } catch { return null; }
 }
 
-export default async function TopWinnersPage({ params }: { params: { id: string } }) {
+export default async function TopWinnersPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    
     const [winners, quiz] = await Promise.all([
-        getTopWinners(params.id),
-        getQuiz(params.id)
+        getTopWinners(id),
+        getQuiz(id)
     ]);
 
     if (!quiz) {
