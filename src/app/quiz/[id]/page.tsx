@@ -63,12 +63,32 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
             if (data) {
                 setQuiz(data.quiz);
                 setQuestions(data.questions);
+                setTimeLeft(data.quiz.duration);
                 setAnswers(new Array(data.questions.length).fill(-1));
-                setTimeLeft(data.quiz.duration); // duration stored in seconds already
             }
             setLoading(false);
         });
     }, [quizId]);
+
+    const handleStartQuiz = async () => {
+        if (!participantName.trim() || !participantPhone.trim()) {
+            alert('Please enter both your name and phone number to continue.');
+            return;
+        }
+        setCheckingAttempt(true);
+        try {
+            const exists = await checkAttemptExistsAction(quizId, participantPhone);
+            if (exists) {
+                alert('An attempt with this phone number has already been recorded. Only one entry is allowed per person!');
+                setCheckingAttempt(false);
+                return;
+            }
+            setNameEntered(true);
+        } catch (e) {
+            alert('Could not verify attempt status. Please try again.');
+            setCheckingAttempt(false);
+        }
+    };
 
     const handleSubmit = useCallback(async (force = false) => {
         if (submitting) return;
@@ -287,25 +307,7 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                             }}
                         />
                         <button
-                            onClick={async () => {
-                                if (!participantName.trim() || !participantPhone.trim()) {
-                                    alert('Please enter both your name and phone number to continue.');
-                                    return;
-                                }
-                                setCheckingAttempt(true);
-                                try {
-                                    const exists = await checkAttemptExistsAction(quizId, participantPhone);
-                                    if (exists) {
-                                        alert('An attempt with this phone number has already been recorded. Only one entry is allowed per person!');
-                                        setCheckingAttempt(false);
-                                        return;
-                                    }
-                                    setNameEntered(true);
-                                } catch (e) {
-                                    alert('Could not verify attempt status. Please try again.');
-                                    setCheckingAttempt(false);
-                                }
-                            }}
+                            onClick={handleStartQuiz}
                             disabled={!participantName.trim() || !participantPhone.trim() || checkingAttempt}
                             className="w-full bg-gradient-to-r from-gold-500 to-amber-600 text-white font-sans font-bold py-4 rounded-xl hover:shadow-xl hover:shadow-gold-500/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                         >
