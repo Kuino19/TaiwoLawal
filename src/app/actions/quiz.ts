@@ -131,3 +131,16 @@ export async function uploadAudioAction(formData: FormData) {
         throw new Error(`Failed to upload audio: ${e.message}`);
     }
 }
+
+export async function checkAttemptExistsAction(quizId: string, phone: string) {
+    if (!phone) return false;
+    try {
+        const existing = await adminDatabases.listDocuments(DB_ID, 'attempts', [
+            Query.equal('quiz_id', quizId),
+            Query.equal('participant_phone', phone),
+        ]);
+        return existing.total > 0;
+    } catch (e) {
+        return false;
+    }
+}

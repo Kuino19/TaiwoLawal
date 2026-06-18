@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowRight, CheckCircle2, Clock, AlertCircle, ChevronRight, 
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import { submitQuizAction, uploadAudioAction } from '@/app/actions/quiz';
+import { submitQuizAction, uploadAudioAction, checkAttemptExistsAction } from '@/app/actions/quiz';
 
 interface Question {
     $id: string;
@@ -48,6 +48,7 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
     const [participantName, setParticipantName] = useState('');
     const [participantPhone, setParticipantPhone] = useState('');
     const [nameEntered, setNameEntered] = useState(false);
+    const [checkingAttempt, setCheckingAttempt] = useState(false);
     const [timeLeft, setTimeLeft] = useState(0);
     const [submitting, setSubmitting] = useState(false);
     const [showSubmitGuard, setShowSubmitGuard] = useState(false);
@@ -264,7 +265,7 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                             placeholder="Enter your full name"
                             value={participantName}
                             onChange={(e) => setParticipantName(e.target.value)}
-                            onKeyDown={(e) => { if (e.key === 'Enter' && participantName.trim()) setNameEntered(true); }}
+                            onKeyDown={(e) => { if (e.key === 'Enter' && participantName.trim() && participantPhone.trim()) handleStartQuiz(); }}
                             className="w-full px-4 py-3.5 rounded-xl font-sans text-sm focus:outline-none mb-3"
                             style={{
                                 background: 'rgba(255,255,255,0.07)',
@@ -274,10 +275,10 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                         />
                         <input
                             type="tel"
-                            placeholder="Enter your phone number (optional)"
+                            placeholder="Enter your phone number (required to claim prize)"
                             value={participantPhone}
                             onChange={(e) => setParticipantPhone(e.target.value)}
-                            onKeyDown={(e) => { if (e.key === 'Enter' && participantName.trim()) setNameEntered(true); }}
+                            onKeyDown={(e) => { if (e.key === 'Enter' && participantName.trim() && participantPhone.trim()) handleStartQuiz(); }}
                             className="w-full px-4 py-3.5 rounded-xl font-sans text-sm focus:outline-none mb-4"
                             style={{
                                 background: 'rgba(255,255,255,0.07)',
@@ -286,12 +287,29 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                             }}
                         />
                         <button
-                            onClick={() => { if (participantName.trim()) setNameEntered(true); }}
-                            disabled={!participantName.trim()}
-                            className="w-full py-3.5 rounded-xl font-semibold text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                            style={{ background: 'linear-gradient(135deg, #6d28d9, #f59e0b)' }}
+                            onClick={async () => {
+                                if (!participantName.trim() || !participantPhone.trim()) {
+                                    alert('Please enter both your name and phone number to continue.');
+                                    return;
+                                }
+                                setCheckingAttempt(true);
+                                try {
+                                    const exists = await checkAttemptExistsAction(quizId, participantPhone);
+                                    if (exists) {
+                                        alert('An attempt with this phone number has already been recorded. Only one entry is allowed per person!');
+                                        setCheckingAttempt(false);
+                                        return;
+                                    }
+                                    setNameEntered(true);
+                                } catch (e) {
+                                    alert('Could not verify attempt status. Please try again.');
+                                    setCheckingAttempt(false);
+                                }
+                            }}
+                            disabled={!participantName.trim() || !participantPhone.trim() || checkingAttempt}
+                            className="w-full bg-gradient-to-r from-gold-500 to-amber-600 text-white font-sans font-bold py-4 rounded-xl hover:shadow-xl hover:shadow-gold-500/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                         >
-                            Begin Quiz <ChevronRight className="w-4 h-4" />
+                            {checkingAttempt ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : 'Begin Quiz'}
                         </button>
                     </div>
                 </div>
