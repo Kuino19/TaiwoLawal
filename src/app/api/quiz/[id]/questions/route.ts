@@ -36,12 +36,22 @@ export async function GET(
             cursor = res.documents[res.documents.length - 1].$id;
         }
 
-        // Shuffle the full pool and take questionCount for this session
-        const shuffled = allQuestions
-            .sort(() => Math.random() - 0.5)
-            .slice(0, questionCount);
+        // Separate into normal and reflection questions
+        const normalQuestions = allQuestions.filter(q => q.correct_index !== -1);
+        const reflectionQuestions = allQuestions.filter(q => q.correct_index === -1);
 
-        return NextResponse.json(shuffled);
+        // Shuffle the normal pool and take (questionCount - 1) for this session
+        const shuffledNormal = normalQuestions
+            .sort(() => Math.random() - 0.5)
+            .slice(0, questionCount - 1);
+
+        // If we have reflection questions, pick 1 and append it
+        if (reflectionQuestions.length > 0) {
+            const randomReflection = reflectionQuestions[Math.floor(Math.random() * reflectionQuestions.length)];
+            shuffledNormal.push(randomReflection);
+        }
+
+        return NextResponse.json(shuffledNormal);
     } catch {
         return NextResponse.json([], { status: 200 });
     }

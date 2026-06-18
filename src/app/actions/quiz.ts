@@ -1,7 +1,7 @@
 'use server';
 
 import { ID, Query } from 'node-appwrite';
-import { adminDatabases } from '@/lib/server/appwrite';
+import { adminDatabases, adminStorage } from '@/lib/server/appwrite';
 import { redirect } from 'next/navigation';
 
 const DB_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'main-db';
@@ -80,6 +80,7 @@ export async function submitQuizAction(formData: FormData) {
     const score = parseInt(formData.get('score') as string);
     const total = parseInt(formData.get('total') as string);
     const userAnswers = formData.get('userAnswers') as string;
+    const participantPhone = formData.get('participantPhone') as string || '';
 
     console.log('--- STARTING QUIZ SUBMISSION ---');
     console.log('Quiz ID:', quizId);
@@ -98,6 +99,7 @@ export async function submitQuizAction(formData: FormData) {
             quiz_id: quizId,
             quiz_title: quizTitle,
             participant_name: participantName,
+            participant_phone: participantPhone,
             score,
             total,
             percentage: Math.round((score / total) * 100),
@@ -115,4 +117,17 @@ export async function submitQuizAction(formData: FormData) {
 
     console.log('Redirecting to results page...');
     redirect(`/quiz/${quizId}/result?attemptId=${attemptId}`);
+}
+
+export async function uploadAudioAction(formData: FormData) {
+    const audioFile = formData.get('audio') as File;
+    if (!audioFile) throw new Error('No audio file provided');
+    
+    const bucketId = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || '699b30ce001bfec8ad88';
+    try {
+        const res = await adminStorage.createFile(bucketId, ID.unique(), audioFile);
+        return `${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${bucketId}/files/${res.$id}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID}`;
+    } catch (e: any) {
+        throw new Error(`Failed to upload audio: ${e.message}`);
+    }
 }
