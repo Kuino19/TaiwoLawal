@@ -75,8 +75,14 @@ export default async function AdminQuizzesPage() {
                                 </div>
 
                                 <div className="flex items-center gap-1 flex-shrink-0">
+                                    <Link href={`/admin/quizzes/${quiz.$id}/winners`}
+                                        className="w-9 h-9 rounded-lg flex items-center justify-center text-amber-500 hover:text-amber-600 hover:bg-amber-50 transition-all"
+                                        title="View Winners">
+                                        <Trophy className="w-4 h-4" />
+                                    </Link>
                                     <Link href={`/admin/quizzes/${quiz.$id}/edit`}
-                                        className="w-9 h-9 rounded-lg flex items-center justify-center text-gray-400 hover:text-royal-600 hover:bg-royal-50 transition-all">
+                                        className="w-9 h-9 rounded-lg flex items-center justify-center text-gray-400 hover:text-royal-600 hover:bg-royal-50 transition-all"
+                                        title="Edit Quiz">
                                         <Edit className="w-4 h-4" />
                                     </Link>
                                     <form action={async () => {
