@@ -19,6 +19,7 @@ interface QuizData {
     title: string;
     description: string;
     duration: number;
+    image_url?: string;
 }
 
 async function fetchQuizData(quizId: string): Promise<{ quiz: QuizData; questions: Question[] } | null> {
@@ -249,6 +250,13 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                     <div className="p-8 md:p-10">
                         {/* Section label */}
                         <p className="text-xs font-bold tracking-[0.3em] uppercase text-gold-400 mb-4 text-center">Get Ready</p>
+
+                        {quiz.image_url && (
+                            <div className="mb-6 w-full max-w-[160px] mx-auto rounded-xl overflow-hidden shadow-2xl border border-white/10 relative group">
+                                <img src={quiz.image_url} alt={quiz.title} className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            </div>
+                        )}
 
                         <h1 className="font-serif font-bold text-3xl md:text-4xl text-white mb-3 text-center leading-snug">
                             {quiz.title}

@@ -40,18 +40,19 @@ export async function GET(
         const normalQuestions = allQuestions.filter(q => q.correct_index !== -1);
         const reflectionQuestions = allQuestions.filter(q => q.correct_index === -1);
 
-        // Shuffle the normal pool and take (questionCount - 1) for this session
-        const shuffledNormal = normalQuestions
-            .sort(() => Math.random() - 0.5)
-            .slice(0, questionCount - 1);
+        // Shuffle the normal pool
+        const shuffledNormal = normalQuestions.sort(() => Math.random() - 0.5);
 
-        // If we have reflection questions, pick 1 and append it
+        let finalQuestions = [];
         if (reflectionQuestions.length > 0) {
             const randomReflection = reflectionQuestions[Math.floor(Math.random() * reflectionQuestions.length)];
-            shuffledNormal.push(randomReflection);
+            finalQuestions = shuffledNormal.slice(0, questionCount - 1);
+            finalQuestions.push(randomReflection);
+        } else {
+            finalQuestions = shuffledNormal.slice(0, questionCount);
         }
 
-        return NextResponse.json(shuffledNormal);
+        return NextResponse.json(finalQuestions);
     } catch {
         return NextResponse.json([], { status: 200 });
     }
