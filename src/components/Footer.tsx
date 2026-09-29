@@ -17,19 +17,18 @@ export default function Footer() {
     ];
 
     return (
-        <footer style={{ background: 'linear-gradient(160deg, #0d0520 0%, #1e0a4e 100%)' }}>
+        <footer className="bg-white border-t border-slate-200">
             {/* Top accent line */}
-            <div className="h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(251,191,36,0.5), transparent)' }} />
+            <div className="h-px bg-gradient-to-r from-transparent via-amber-200 to-transparent" />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
                 {/* WhatsApp Newsletter Strip */}
-                <div className="mb-16 rounded-2xl px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-6"
-                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(251,191,36,0.15)' }}>
+                <div className="mb-16 rounded-2xl px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-6 bg-slate-50 border border-slate-200">
                     <div>
-                        <p className="text-xs font-bold tracking-[0.3em] uppercase text-gold-400 mb-1">Stay Connected</p>
-                        <h3 className="font-serif font-bold text-white text-2xl mb-1">Get Updates on WhatsApp</h3>
-                        <p className="text-white/40 text-sm font-sans">New books, competitions, and ministry updates — delivered to you.</p>
+                        <p className="text-xs font-bold tracking-[0.3em] uppercase text-amber-600 mb-1">Stay Connected</p>
+                        <h3 className="font-serif font-bold text-slate-900 text-2xl mb-1">Get Updates on WhatsApp</h3>
+                        <p className="text-slate-600 text-sm font-sans">New books, competitions, and ministry updates — delivered to you.</p>
                     </div>
                     <a
                         href="https://wa.me/2348098687742?text=Hello%21+I%27d+like+to+receive+updates+about+books+and+competitions."
@@ -48,13 +47,12 @@ export default function Footer() {
                     {/* Brand */}
                     <div className="space-y-5">
                         <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
-                                style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)' }}>
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-gradient-to-br from-amber-500 to-amber-600 shadow-sm">
                                 <span className="text-white font-serif font-bold text-sm">TL</span>
                             </div>
-                            <span className="font-serif font-bold text-2xl text-white">Taiwo Lawal</span>
+                            <span className="font-serif font-bold text-2xl text-slate-900">Taiwo Lawal</span>
                         </div>
-                        <p className="text-white/45 text-sm font-sans leading-relaxed">
+                        <p className="text-slate-600 text-sm font-sans leading-relaxed">
                             Raising a godly generation through books, faith-based education, and inspiring competitions for children.
                         </p>
                         {/* Social icons */}
@@ -76,13 +74,13 @@ export default function Footer() {
 
                     {/* Links */}
                     <div>
-                        <h3 className="text-xs font-bold tracking-[0.3em] uppercase text-gold-500 mb-6">Quick Links</h3>
+                        <h3 className="text-xs font-bold tracking-[0.3em] uppercase text-amber-600 mb-6">Quick Links</h3>
                         <ul className="space-y-3">
                             {quickLinks.map((link) => (
                                 <li key={link.href}>
                                     <Link href={link.href}
-                                        className="text-white/45 hover:text-white text-sm font-sans transition-colors hover:translate-x-1 inline-flex items-center gap-1.5 group">
-                                        <span className="w-1 h-1 rounded-full bg-gold-500/50 group-hover:bg-gold-400 transition-colors flex-shrink-0" />
+                                        className="text-slate-600 hover:text-amber-600 text-sm font-sans transition-colors hover:translate-x-1 inline-flex items-center gap-1.5 group">
+                                        <span className="w-1 h-1 rounded-full bg-slate-300 group-hover:bg-amber-400 transition-colors flex-shrink-0" />
                                         {link.label}
                                     </Link>
                                 </li>
@@ -92,7 +90,7 @@ export default function Footer() {
 
                     {/* Contact */}
                     <div>
-                        <h3 className="text-xs font-bold tracking-[0.3em] uppercase text-gold-500 mb-6">Get In Touch</h3>
+                        <h3 className="text-xs font-bold tracking-[0.3em] uppercase text-amber-600 mb-6">Get In Touch</h3>
                         <ul className="space-y-4">
                             {[
                                 { icon: Mail, text: 'joygirl714u@gmail.com', href: 'mailto:joygirl714u@gmail.com' },
@@ -101,17 +99,16 @@ export default function Footer() {
                                 { icon: MapPin, text: 'Lagos, Nigeria', href: null },
                             ].map(({ icon: Icon, text, href }, i) => (
                                 <li key={i} className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-                                        style={{ background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.18)' }}>
-                                        <Icon className="w-4 h-4 text-gold-400" />
+                                    <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-amber-50 border border-amber-100">
+                                        <Icon className="w-4 h-4 text-amber-600" />
                                     </div>
                                     {href ? (
                                         <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer"
-                                            className="text-white/45 hover:text-white text-sm font-sans transition-colors">
+                                            className="text-slate-600 hover:text-amber-600 text-sm font-sans transition-colors">
                                             {text}
                                         </a>
                                     ) : (
-                                        <span className="text-white/45 text-sm font-sans">{text}</span>
+                                        <span className="text-slate-600 text-sm font-sans">{text}</span>
                                     )}
                                 </li>
                             ))}
@@ -120,12 +117,11 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom bar */}
-                <div className="mt-16 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4"
-                    style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-                    <p className="text-white/25 text-sm font-sans">
+                <div className="mt-16 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100">
+                    <p className="text-slate-500 text-sm font-sans">
                         © {new Date().getFullYear()} Taiwo Funmilayo Lawal. All rights reserved.
                     </p>
-                    <p className="text-white/20 text-xs font-sans italic">Raising a Godly Generation</p>
+                    <p className="text-slate-400 text-xs font-sans italic">Raising a Godly Generation</p>
                 </div>
             </div>
         </footer>

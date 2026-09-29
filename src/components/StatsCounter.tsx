@@ -33,9 +33,9 @@ function Counter({ end, suffix = '', duration = 2 }: CounterProps) {
 
 export default function Counter3({ items }: { items: { value: number; suffix: string; label: string }[] }) {
     return (
-        <div style={{ background: 'linear-gradient(135deg, #0f0628, #1e0a4e)' }}>
+        <div className="bg-white border-y border-slate-100">
             <div className="max-w-7xl mx-auto px-4 py-14">
-                <div className="grid grid-cols-3 gap-6 divide-x divide-white/10">
+                <div className="grid grid-cols-3 gap-6 divide-x divide-slate-100">
                     {items.map((s, i) => (
                         <motion.div
                             key={s.label}
@@ -45,11 +45,10 @@ export default function Counter3({ items }: { items: { value: number; suffix: st
                             transition={{ delay: i * 0.1 }}
                             className="text-center px-4"
                         >
-                            <div className="font-serif font-bold text-4xl sm:text-5xl mb-1"
-                                style={{ background: 'linear-gradient(135deg, #fbbf24, #f59e0b)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                            <div className="font-serif font-bold text-4xl sm:text-5xl mb-1 text-amber-600">
                                 <Counter end={s.value} suffix={s.suffix} />
                             </div>
-                            <div className="text-white/45 text-xs font-sans tracking-widest uppercase">{s.label}</div>
+                            <div className="text-slate-500 text-xs font-sans tracking-widest uppercase">{s.label}</div>
                         </motion.div>
                     ))}
                 </div>

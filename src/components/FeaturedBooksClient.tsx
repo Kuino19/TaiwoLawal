@@ -24,10 +24,7 @@ export default function FeaturedBooksClient({ books }: Props) {
     if (books.length === 0) return null;
 
     return (
-        <section className="py-28 relative overflow-hidden" style={{ background: '#0d0520' }}>
-            {/* Subtle top accent */}
-            <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(251,191,36,0.3), transparent)' }} />
-
+        <section className="py-28 relative overflow-hidden bg-slate-50 border-t border-slate-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <motion.div
@@ -36,11 +33,11 @@ export default function FeaturedBooksClient({ books }: Props) {
                     viewport={{ once: true }}
                     className="text-center mb-20"
                 >
-                    <p className="section-label mb-3">New Arrivals</p>
-                    <h2 className="font-serif font-bold text-5xl md:text-6xl text-white mb-5">
-                        Resources for <span className="text-gradient-gold">Growth</span>
+                    <p className="text-amber-600 font-bold tracking-widest uppercase text-xs mb-3">New Arrivals</p>
+                    <h2 className="font-serif font-bold text-5xl md:text-6xl text-slate-900 mb-5">
+                        Resources for Growth
                     </h2>
-                    <p className="max-w-xl mx-auto text-white/45 text-lg font-sans leading-relaxed">
+                    <p className="max-w-xl mx-auto text-slate-600 text-lg font-sans leading-relaxed">
                         Carefully curated books that nurture faith, sharpen intellect, and ignite the potential inside every child.
                     </p>
                 </motion.div>
@@ -57,13 +54,7 @@ export default function FeaturedBooksClient({ books }: Props) {
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: i * 0.1 }}
                                 whileHover={{ y: -4 }}
-                                className="group rounded-2xl overflow-hidden flex flex-col"
-                                style={{
-                                    background: 'rgba(255,255,255,0.04)',
-                                    border: '1px solid rgba(255,255,255,0.08)',
-                                    backdropFilter: 'blur(12px)',
-                                    boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
-                                }}
+                                className="group rounded-2xl overflow-hidden flex flex-col bg-white border border-slate-200 shadow-sm transition-shadow hover:shadow-md"
                             >
                                 {/* Cover */}
                                 <Link href={`/store/${book.$id}`} className="block flex-shrink-0">
@@ -89,7 +80,7 @@ export default function FeaturedBooksClient({ books }: Props) {
                                         )}
                                         {/* Rating chip */}
                                         <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold"
-                                            style={{ background: 'rgba(0,0,0,0.5)', color: '#fbbf24', backdropFilter: 'blur(8px)' }}>
+                                            style={{ background: 'rgba(255,255,255,0.9)', color: '#d97706', backdropFilter: 'blur(8px)' }}>
                                             <Star className="w-3 h-3 fill-current" /> 4.9
                                         </div>
                                     </div>
@@ -98,16 +89,16 @@ export default function FeaturedBooksClient({ books }: Props) {
                                 {/* Body */}
                                 <div className="p-5 flex flex-col flex-1">
                                     <span className="text-xs font-bold tracking-widest uppercase mb-2"
-                                        style={{ color: col.to === '#d97706' ? '#fbbf24' : col.to }}>
+                                        style={{ color: col.to === '#d97706' ? '#d97706' : col.to }}>
                                         {book.type}
                                     </span>
                                     <Link href={`/store/${book.$id}`}>
-                                        <h3 className="font-serif font-bold text-white text-lg mb-4 leading-tight group-hover:text-gold-300 transition-colors flex-1 line-clamp-2">
+                                        <h3 className="font-serif font-bold text-slate-900 text-lg mb-4 leading-tight group-hover:text-amber-600 transition-colors flex-1 line-clamp-2">
                                             {book.title}
                                         </h3>
                                     </Link>
-                                    <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/8">
-                                        <span className="font-serif font-bold text-xl" style={{ color: book.price === 0 ? '#34d399' : '#fff' }}>
+                                    <div className="flex items-center justify-between mt-auto pt-3 border-t border-slate-100">
+                                        <span className="font-serif font-bold text-xl" style={{ color: book.price === 0 ? '#059669' : '#0f172a' }}>
                                             {book.price === 0 ? 'FREE' : `₦${book.price.toLocaleString()}`}
                                         </span>
                                         {book.type === 'digital' && book.price === 0 && book.download_url ? (
@@ -150,7 +141,7 @@ export default function FeaturedBooksClient({ books }: Props) {
                     viewport={{ once: true }}
                     className="mt-14 text-center"
                 >
-                    <Link href="/store" className="inline-flex items-center gap-2 font-semibold text-gold-400 hover:text-gold-300 transition-colors group">
+                    <Link href="/store" className="inline-flex items-center gap-2 font-semibold text-amber-600 hover:text-amber-500 transition-colors group">
                         View all books
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </Link>

@@ -40,10 +40,10 @@ export default function Navbar() {
                 : 'py-4'
         }`} style={{
             background: scrolled
-                ? 'rgba(14,6,40,0.97)'
-                : 'rgba(14,6,40,0.55)',
+                ? 'rgba(255,255,255,0.97)'
+                : 'rgba(255,255,255,0.85)',
             backdropFilter: 'blur(16px)',
-            borderBottom: scrolled ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(255,255,255,0.04)',
+            borderBottom: scrolled ? '1px solid rgba(0,0,0,0.08)' : '1px solid rgba(0,0,0,0.04)',
         }}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-14 items-center">
@@ -53,7 +53,7 @@ export default function Navbar() {
                             style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', boxShadow: '0 0 12px rgba(245,158,11,0.4)' }}>
                             <span className="text-white font-serif font-bold text-sm">TL</span>
                         </div>
-                        <span className="font-serif font-bold text-xl tracking-wide text-white">
+                        <span className="font-serif font-bold text-xl tracking-wide text-slate-900">
                             Taiwo Lawal
                         </span>
                     </Link>
@@ -68,13 +68,13 @@ export default function Navbar() {
                                     href={link.href}
                                     className="relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
                                     style={{
-                                        color: active ? '#fbbf24' : 'rgba(255,255,255,0.65)',
-                                        background: active ? 'rgba(251,191,36,0.1)' : 'transparent',
+                                        color: active ? '#d97706' : 'rgba(15,23,42,0.65)',
+                                        background: active ? 'rgba(217,119,6,0.1)' : 'transparent',
                                     }}
                                 >
                                     {link.label}
                                     {active && (
-                                        <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-gold-400" />
+                                        <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-amber-600" />
                                     )}
                                 </Link>
                             );
@@ -83,12 +83,12 @@ export default function Navbar() {
                         {/* Cart */}
                         <Link
                             href="/cart"
-                            className="relative ml-2 p-2.5 rounded-full transition-all hover:bg-white/10"
-                            style={{ color: 'rgba(255,255,255,0.65)' }}
+                            className="relative ml-2 p-2.5 rounded-full transition-all hover:bg-slate-100"
+                            style={{ color: 'rgba(15,23,42,0.65)' }}
                         >
                             <ShoppingCart className="h-5 w-5" />
                             {totalItems > 0 && (
-                                <span className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-gold-500 text-white text-xs font-bold flex items-center justify-center">
+                                <span className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-amber-500 text-white text-xs font-bold flex items-center justify-center">
                                     {totalItems}
                                 </span>
                             )}
@@ -98,16 +98,16 @@ export default function Navbar() {
                     {/* Mobile toggle */}
                     <div className="flex md:hidden items-center gap-3">
                         <Link href="/cart" className="relative p-2">
-                            <ShoppingCart className="h-5 w-5 text-white/70" />
+                            <ShoppingCart className="h-5 w-5 text-slate-600" />
                             {totalItems > 0 && (
-                                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-gold-500 text-white text-xs font-bold flex items-center justify-center">
+                                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-amber-500 text-white text-xs font-bold flex items-center justify-center">
                                     {totalItems}
                                 </span>
                             )}
                         </Link>
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-all"
+                            className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all"
                         >
                             <AnimatePresence mode="wait" initial={false}>
                                 <motion.div
@@ -134,7 +134,7 @@ export default function Navbar() {
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.25, ease: 'easeInOut' }}
                         className="md:hidden overflow-hidden"
-                        style={{ borderTop: '1px solid rgba(255,255,255,0.08)', background: 'rgba(14,6,40,0.98)' }}
+                        style={{ borderTop: '1px solid rgba(0,0,0,0.08)', background: 'rgba(255,255,255,0.98)' }}
                     >
                         <div className="px-4 py-4 space-y-1">
                             {navLinks.map((link) => {
@@ -145,8 +145,8 @@ export default function Navbar() {
                                         href={link.href}
                                         className="flex items-center px-4 py-3 rounded-xl font-medium transition-colors"
                                         style={{
-                                            color: active ? '#fbbf24' : 'rgba(255,255,255,0.7)',
-                                            background: active ? 'rgba(251,191,36,0.1)' : 'transparent',
+                                            color: active ? '#d97706' : 'rgba(15,23,42,0.7)',
+                                            background: active ? 'rgba(217,119,6,0.1)' : 'transparent',
                                         }}
                                     >
                                         {link.label}

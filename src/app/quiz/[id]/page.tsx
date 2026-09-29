@@ -204,35 +204,33 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
 
     // ─── Loading ───
     if (loading) return (
-        <div className="min-h-screen flex items-center justify-center" style={{ background: '#0d0520' }}>
+        <div className="min-h-screen flex items-center justify-center bg-slate-50">
             <div className="text-center">
-                <div className="w-16 h-16 rounded-full border-2 border-gold-400 border-t-transparent animate-spin mx-auto mb-4" />
-                <p className="text-white/50 font-sans">Loading quiz…</p>
+                <div className="w-16 h-16 rounded-full border-4 border-amber-400 border-t-transparent animate-spin mx-auto mb-4" />
+                <p className="text-slate-500 font-sans">Loading quiz…</p>
             </div>
         </div>
     );
 
     // ─── Not found ───
     if (!quiz || questions.length === 0) return (
-        <div className="min-h-screen flex items-center justify-center" style={{ background: '#0d0520' }}>
-            <div className="text-center text-white">
-                <AlertCircle className="w-16 h-16 text-rose-400 mx-auto mb-4" />
+        <div className="min-h-screen flex items-center justify-center bg-slate-50">
+            <div className="text-center text-slate-900">
+                <AlertCircle className="w-16 h-16 text-rose-500 mx-auto mb-4" />
                 <h2 className="font-serif font-bold text-3xl mb-2">Quiz Not Found</h2>
-                <p className="text-white/50 mb-6">This quiz doesn't exist or has no questions yet.</p>
-                <Link href="/quiz" className="btn-gold">Back to Quizzes</Link>
+                <p className="text-slate-500 mb-6">This quiz doesn't exist or has no questions yet.</p>
+                <Link href="/quiz" className="inline-flex px-6 py-3 rounded-full bg-slate-200 text-slate-800 font-medium hover:bg-slate-300 transition-colors">Back to Quizzes</Link>
             </div>
         </div>
     );
 
     // ─── Name Entry ───
     if (!nameEntered) return (
-        <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#0d0520' }}>
+        <div className="min-h-screen flex items-center justify-center p-4 bg-slate-50">
             {/* Bg blobs */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full blur-3xl opacity-20"
-                    style={{ background: 'radial-gradient(circle, #6d28d9, transparent)' }} />
-                <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full blur-3xl opacity-15"
-                    style={{ background: 'radial-gradient(circle, #f59e0b, transparent)' }} />
+                <div className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full blur-3xl opacity-30 bg-amber-200" />
+                <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full blur-3xl opacity-30 bg-purple-200" />
             </div>
 
             <motion.div
@@ -241,27 +239,25 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                 transition={{ duration: 0.55, ease: 'easeOut' }}
                 className="w-full max-w-md relative z-10"
             >
-                <div className="rounded-3xl overflow-hidden border border-white/10"
-                    style={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(24px)' }}>
+                <div className="rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-xl">
 
                     {/* Top accent */}
-                    <div className="h-1.5" style={{ background: 'linear-gradient(90deg, #6d28d9, #f59e0b)' }} />
+                    <div className="h-1.5 bg-gradient-to-r from-amber-400 to-amber-600" />
 
                     <div className="p-8 md:p-10">
                         {/* Section label */}
-                        <p className="text-xs font-bold tracking-[0.3em] uppercase text-gold-400 mb-4 text-center">Get Ready</p>
+                        <p className="text-xs font-bold tracking-[0.3em] uppercase text-amber-600 mb-4 text-center">Get Ready</p>
 
                         {quiz.image_url && (
-                            <div className="mb-6 w-full max-w-[160px] mx-auto rounded-xl overflow-hidden shadow-2xl border border-white/10 relative group">
+                            <div className="mb-6 w-full max-w-[160px] mx-auto rounded-xl overflow-hidden shadow-lg border border-slate-100 relative group">
                                 <img src={quiz.image_url} alt={quiz.title} className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                             </div>
                         )}
 
-                        <h1 className="font-serif font-bold text-3xl md:text-4xl text-white mb-3 text-center leading-snug">
+                        <h1 className="font-serif font-bold text-3xl md:text-4xl text-slate-900 mb-3 text-center leading-snug">
                             {quiz.title}
                         </h1>
-                        <p className="text-white/45 text-sm font-sans text-center mb-8 leading-relaxed">
+                        <p className="text-slate-500 text-sm font-sans text-center mb-8 leading-relaxed">
                             {quiz.description}
                         </p>
 
@@ -271,21 +267,20 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                                 { icon: Clock, label: 'Duration', value: `${Math.round(quiz.duration / 60)} min` },
                                 { icon: BookOpen, label: 'Questions', value: `${questions.length} total` },
                             ].map(({ icon: Icon, label, value }) => (
-                                <div key={label} className="rounded-2xl p-4 text-center"
-                                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                                    <Icon className="w-5 h-5 text-gold-400 mx-auto mb-1.5" />
-                                    <div className="text-white font-semibold font-sans text-lg">{value}</div>
-                                    <div className="text-white/40 text-xs font-sans">{label}</div>
+                                <div key={label} className="rounded-2xl p-4 text-center bg-slate-50 border border-slate-100">
+                                    <Icon className="w-5 h-5 text-amber-500 mx-auto mb-1.5" />
+                                    <div className="text-slate-900 font-semibold font-sans text-lg">{value}</div>
+                                    <div className="text-slate-400 text-xs font-sans">{label}</div>
                                 </div>
                             ))}
                         </div>
 
                         {/* Keyboard hint */}
-                        <p className="text-white/30 text-xs font-sans text-center mb-5">
-                            Tip: Press <kbd className="px-1.5 py-0.5 rounded bg-white/10 font-mono">A</kbd>–
-                            <kbd className="px-1.5 py-0.5 rounded bg-white/10 font-mono">D</kbd> to select answers,{' '}
-                            <kbd className="px-1.5 py-0.5 rounded bg-white/10 font-mono">←</kbd>
-                            <kbd className="px-1.5 py-0.5 rounded bg-white/10 font-mono">→</kbd> to navigate
+                        <p className="text-slate-400 text-xs font-sans text-center mb-5">
+                            Tip: Press <kbd className="px-1.5 py-0.5 rounded border border-slate-200 bg-slate-50 font-mono text-slate-500">A</kbd>–
+                            <kbd className="px-1.5 py-0.5 rounded border border-slate-200 bg-slate-50 font-mono text-slate-500">D</kbd> to select answers,{' '}
+                            <kbd className="px-1.5 py-0.5 rounded border border-slate-200 bg-slate-50 font-mono text-slate-500">←</kbd>
+                            <kbd className="px-1.5 py-0.5 rounded border border-slate-200 bg-slate-50 font-mono text-slate-500">→</kbd> to navigate
                         </p>
 
                         <input
@@ -294,30 +289,20 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                             value={participantName}
                             onChange={(e) => setParticipantName(e.target.value)}
                             onKeyDown={(e) => { if (e.key === 'Enter' && participantName.trim() && participantPhone.trim()) handleStartQuiz(); }}
-                            className="w-full px-4 py-3.5 rounded-xl font-sans text-sm focus:outline-none mb-3"
-                            style={{
-                                background: 'rgba(255,255,255,0.07)',
-                                border: '1px solid rgba(255,255,255,0.15)',
-                                color: 'white',
-                            }}
+                            className="w-full px-4 py-3.5 rounded-xl font-sans text-sm focus:outline-none mb-3 bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-all"
                         />
                         <input
                             type="tel"
-                            placeholder="Enter your phone number (required to claim prize)"
+                            placeholder="Enter your phone number (required for prizes)"
                             value={participantPhone}
                             onChange={(e) => setParticipantPhone(e.target.value)}
                             onKeyDown={(e) => { if (e.key === 'Enter' && participantName.trim() && participantPhone.trim()) handleStartQuiz(); }}
-                            className="w-full px-4 py-3.5 rounded-xl font-sans text-sm focus:outline-none mb-4"
-                            style={{
-                                background: 'rgba(255,255,255,0.07)',
-                                border: '1px solid rgba(255,255,255,0.15)',
-                                color: 'white',
-                            }}
+                            className="w-full px-4 py-3.5 rounded-xl font-sans text-sm focus:outline-none mb-6 bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-all"
                         />
                         <button
                             onClick={handleStartQuiz}
                             disabled={!participantName.trim() || !participantPhone.trim() || checkingAttempt}
-                            className="w-full bg-gradient-to-r from-gold-500 to-amber-600 text-white font-sans font-bold py-4 rounded-xl hover:shadow-xl hover:shadow-gold-500/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                            className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-white font-sans font-bold py-4 rounded-xl hover:shadow-lg hover:shadow-amber-500/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                         >
                             {checkingAttempt ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : 'Begin Quiz'}
                         </button>
@@ -331,14 +316,13 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
 
     // ─── Quiz Interface ───
     return (
-        <div className="min-h-screen flex flex-col" style={{ background: '#0d0520' }}>
+        <div className="min-h-screen flex flex-col bg-slate-50">
 
             {/* Timer + progress bar strip */}
-            <div className="fixed top-0 left-0 right-0 z-50"
-                style={{ background: 'rgba(13,5,32,0.92)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+            <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
 
                 {/* Timer bar */}
-                <div className="h-1 w-full bg-white/8">
+                <div className="h-1 w-full bg-slate-100">
                     <div className="h-full transition-all duration-1000 ease-linear"
                         style={{
                             width: `${timePercent}%`,
@@ -346,25 +330,25 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                                 ? 'linear-gradient(90deg, #ef4444, #f97316)'
                                 : isMedTime
                                     ? 'linear-gradient(90deg, #f59e0b, #fbbf24)'
-                                    : 'linear-gradient(90deg, #6d28d9, #f59e0b)',
+                                    : 'linear-gradient(90deg, #f59e0b, #d97706)',
                         }} />
                 </div>
 
                 <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
                     <Link href="/quiz"
-                        className="flex items-center gap-1.5 text-white/40 hover:text-white/80 transition-colors text-sm font-sans">
+                        className="flex items-center gap-1.5 text-slate-500 hover:text-slate-800 transition-colors text-sm font-sans">
                         <ArrowLeft className="w-4 h-4" /> Exit
                     </Link>
 
                     {/* Timer */}
-                    <div className={`flex items-center gap-2 px-4 py-1.5 rounded-full font-mono font-bold text-base transition-colors ${
-                        isLowTime ? 'text-rose-400 animate-pulse' : isMedTime ? 'text-gold-400' : 'text-white'
-                    }`} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                    <div className={`flex items-center gap-2 px-4 py-1.5 rounded-full font-mono font-bold text-base transition-colors bg-slate-50 border border-slate-200 ${
+                        isLowTime ? 'text-rose-500 animate-pulse' : isMedTime ? 'text-amber-600' : 'text-slate-900'
+                    }`}>
                         <Clock className="w-4 h-4" />
                         {formatTime(timeLeft)}
                     </div>
 
-                    <span className="text-white/40 text-sm font-sans">{answeredCount}/{questions.length}</span>
+                    <span className="text-slate-500 text-sm font-sans">{answeredCount}/{questions.length}</span>
                 </div>
             </div>
 
@@ -374,13 +358,13 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
 
                     {/* Question progress */}
                     <div className="mb-6">
-                        <div className="flex items-center justify-between text-xs font-sans text-white/35 mb-2">
+                        <div className="flex items-center justify-between text-xs font-sans text-slate-500 mb-2">
                             <span>Question {currentQuestion + 1} of {questions.length}</span>
                             <span>{Math.round(progress)}% complete</span>
                         </div>
-                        <div className="h-1.5 rounded-full bg-white/8">
-                            <div className="h-full rounded-full transition-all duration-400"
-                                style={{ width: `${progress}%`, background: 'linear-gradient(90deg, #6d28d9, #f59e0b)' }} />
+                        <div className="h-1.5 rounded-full bg-slate-200">
+                            <div className="h-full rounded-full transition-all duration-400 bg-gradient-to-r from-amber-400 to-amber-600"
+                                style={{ width: `${progress}%` }} />
                         </div>
                     </div>
 
@@ -394,14 +378,12 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                             transition={{ duration: 0.28, ease: 'easeOut' }}
                         >
                             {/* Question */}
-                            <div className="rounded-2xl p-7 mb-5 border border-white/8"
-                                style={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(16px)' }}>
+                            <div className="rounded-2xl p-7 mb-5 bg-white border border-slate-200 shadow-sm">
                                 <div className="flex items-start gap-4">
-                                    <span className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold font-sans"
-                                        style={{ background: 'linear-gradient(135deg, #6d28d9, #a78bfa)', color: 'white' }}>
+                                    <span className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold font-sans bg-amber-100 text-amber-700">
                                         {currentQuestion + 1}
                                     </span>
-                                    <h2 className="font-serif font-semibold text-white text-xl leading-snug pt-0.5">
+                                    <h2 className="font-serif font-semibold text-slate-900 text-xl leading-snug pt-0.5">
                                         {question.text}
                                     </h2>
                                 </div>
@@ -410,13 +392,13 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                             {/* Options or Text/Audio input */}
                             {question.correct_index === -1 ? (
                                 <div className="mb-6 space-y-4">
-                                    <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
-                                        <p className="text-white/60 text-sm font-sans mb-3">Respond by writing your thoughts or recording a voice note. (Points: 1)</p>
+                                    <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                                        <p className="text-slate-500 text-sm font-sans mb-3">Respond by writing your thoughts or recording a voice note. (Points: 1)</p>
                                         
                                         {/* Text Area */}
                                         <textarea 
                                             placeholder="Type your response here..."
-                                            className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white font-sans text-sm min-h-[120px] focus:outline-none focus:border-gold-400/50 transition-colors mb-4"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-slate-900 font-sans text-sm min-h-[120px] focus:outline-none focus:ring-2 focus:ring-amber-400/20 focus:border-amber-400 transition-all mb-4 placeholder:text-slate-400"
                                             value={typeof answers[currentQuestion] === 'string' && !answers[currentQuestion].toString().startsWith('http') ? answers[currentQuestion] : ''}
                                             onChange={(e) => {
                                                 const updated = [...answers];
@@ -428,15 +410,15 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
 
                                         {/* Audio Recorder */}
                                         <div className="flex items-center gap-4">
-                                            <div className="h-px flex-1 bg-white/10"></div>
-                                            <span className="text-xs text-white/40 uppercase tracking-widest">OR</span>
-                                            <div className="h-px flex-1 bg-white/10"></div>
+                                            <div className="h-px flex-1 bg-slate-100"></div>
+                                            <span className="text-xs text-slate-400 uppercase tracking-widest">OR</span>
+                                            <div className="h-px flex-1 bg-slate-100"></div>
                                         </div>
 
                                         <div className="mt-4 flex flex-col items-center">
                                             {typeof answers[currentQuestion] === 'string' && answers[currentQuestion].toString().startsWith('http') ? (
                                                 <div className="w-full flex flex-col items-center gap-3">
-                                                    <div className="text-emerald-400 text-sm flex items-center gap-2">
+                                                    <div className="text-emerald-600 font-medium text-sm flex items-center gap-2">
                                                         <CheckCircle2 className="w-4 h-4" /> Audio Recorded Successfully
                                                     </div>
                                                     <audio src={answers[currentQuestion] as string} controls className="w-full max-w-sm" />
@@ -445,20 +427,20 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                                                         updated[currentQuestion] = '';
                                                         setAnswers(updated);
                                                         setRecordingStatus('idle');
-                                                    }} className="text-xs text-rose-400 hover:text-rose-300">Remove Recording</button>
+                                                    }} className="text-xs text-rose-500 hover:text-rose-600 font-medium transition-colors">Remove Recording</button>
                                                 </div>
                                             ) : (
                                                 <button
                                                     onClick={recordingStatus === 'recording' ? stopRecording : startRecording}
                                                     disabled={uploadingAudio}
-                                                    className={`flex items-center gap-2 px-6 py-3 rounded-full font-sans font-semibold text-sm transition-all ${
+                                                    className={`flex items-center gap-2 px-6 py-3 rounded-full font-sans font-semibold text-sm transition-all shadow-sm ${
                                                         recordingStatus === 'recording' 
-                                                            ? 'bg-rose-500/20 text-rose-400 border border-rose-500/50 hover:bg-rose-500/30 animate-pulse' 
-                                                            : 'bg-white/5 text-white border border-white/10 hover:bg-white/10'
+                                                            ? 'bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100 animate-pulse' 
+                                                            : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'
                                                     }`}
                                                 >
                                                     {uploadingAudio ? (
-                                                        <><Loader2 className="w-4 h-4 animate-spin" /> Uploading...</>
+                                                        <><Loader2 className="w-4 h-4 animate-spin text-slate-500" /> <span className="text-slate-500">Uploading...</span></>
                                                     ) : recordingStatus === 'recording' ? (
                                                         <><Square className="w-4 h-4" fill="currentColor" /> Stop Recording</>
                                                     ) : (
@@ -484,17 +466,17 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                                                 }}
                                                 className="w-full text-left flex items-center gap-4 px-5 py-4 rounded-xl border-2 transition-all duration-200 font-sans group"
                                                 style={{
-                                                    background: selected ? 'rgba(109,40,217,0.18)' : 'rgba(255,255,255,0.04)',
-                                                    borderColor: selected ? 'rgba(167,139,250,0.7)' : 'rgba(255,255,255,0.08)',
-                                                    color: selected ? '#e9d5ff' : 'rgba(255,255,255,0.65)',
-                                                    boxShadow: selected ? '0 0 20px rgba(109,40,217,0.25)' : 'none',
+                                                    background: selected ? 'rgba(245,158,11,0.08)' : '#ffffff',
+                                                    borderColor: selected ? 'rgba(245,158,11,0.5)' : 'rgba(226,232,240,1)', // border-slate-200
+                                                    color: selected ? '#92400e' : '#475569', // text-amber-800 or slate-600
+                                                    boxShadow: selected ? '0 0 12px rgba(245,158,11,0.1)' : '0 1px 2px 0 rgb(0 0 0 / 0.05)',
                                                 }}
                                             >
                                                 <span className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-sm font-bold transition-all duration-200"
                                                     style={{
-                                                        background: selected ? 'rgba(167,139,250,0.3)' : 'rgba(255,255,255,0.07)',
-                                                        color: selected ? '#c4b5fd' : 'rgba(255,255,255,0.4)',
-                                                        border: selected ? '1px solid rgba(167,139,250,0.5)' : '1px solid rgba(255,255,255,0.1)',
+                                                        background: selected ? 'rgba(245,158,11,0.2)' : '#f8fafc', // amber or slate-50
+                                                        color: selected ? '#d97706' : '#94a3b8',
+                                                        border: selected ? '1px solid rgba(245,158,11,0.4)' : '1px solid #e2e8f0',
                                                     }}>
                                                     {OPTION_LABELS[i]}
                                                 </span>
@@ -522,11 +504,11 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                                         width: isCurrent ? '28px' : '10px',
                                         height: '10px',
                                         background: isCurrent
-                                            ? 'linear-gradient(90deg, #6d28d9, #f59e0b)'
+                                            ? 'linear-gradient(90deg, #f59e0b, #d97706)'
                                             : isAnswered
-                                                ? '#6d28d9'
-                                                : 'rgba(255,255,255,0.15)',
-                                        boxShadow: isCurrent ? '0 0 8px rgba(109,40,217,0.6)' : 'none',
+                                                ? '#fbbf24'
+                                                : '#e2e8f0', // slate-200
+                                        boxShadow: isCurrent ? '0 0 8px rgba(245,158,11,0.4)' : 'none',
                                     }}
                                 />
                             );
@@ -538,8 +520,7 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                         <button
                             onClick={() => setCurrentQuestion((c) => Math.max(0, c - 1))}
                             disabled={currentQuestion === 0}
-                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border text-sm font-sans font-medium transition-all disabled:opacity-25 disabled:cursor-not-allowed"
-                            style={{ borderColor: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.6)' }}
+                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border text-sm font-sans font-medium transition-all disabled:opacity-25 disabled:cursor-not-allowed border-slate-200 text-slate-500 hover:bg-slate-100"
                         >
                             <ArrowLeft className="w-4 h-4" /> Previous
                         </button>
@@ -547,8 +528,7 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                         {currentQuestion < questions.length - 1 ? (
                             <button
                                 onClick={() => setCurrentQuestion((c) => c + 1)}
-                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm transition-all hover:opacity-90"
-                                style={{ background: 'linear-gradient(135deg, #2e1065, #6d28d9)' }}
+                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm transition-all hover:opacity-90 bg-slate-800 hover:bg-slate-900"
                             >
                                 Next <ArrowRight className="w-4 h-4" />
                             </button>
@@ -556,8 +536,7 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                             <button
                                 onClick={() => handleSubmit(false)}
                                 disabled={submitting}
-                                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-white text-sm transition-all disabled:opacity-60"
-                                style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)' }}
+                                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-white text-sm transition-all disabled:opacity-60 bg-gradient-to-r from-amber-500 to-amber-600 hover:shadow-lg hover:shadow-amber-500/20"
                             >
                                 {submitting ? 'Submitting…' : 'Submit Quiz'}
                                 <CheckCircle2 className="w-4 h-4" />
@@ -574,19 +553,17 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-                        style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
+                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
                     >
                         <motion.div
                             initial={{ scale: 0.9, y: 20 }}
                             animate={{ scale: 1, y: 0 }}
                             exit={{ scale: 0.9, y: 20 }}
-                            className="w-full max-w-sm rounded-3xl p-8 text-center border border-white/10"
-                            style={{ background: 'rgba(20,8,50,0.98)', backdropFilter: 'blur(20px)' }}
+                            className="w-full max-w-sm rounded-3xl p-8 text-center border border-slate-100 bg-white shadow-2xl"
                         >
-                            <AlertCircle className="w-12 h-12 text-gold-400 mx-auto mb-4" />
-                            <h3 className="font-serif font-bold text-2xl text-white mb-2">Not all answered</h3>
-                            <p className="text-white/50 font-sans text-sm mb-6">
+                            <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-4" />
+                            <h3 className="font-serif font-bold text-2xl text-slate-900 mb-2">Not all answered</h3>
+                            <p className="text-slate-500 font-sans text-sm mb-6">
                                 You have {answers.filter((a, i) => questions[i]?.correct_index === -1 ? (a === -1 || a === '') : a === -1).length} unanswered{' '}
                                 {answers.filter((a, i) => questions[i]?.correct_index === -1 ? (a === -1 || a === '') : a === -1).length === 1 ? 'question' : 'questions'}.
                                 Submit anyway?
@@ -594,15 +571,13 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                             <div className="flex gap-3">
                                 <button
                                     onClick={() => setShowSubmitGuard(false)}
-                                    className="flex-1 py-2.5 rounded-xl border text-sm font-semibold text-white/70 transition-all hover:bg-white/5"
-                                    style={{ borderColor: 'rgba(255,255,255,0.15)' }}
+                                    className="flex-1 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-600 transition-all hover:bg-slate-100"
                                 >
                                     Go back
                                 </button>
                                 <button
                                     onClick={() => { setShowSubmitGuard(false); handleSubmit(true); }}
-                                    className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white transition-all"
-                                    style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)' }}
+                                    className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white transition-all bg-gradient-to-r from-amber-500 to-amber-600 shadow-sm"
                                 >
                                     Submit
                                 </button>
