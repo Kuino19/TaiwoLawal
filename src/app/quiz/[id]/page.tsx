@@ -143,7 +143,7 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
             if (e.target instanceof HTMLTextAreaElement || e.target instanceof HTMLInputElement) return;
             const key = e.key.toLowerCase();
             const q = questions[currentQuestion];
-            if (q.correct_index !== -1) {
+            if (q.correct_index !== -1 && answers[currentQuestion] === -1) {
                 if (key === 'a' || key === '1') { const updated = [...answers]; updated[currentQuestion] = 0; setAnswers(updated); }
                 else if (key === 'b' || key === '2') { const updated = [...answers]; updated[currentQuestion] = 1; setAnswers(updated); }
                 else if (key === 'c' || key === '3') { const updated = [...answers]; updated[currentQuestion] = 2; setAnswers(updated); }
@@ -454,29 +454,71 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
                             ) : (
                                 <div className="grid gap-3 mb-6">
                                     {question.options.map((option, i) => {
-                                        const selected = answers[currentQuestion] === i;
+                                        const hasAnswered = answers[currentQuestion] !== -1;
+                                        const isSelected = answers[currentQuestion] === i;
+                                        const isCorrect = i === question.correct_index;
+                                        
+                                        // Default styles
+                                        let bg = isSelected ? 'rgba(245,158,11,0.08)' : '#ffffff';
+                                        let border = isSelected ? 'rgba(245,158,11,0.5)' : 'rgba(226,232,240,1)';
+                                        let text = isSelected ? '#92400e' : '#475569';
+                                        let shadow = isSelected ? '0 0 12px rgba(245,158,11,0.1)' : '0 1px 2px 0 rgb(0 0 0 / 0.05)';
+                                        let labelBg = isSelected ? 'rgba(245,158,11,0.2)' : '#f8fafc';
+                                        let labelColor = isSelected ? '#d97706' : '#94a3b8';
+                                        let labelBorder = isSelected ? '1px solid rgba(245,158,11,0.4)' : '1px solid #e2e8f0';
+
+                                        // Override with instant feedback if answered
+                                        if (hasAnswered) {
+                                            if (isCorrect) {
+                                                bg = 'rgba(16,185,129,0.08)'; // emerald-500 light
+                                                border = 'rgba(16,185,129,0.5)';
+                                                text = '#065f46'; // emerald-800
+                                                shadow = '0 0 12px rgba(16,185,129,0.1)';
+                                                labelBg = 'rgba(16,185,129,0.2)';
+                                                labelColor = '#059669'; // emerald-600
+                                                labelBorder = '1px solid rgba(16,185,129,0.4)';
+                                            } else if (isSelected && !isCorrect) {
+                                                bg = 'rgba(244,63,94,0.08)'; // rose-500 light
+                                                border = 'rgba(244,63,94,0.5)';
+                                                text = '#9f1239'; // rose-800
+                                                shadow = '0 0 12px rgba(244,63,94,0.1)';
+                                                labelBg = 'rgba(244,63,94,0.2)';
+                                                labelColor = '#e11d48'; // rose-600
+                                                labelBorder = '1px solid rgba(244,63,94,0.4)';
+                                            } else {
+                                                // Unselected and incorrect, fade out a bit
+                                                bg = '#f8fafc';
+                                                border = 'rgba(226,232,240,0.5)';
+                                                text = '#94a3b8';
+                                                shadow = 'none';
+                                                labelBg = '#f1f5f9';
+                                                labelColor = '#cbd5e1';
+                                            }
+                                        }
+
                                         return (
                                             <motion.button
                                                 key={i}
-                                                whileTap={{ scale: 0.98 }}
+                                                whileTap={!hasAnswered ? { scale: 0.98 } : {}}
                                                 onClick={() => {
+                                                    if (hasAnswered) return;
                                                     const updated = [...answers];
                                                     updated[currentQuestion] = i;
                                                     setAnswers(updated);
                                                 }}
-                                                className="w-full text-left flex items-center gap-4 px-5 py-4 rounded-xl border-2 transition-all duration-200 font-sans group"
+                                                className={`w-full text-left flex items-center gap-4 px-5 py-4 rounded-xl border-2 transition-all duration-200 font-sans group ${hasAnswered ? 'cursor-default' : 'cursor-pointer'}`}
                                                 style={{
-                                                    background: selected ? 'rgba(245,158,11,0.08)' : '#ffffff',
-                                                    borderColor: selected ? 'rgba(245,158,11,0.5)' : 'rgba(226,232,240,1)', // border-slate-200
-                                                    color: selected ? '#92400e' : '#475569', // text-amber-800 or slate-600
-                                                    boxShadow: selected ? '0 0 12px rgba(245,158,11,0.1)' : '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+                                                    background: bg,
+                                                    borderColor: border,
+                                                    color: text,
+                                                    boxShadow: shadow,
                                                 }}
                                             >
                                                 <span className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-sm font-bold transition-all duration-200"
                                                     style={{
-                                                        background: selected ? 'rgba(245,158,11,0.2)' : '#f8fafc', // amber or slate-50
-                                                        color: selected ? '#d97706' : '#94a3b8',
-                                                        border: selected ? '1px solid rgba(245,158,11,0.4)' : '1px solid #e2e8f0',
+                                                        background: labelBg,
+                                                        color: labelColor,
+                                                        border: labelBorder,
                                                     }}>
                                                     {OPTION_LABELS[i]}
                                                 </span>
