@@ -27,7 +27,7 @@ export default function Navbar() {
         { href: '/store', label: 'Store' },
         { href: '/event', label: 'Events' },
         { href: '/quiz', label: 'Competitions' },
-        { href: '/games/crossword', label: 'Games' },
+        { href: '/games', label: 'Games' },
         { href: '/leaderboard', label: 'Leaderboard' },
     ];
 
