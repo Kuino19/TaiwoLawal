@@ -23,16 +23,16 @@ const GAMES: Game[] = [
     {
         title: 'Verse Scramble',
         description: 'Unscramble the words to reveal famous Bible verses.',
-        href: '#',
+        href: '/games/scramble',
         emoji: '🔤',
-        status: 'coming_soon',
+        status: 'live',
     },
     {
         title: 'Bible Trivia Rush',
         description: 'Answer as many Bible trivia questions as you can before time runs out.',
-        href: '#',
+        href: '/games/rush',
         emoji: '⏱️',
-        status: 'coming_soon',
+        status: 'live',
     },
 ];
 
