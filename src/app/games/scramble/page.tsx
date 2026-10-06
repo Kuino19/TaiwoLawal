@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import confetti from 'canvas-confetti';
+import { triggerRealisticConfetti } from '@/lib/confettiBurst';
 import { ArrowLeft, CheckCircle2, RotateCcw, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -82,11 +82,7 @@ export default function VerseScrambleGame() {
             const currentSentence = selected.map(s => s.word).join(' ');
             if (currentSentence === currentVerse.text) {
                 setIsWin(true);
-                confetti({
-                    particleCount: 100,
-                    spread: 70,
-                    origin: { y: 0.6 }
-                });
+                triggerRealisticConfetti();
             }
         }
     }, [selected, pool, currentVerse]);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import confetti from 'canvas-confetti';
+import { triggerConfettiBurst } from '@/lib/confettiBurst';
 import { ArrowLeft, CheckCircle2, ChevronRight, Trophy, Lock, Sparkles, RotateCcw } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -59,7 +59,7 @@ export default function CrosswordGame() {
         if (allCorrect && Object.keys(gridState).length >= filledCount) {
             setLevelComplete(true);
             setCompletedLevels((prev) => [...new Set([...prev, currentLevel])]);
-            confetti({ particleCount: 200, spread: 80, origin: { y: 0.5 }, colors: ['#f59e0b', '#d97706', '#10b981', '#6366f1', '#ec4899'] });
+            triggerConfettiBurst();
         }
     }, [gridState, cellsInfo, currentLevel]);
 
