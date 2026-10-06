@@ -49,6 +49,7 @@ export default function CrosswordGame() {
 
     /* ── Win check ── */
     useEffect(() => {
+        if (levelComplete) return; // Guard against infinite loop
         if (Object.keys(gridState).length === 0) return;
         let allCorrect = true;
         let filledCount = 0;
@@ -61,7 +62,7 @@ export default function CrosswordGame() {
             setCompletedLevels((prev) => [...new Set([...prev, currentLevel])]);
             triggerConfettiBurst();
         }
-    }, [gridState, cellsInfo, currentLevel]);
+    }, [gridState, cellsInfo, currentLevel, levelComplete]);
 
     /* ── Select first cell on level start ── */
     useEffect(() => {

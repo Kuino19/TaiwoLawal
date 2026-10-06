@@ -78,6 +78,7 @@ export default function VerseScrambleGame() {
 
     // Check for win
     useEffect(() => {
+        if (isWin) return; // Guard against infinite loop
         if (selected.length > 0 && pool.length === 0) {
             const currentSentence = selected.map(s => s.word).join(' ');
             if (currentSentence === currentVerse.text) {
@@ -85,7 +86,7 @@ export default function VerseScrambleGame() {
                 triggerRealisticConfetti();
             }
         }
-    }, [selected, pool, currentVerse]);
+    }, [selected, pool, currentVerse, isWin]);
 
     const handleSelectWord = (word: WordObj) => {
         setPool(prev => prev.filter(w => w.id !== word.id));
