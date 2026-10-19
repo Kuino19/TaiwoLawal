@@ -71,24 +71,12 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
         });
     }, [quizId]);
 
-    const handleStartQuiz = async () => {
+    const handleStartQuiz = () => {
         if (!participantName.trim() || !participantPhone.trim()) {
             alert('Please enter both your name and phone number to continue.');
             return;
         }
-        setCheckingAttempt(true);
-        try {
-            const exists = await checkAttemptExistsAction(quizId, participantPhone);
-            if (exists) {
-                alert('An attempt with this phone number has already been recorded. Only one entry is allowed per person!');
-                setCheckingAttempt(false);
-                return;
-            }
-            setNameEntered(true);
-        } catch (e) {
-            alert('Could not verify attempt status. Please try again.');
-            setCheckingAttempt(false);
-        }
+        setNameEntered(true);
     };
 
     const handleSubmit = useCallback(async (force = false) => {
@@ -115,9 +103,16 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
             formData.append('score', String(score));
             formData.append('total', String(questions.length));
             formData.append('userAnswers', JSON.stringify(answers));
-            await submitQuizAction(formData);
+            
+            const result = await submitQuizAction(formData);
+            if (result?.redirectUrl) {
+                window.location.href = result.redirectUrl;
+                return;
+            }
         } catch (error: any) {
-            if (error?.message?.includes('NEXT_REDIRECT')) throw error;
+            if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
+                return;
+            }
             console.error('Quiz submission failed:', error);
             alert(error.message || 'Failed to submit quiz. Please check your connection and try again.');
             setSubmitting(false);

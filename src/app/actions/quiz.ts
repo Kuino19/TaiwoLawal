@@ -115,8 +115,12 @@ export async function submitQuizAction(formData: FormData) {
         throw new Error(`Database error: ${error.message}`);
     }
 
-    console.log('Redirecting to results page...');
-    redirect(`/quiz/${quizId}/result?attemptId=${attemptId}`);
+    console.log('Quiz submitted successfully, returning result URL');
+    return {
+        success: true,
+        attemptId,
+        redirectUrl: `/quiz/${quizId}/result?attemptId=${attemptId}`
+    };
 }
 
 export async function uploadAudioAction(formData: FormData) {
@@ -133,14 +137,6 @@ export async function uploadAudioAction(formData: FormData) {
 }
 
 export async function checkAttemptExistsAction(quizId: string, phone: string) {
-    if (!phone) return false;
-    try {
-        const existing = await adminDatabases.listDocuments(DB_ID, 'attempts', [
-            Query.equal('quiz_id', quizId),
-            Query.equal('participant_phone', phone),
-        ]);
-        return existing.total > 0;
-    } catch (e) {
-        return false;
-    }
+    // Allowed multiple attempts per phone number as requested
+    return false;
 }
