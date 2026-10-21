@@ -182,13 +182,17 @@ export default function Home() {
                         Join our competitions, showcase your intelligence, and win incredible prizes. Register for the upcoming quiz today!
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link href="/quiz"
-                            className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full font-semibold text-white transition-all hover:opacity-90 hover:scale-[1.02] bg-gradient-to-r from-amber-500 to-amber-600 shadow-lg shadow-amber-500/20">
-                            Start a Quiz
+                        <Link href="/practice"
+                            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-white transition-all hover:opacity-90 hover:scale-[1.02] bg-gradient-to-r from-amber-500 to-amber-600 shadow-lg shadow-amber-500/20">
+                            Children Quiz Practice
                             <ArrowRight className="w-4 h-4" />
                         </Link>
+                        <Link href="/quiz"
+                            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold transition-all hover:bg-slate-50 text-slate-700 border border-slate-200">
+                            Live Competitions
+                        </Link>
                         <Link href="/store"
-                            className="inline-flex items-center justify-center px-10 py-4 rounded-full font-semibold transition-all hover:bg-slate-50 text-slate-700 border border-slate-200">
+                            className="inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold transition-all hover:bg-slate-50 text-slate-700 border border-slate-200">
                             Browse Store
                         </Link>
                     </div>

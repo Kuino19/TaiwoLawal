@@ -1,7 +1,7 @@
 import { databases } from '@/lib/appwrite';
 import { Query } from 'appwrite';
 import QuizCard, { Quiz } from '@/components/QuizCard';
-import { Trophy, Zap, BookOpen, Clock, Users } from 'lucide-react';
+import { Trophy, Zap, BookOpen, Clock, Users, Sparkles, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 const DB_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'main-db';
@@ -92,6 +92,29 @@ export default async function QuizPage() {
                 {/* Bottom fade into page bg */}
                 <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none"
                     style={{ background: 'linear-gradient(to bottom, transparent, #0d0520)' }} />
+            </div>
+
+            {/* ── Foursquare Idimu Children Quiz Practice Section Callout ── */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
+                <div className="rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-amber-500/20 via-purple-950/60 to-slate-900 border border-amber-500/30 backdrop-blur-md flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-2xl">
+                    <div>
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-amber-500 text-slate-950 mb-3">
+                            <Sparkles className="w-3.5 h-3.5" /> Practice Stage
+                        </div>
+                        <h2 className="font-serif font-bold text-2xl sm:text-3xl text-white mb-2">
+                            Foursquare Idimu Children Quiz Practice Zone
+                        </h2>
+                        <p className="text-slate-300 font-sans text-sm max-w-2xl leading-relaxed">
+                            Practicing for the upcoming competition? Master 145+ questions from the <strong className="text-amber-400">Book of Numbers (Chapters 1–36)</strong> and the official <strong className="text-purple-300">Standard of Attainment</strong> catechism & scriptures with instant study mode and test simulations!
+                        </p>
+                    </div>
+                    <Link
+                        href="/practice"
+                        className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-bold text-sm tracking-wide uppercase whitespace-nowrap shadow-lg shadow-amber-500/20 transition-all flex items-center gap-2 flex-shrink-0"
+                    >
+                        Enter Practice Stage <ArrowRight className="w-4 h-4" />
+                    </Link>
+                </div>
             </div>
 
             {/* ── Quiz Grid ── */}

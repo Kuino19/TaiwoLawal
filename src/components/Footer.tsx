@@ -6,6 +6,7 @@ export default function Footer() {
         { href: '/', label: 'Home' },
         { href: '/store', label: 'Store' },
         { href: '/event', label: 'Events' },
+        { href: '/practice', label: 'Children Quiz Practice' },
         { href: '/quiz', label: 'Competitions' },
         { href: '/leaderboard', label: 'Leaderboard' },
     ];
