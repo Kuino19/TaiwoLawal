@@ -1,0 +1,227 @@
+[
+  {
+    "id": 1,
+    "text": "Who founded the Foursquare Gospel Church?",
+    "options": ["Aimee Semple McPherson", "Billy Graham", "Kathryn Kuhlman", "John Wesley"],
+    "correct_index": 0
+  },
+  {
+    "id": 2,
+    "text": "In what year was the Foursquare Gospel Church founded?",
+    "options": ["1914", "1923", "1948", "1955"],
+    "correct_index": 1
+  },
+  {
+    "id": 3,
+    "text": "Where was the Foursquare Gospel Church founded?",
+    "options": ["London, England", "Toronto, Canada", "Los Angeles, USA", "New York, USA"],
+    "correct_index": 2
+  },
+  {
+    "id": 4,
+    "text": "What does the name 'Foursquare' mean concerning Jesus Christ?",
+    "options": [
+      "Jesus as Prophet, Priest, King, and Judge",
+      "Faith, Hope, Love, and Grace",
+      "Jesus as Saviour, Baptizer with the Holy Spirit, Healer, and Soon-Coming King",
+      "Matthew, Mark, Luke, and John"
+    ],
+    "correct_index": 2
+  },
+  {
+    "id": 5,
+    "text": "In what year did the Foursquare Church come to Nigeria?",
+    "options": ["1923", "1955", "1960", "1970"],
+    "correct_index": 1
+  },
+  {
+    "id": 6,
+    "text": "Who brought the Foursquare Gospel Church to Nigeria?",
+    "options": [
+      "Rev. Harold and Mrs. Faye Curtis",
+      "Rev. William and Mrs. Mary Booth",
+      "Rev. David and Mrs. Mary Livingstone",
+      "Rev. Billy and Mrs. Ruth Graham"
+    ],
+    "correct_index": 0
+  },
+  {
+    "id": 7,
+    "text": "Where was the first Foursquare meeting in Nigeria held?",
+    "options": ["Tafawa Balewa Square, Lagos", "Yankee Bar, Yaba, Lagos", "National Stadium, Surulere", "Freedom Park, Lagos Island"],
+    "correct_index": 1
+  },
+  {
+    "id": 8,
+    "text": "Which of the following was an early Nigerian leader of Foursquare?",
+    "options": ["Samuel Odunaike", "Bishop David Oyedepo", "Pastor E.A. Adeboye", "Rev. Uma Ukpai"],
+    "correct_index": 0
+  },
+  {
+    "id": 9,
+    "text": "How old was Foursquare Nigeria in 2025?",
+    "options": ["50 years old", "60 years old", "70 years old", "100 years old"],
+    "correct_index": 2
+  },
+  {
+    "id": 10,
+    "text": "What did Foursquare call its 70th anniversary in 2025?",
+    "options": ["The Golden Jubilee", "The Silver Jubilee", "The Diamond Jubilee", "The Platinum Jubilee"],
+    "correct_index": 3
+  },
+  {
+    "id": 11,
+    "text": "Who is the General Overseer of Foursquare Nigeria in 2026?",
+    "options": ["Rev. Felix Meduoye", "Rev. Wilson Badejo", "Rev. (Dr.) Sam Aboyeji", "Rev. G.O. Farombi"],
+    "correct_index": 2
+  },
+  {
+    "id": 12,
+    "text": "What is the name of the Idimu Missionary District Overseer?",
+    "options": ["Rev. Joshua Olotu", "Rev. Friday Obende", "Rev. Samson Alawode", "Rev. Samuel Odunaike"],
+    "correct_index": 0
+  },
+  {
+    "id": 13,
+    "text": "What is the name of the National Secretary of Foursquare?",
+    "options": ["Rev. Joshua Olotu", "Rev. Samson Alawode", "Rev. Friday Obende", "Rev. Sam Aboyeji"],
+    "correct_index": 1
+  },
+  {
+    "id": 14,
+    "text": "Who is Rev. Sam Aboyeji’s wife?",
+    "options": ["Rev. (Mrs) Faye Curtis", "Rev. (Mrs) Olabisi Aboyeji", "Rev. (Mrs) Mary Boyejo", "Rev. (Mrs) Ruth Alawode"],
+    "correct_index": 1
+  },
+  {
+    "id": 15,
+    "text": "Is Rev. (Mrs) Olabisi Aboyeji also an ordained minister?",
+    "options": ["Yes", "No", "Only a church elder", "Not yet"],
+    "correct_index": 0
+  },
+  {
+    "id": 16,
+    "text": "Who is the International President of the Foursquare Church?",
+    "options": ["Rev. Harold Curtis", "Rev. Randy Remington", "Rev. Jack Hayford", "Rev. Glenn Burris Jr."],
+    "correct_index": 1
+  },
+  {
+    "id": 17,
+    "text": "What is the name of the Egbe Axis Coordinator?",
+    "options": ["Rev. Friday Obende", "Rev. Joshua Olotu", "Rev. Samson Alawode", "Rev. James Boyejo"],
+    "correct_index": 0
+  },
+  {
+    "id": 18,
+    "text": "How many years is a General Overseer’s term in Foursquare Nigeria?",
+    "options": ["3 years", "4 years", "5 years", "7 years"],
+    "correct_index": 2
+  },
+  {
+    "id": 19,
+    "text": "Which of these districts is part of the Egbe Axis?",
+    "options": ["Ikeja District", "Idimu District", "Surulere District", "Victoria Island District"],
+    "correct_index": 1
+  },
+  {
+    "id": 20,
+    "text": "What is the name of Foursquare’s main camp in Nigeria?",
+    "options": [
+      "Redemption Camp, Mowe",
+      "Foursquare Camp, Ajebo, Ogun State",
+      "Canaanland, Ota",
+      "Faith Tabernacle, Iba"
+    ],
+    "correct_index": 1
+  },
+  {
+    "id": 21,
+    "text": "How many churches does Foursquare have in Nigeria as of 2025?",
+    "options": ["Around 500", "Around 1,500", "Over 5,000", "Over 25,000"],
+    "correct_index": 2
+  },
+  {
+    "id": 22,
+    "text": "What was the theme of the 70th National Convention in 2025?",
+    "options": ["Completion and Perfection", "Higher Heights", "Great Grace", "Divine Acceleration"],
+    "correct_index": 0
+  },
+  {
+    "id": 23,
+    "text": "When was the 2025 National Convention held?",
+    "options": ["August 1–7, 2025", "September 15–21, 2025", "October 6–12, 2025", "November 10–16, 2025"],
+    "correct_index": 2
+  },
+  {
+    "id": 24,
+    "text": "What is the highway location of the Foursquare Camp?",
+    "options": [
+      "Lagos-Badagry Expressway",
+      "Lagos-Ibadan Expressway, near Ajebo",
+      "Benin-Ore Expressway",
+      "Lekki-Epe Expressway"
+    ],
+    "correct_index": 1
+  },
+  {
+    "id": 25,
+    "text": "What is the church doing to support and mentor the next generation?",
+    "options": [
+      "Appointing Youth Pastors in all zones",
+      "Closing youth fellowships",
+      "Cancelling children's church",
+      "Stopping camp meetings"
+    ],
+    "correct_index": 0
+  },
+  {
+    "id": 26,
+    "text": "What is the full meaning of CFM?",
+    "options": [
+      "Christian Fellowship Movement",
+      "Council of Foursquare Men",
+      "Church Foundation Ministry",
+      "Children and Family Mission"
+    ],
+    "correct_index": 1
+  },
+  {
+    "id": 27,
+    "text": "What is the 'Decade of SOARING' vision about?",
+    "options": [
+      "Building taller church steeples",
+      "Buying airplanes for missions",
+      "Inreach, outreach, and raising the next generation",
+      "Opening church banks"
+    ],
+    "correct_index": 2
+  },
+  {
+    "id": 28,
+    "text": "What is the full meaning of FWI?",
+    "options": [
+      "Foursquare Women International",
+      "Faith and Wisdom Initiative",
+      "Fellowship of World Intercessors",
+      "Female Workers Institute"
+    ],
+    "correct_index": 0
+  },
+  {
+    "id": 29,
+    "text": "What is the name of the church’s quarterly evangelistic outreach in Lagos?",
+    "options": ["Night of Signs", "Refreshing Vigil", "Holy Ghost Night", "Hour of Deliverance"],
+    "correct_index": 1
+  },
+  {
+    "id": 30,
+    "text": "What is the full meaning of ICML?",
+    "options": [
+      "International Children and Missionary League",
+      "International Conference for Ministers and Leaders",
+      "Institute of Christian Ministry and Leadership",
+      "Inter-Church Mission Link"
+    ],
+    "correct_index": 1
+  }
+]

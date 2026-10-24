@@ -15,7 +15,7 @@ import ConfettiBlast from '@/components/ConfettiBlast';
 export default function PracticeClient() {
     // Stage: 'select' | 'quiz' | 'result'
     const [stage, setStage] = useState<'select' | 'quiz' | 'result'>('select');
-    const [selectedSubject, setSelectedSubject] = useState<'numbers' | 'standard' | 'combined'>('numbers');
+    const [selectedSubject, setSelectedSubject] = useState<'current_affairs' | 'numbers' | 'standard' | 'combined'>('current_affairs');
 
     // Quiz Session State
     const [questions, setQuestions] = useState<PracticeQuestion[]>([]);
@@ -30,11 +30,11 @@ export default function PracticeClient() {
         return PRACTICE_SUBJECTS.find(s => s.id === selectedSubject) || PRACTICE_SUBJECTS[0];
     }, [selectedSubject]);
 
-    // Start a fresh 20-question session from the 100-question pool
-    const handleStartPractice = (subjectId: 'numbers' | 'standard' | 'combined') => {
-        const random20 = getRandomPracticeSession(subjectId);
+    // Start a fresh 10-question session from the pool
+    const handleStartPractice = (subjectId: 'current_affairs' | 'numbers' | 'standard' | 'combined') => {
+        const random10 = getRandomPracticeSession(subjectId);
         setSelectedSubject(subjectId);
-        setQuestions(random20);
+        setQuestions(random10);
         setCurrentIndex(0);
         setAnswers({});
         setSecondsLeft(180); // 3 minutes
@@ -104,7 +104,7 @@ export default function PracticeClient() {
                 correct++;
             }
         });
-        const total = questions.length || 20;
+        const total = questions.length || 10;
         const percentage = Math.round((correct / total) * 100);
         const answeredCount = Object.keys(answers).length;
         const timeSpent = 180 - secondsLeft;
@@ -153,7 +153,7 @@ export default function PracticeClient() {
                STAGE 1: CLEAN SELECTION VIEW
             ══════════════════════════════════════════════════════ */}
             {stage === 'select' && (
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-24 sm:pt-28">
+                <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-24 sm:pt-28">
                     {/* Header */}
                     <div className="text-center mb-8 sm:mb-12">
                         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200 mb-3">
@@ -163,12 +163,12 @@ export default function PracticeClient() {
                             Competition Practice Stage
                         </h1>
                         <p className="text-slate-600 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
-                            Each practice test generates <strong>20 randomized questions</strong> from a pool of <strong>100 questions</strong> with a <strong>3-minute countdown</strong>.
+                            Each practice test generates <strong>10 randomized questions</strong> with a <strong>3-minute countdown</strong>. Simplified and relaxed for children to build confidence!
                         </p>
                     </div>
 
                     {/* Subject Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
                         {PRACTICE_SUBJECTS.map((subject) => {
                             return (
                                 <div
@@ -181,7 +181,7 @@ export default function PracticeClient() {
                                                 {subject.badge}
                                             </span>
                                             <span className="text-xs font-bold text-amber-700 flex items-center gap-1 font-mono">
-                                                <Clock className="w-3.5 h-3.5" /> 3 mins
+                                                <Clock className="w-3.5 h-3.5" /> {subject.timeMinutes} mins
                                             </span>
                                         </div>
 
@@ -197,7 +197,7 @@ export default function PracticeClient() {
                                     <div>
                                         <div className="bg-slate-50 rounded-xl p-3 border border-slate-100 mb-5 flex items-center justify-between text-xs">
                                             <span className="text-slate-500 font-medium">Test Format</span>
-                                            <span className="font-bold text-slate-800">20 Qs • 3 Mins</span>
+                                            <span className="font-bold text-slate-800">{subject.sessionQuestions} Qs • {subject.timeMinutes} Mins</span>
                                         </div>
 
                                         <button
@@ -217,14 +217,14 @@ export default function PracticeClient() {
                     <div className="bg-amber-50/80 rounded-2xl border border-amber-200 p-5 text-center text-xs text-amber-900 max-w-xl mx-auto">
                         <p className="font-semibold mb-1">⚡ Instant Practice Tips</p>
                         <p className="text-amber-800">
-                            Questions and options are reshuffled on every try. After completing your 3-minute test, you will get a full answer breakdown with scripture references to help you learn!
+                            Questions and options are reshuffled on every try. After completing your 3-minute test, you will get a full answer breakdown with references to help you learn!
                         </p>
                     </div>
                 </div>
             )}
 
             {/* ══════════════════════════════════════════════════════
-               STAGE 2: RESPONSIVE 20-QUESTION PRACTICE RUNNER
+               STAGE 2: RESPONSIVE 10-QUESTION PRACTICE RUNNER
             ══════════════════════════════════════════════════════ */}
             {stage === 'quiz' && currentQ && (
                 <div className="w-full">
@@ -353,11 +353,11 @@ export default function PracticeClient() {
                             </div>
                         </div>
 
-                        {/* Quick Question Jump Strip (1 to 20) */}
+                        {/* Quick Question Jump Strip (1 to 10) */}
                         <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
                             <div className="flex items-center justify-between text-xs text-slate-500 mb-3">
                                 <span className="font-medium">Quick Question Navigation</span>
-                                <span>{scoreData.answeredCount} of 20 answered</span>
+                                <span>{scoreData.answeredCount} of {questions.length} answered</span>
                             </div>
                             <div className="grid grid-cols-10 gap-1.5 sm:gap-2">
                                 {questions.map((_, idx) => {
@@ -425,13 +425,13 @@ export default function PracticeClient() {
                         </h2>
 
                         <p className="text-slate-500 text-xs sm:text-sm max-w-md mx-auto mb-6">
-                            You completed {scoreData.answeredCount} of 20 questions in {Math.floor(scoreData.timeSpent / 60)}m {scoreData.timeSpent % 60}s.
+                            You completed {scoreData.answeredCount} of {questions.length} questions in {Math.floor(scoreData.timeSpent / 60)}m {scoreData.timeSpent % 60}s.
                         </p>
 
                         {/* Score stats */}
                         <div className="grid grid-cols-3 gap-3 max-w-sm mx-auto mb-8">
                             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100">
-                                <div className="text-2xl font-black font-serif text-slate-900">{scoreData.correct} / 20</div>
+                                <div className="text-2xl font-black font-serif text-slate-900">{scoreData.correct} / {questions.length}</div>
                                 <div className="text-[11px] text-slate-400 font-bold uppercase mt-0.5">Score</div>
                             </div>
                             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100">
@@ -451,7 +451,7 @@ export default function PracticeClient() {
                                 onClick={() => handleStartPractice(selectedSubject)}
                                 className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs uppercase tracking-wider shadow-sm flex items-center justify-center gap-2 transition-all cursor-pointer"
                             >
-                                <RotateCcw className="w-4 h-4" /> Try Again (New 20 Random Questions)
+                                <RotateCcw className="w-4 h-4" /> Try Again (New {questions.length} Questions)
                             </button>
 
                             <button
@@ -482,7 +482,7 @@ export default function PracticeClient() {
                                             : 'text-slate-500 hover:text-slate-900'
                                     }`}
                                 >
-                                    All (20)
+                                    All ({questions.length})
                                 </button>
                                 <button
                                     type="button"
@@ -493,7 +493,7 @@ export default function PracticeClient() {
                                             : 'text-slate-500 hover:text-rose-700'
                                     }`}
                                 >
-                                    Mistakes ({20 - scoreData.correct})
+                                    Mistakes ({questions.length - scoreData.correct})
                                 </button>
                             </div>
                         </div>
