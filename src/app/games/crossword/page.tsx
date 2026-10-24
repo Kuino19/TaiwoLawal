@@ -10,8 +10,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import { LEVELS, Level, Clue } from './levels';
 
-const OPTION_LABELS = ['A', 'B', 'C', 'D', 'E', 'F'];
-
 /* ───────────────────── Component ───────────────────── */
 
 export default function CrosswordGame() {
@@ -23,6 +21,23 @@ export default function CrosswordGame() {
     const [levelComplete, setLevelComplete] = useState(false);
     const [completedLevels, setCompletedLevels] = useState<number[]>([]);
     const [wrongCells, setWrongCells] = useState<Set<string>>(new Set());
+
+    // Load completed levels from localStorage
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem('crossword_completed_levels');
+            if (saved) setCompletedLevels(JSON.parse(saved));
+        } catch {}
+    }, []);
+
+    // Persist completed levels
+    useEffect(() => {
+        if (completedLevels.length > 0) {
+            try {
+                localStorage.setItem('crossword_completed_levels', JSON.stringify(completedLevels));
+            } catch {}
+        }
+    }, [completedLevels]);
 
     const inputRef = useRef<HTMLInputElement>(null);
     const level = LEVELS[currentLevel];
@@ -180,8 +195,8 @@ export default function CrosswordGame() {
                     </div>
 
                     <div className="relative max-w-2xl mx-auto px-4 pt-24 pb-12 text-center">
-                        <Link href="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-slate-600 transition-colors text-sm mb-8">
-                            <ArrowLeft className="w-4 h-4" /> Back Home
+                        <Link href="/games" className="inline-flex items-center gap-2 text-slate-400 hover:text-slate-600 transition-colors text-sm mb-8">
+                            <ArrowLeft className="w-4 h-4" /> Back to Games
                         </Link>
 
                         <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/25">
