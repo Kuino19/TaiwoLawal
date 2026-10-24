@@ -437,7 +437,7 @@ export default function TrueOrFalseGame() {
                                         type="button"
                                         disabled={feedback !== null}
                                         onClick={() => handleAnswer(true)}
-                                        className={`p-5 rounded-2xl font-black text-xl transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 ${
+                                        className={`p-4 sm:p-5 rounded-2xl font-black text-lg sm:text-xl transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 touch-manipulation select-none ${
                                             feedback !== null && currentQ.isTrue
                                                 ? 'bg-emerald-500 text-slate-950 ring-4 ring-emerald-400/50'
                                                 : feedback !== null && selectedAnswer === true
@@ -445,14 +445,14 @@ export default function TrueOrFalseGame() {
                                                 : 'bg-emerald-600/20 border-2 border-emerald-500/50 text-emerald-300 hover:bg-emerald-600 hover:text-white'
                                         }`}
                                     >
-                                        <Check className="w-6 h-6" /> TRUE
+                                        <Check className="w-5 h-5 sm:w-6 sm:h-6" /> TRUE
                                     </button>
 
                                     <button
                                         type="button"
                                         disabled={feedback !== null}
                                         onClick={() => handleAnswer(false)}
-                                        className={`p-5 rounded-2xl font-black text-xl transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 ${
+                                        className={`p-4 sm:p-5 rounded-2xl font-black text-lg sm:text-xl transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 touch-manipulation select-none ${
                                             feedback !== null && !currentQ.isTrue
                                                 ? 'bg-emerald-500 text-slate-950 ring-4 ring-emerald-400/50'
                                                 : feedback !== null && selectedAnswer === false
@@ -460,7 +460,7 @@ export default function TrueOrFalseGame() {
                                                 : 'bg-rose-600/20 border-2 border-rose-500/50 text-rose-300 hover:bg-rose-600 hover:text-white'
                                         }`}
                                     >
-                                        <X className="w-6 h-6" /> FALSE
+                                        <X className="w-5 h-5 sm:w-6 sm:h-6" /> FALSE
                                     </button>
                                 </div>
                             </div>

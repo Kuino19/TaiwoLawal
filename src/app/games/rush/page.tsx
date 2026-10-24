@@ -415,7 +415,7 @@ export default function TriviaRushGame() {
                                         <button
                                             key={i}
                                             onClick={() => handleAnswer(i)}
-                                            className="w-full text-left p-4 rounded-2xl bg-slate-700/60 hover:bg-slate-700 border-2 border-slate-600 hover:border-cyan-400 transition-all font-semibold text-base sm:text-lg cursor-pointer active:scale-98"
+                                            className="w-full text-left p-3.5 sm:p-4 rounded-2xl bg-slate-700/60 hover:bg-slate-700 border-2 border-slate-600 hover:border-cyan-400 transition-all font-semibold text-base sm:text-lg cursor-pointer active:scale-98 touch-manipulation select-none"
                                         >
                                             {opt}
                                         </button>

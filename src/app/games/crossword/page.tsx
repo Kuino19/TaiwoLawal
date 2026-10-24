@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { triggerConfettiBurst } from '@/lib/confettiBurst';
-import { ArrowLeft, CheckCircle2, ChevronRight, Trophy, Lock, Sparkles, RotateCcw } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, ChevronRight, ChevronLeft, Trophy, Lock, Sparkles, RotateCcw, RefreshCw, Delete } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -22,9 +22,15 @@ export default function CrosswordGame() {
     const [completedLevels, setCompletedLevels] = useState<number[]>([]);
     const [wrongCells, setWrongCells] = useState<Set<string>>(new Set());
     const [currentPage, setCurrentPage] = useState(0);
+    const [mobileClueTab, setMobileClueTab] = useState<'across' | 'down'>('across');
 
     const LEVELS_PER_PAGE = 10;
     const totalPages = Math.ceil(LEVELS.length / LEVELS_PER_PAGE);
+
+    // Keep mobile clue tab in sync with typing direction
+    useEffect(() => {
+        setMobileClueTab(direction);
+    }, [direction]);
 
     // Load completed levels from localStorage
     useEffect(() => {
@@ -89,7 +95,6 @@ export default function CrosswordGame() {
             const firstClue = level.clues[0];
             setSelectedCell({ r: firstClue.row, c: firstClue.col });
             setDirection(firstClue.dir);
-            setTimeout(() => inputRef.current?.focus(), 100);
         }
     }, [currentLevel, screen]);
 
@@ -104,7 +109,6 @@ export default function CrosswordGame() {
             if (info.across && !info.down) setDirection('across');
             else if (!info.across && info.down) setDirection('down');
         }
-        inputRef.current?.focus();
     };
 
     /* ── Navigation helpers ── */
@@ -114,24 +118,62 @@ export default function CrosswordGame() {
         return cellsInfo.has(`${nr}-${nc}`) ? { r: nr, c: nc } : null;
     };
 
-    /* ── Keyboard ── */
+    /* ── Key input actions (used by both hardware & on-screen keyboard) ── */
+    const enterLetter = (letter: string) => {
+        if (levelComplete || !selectedCell) return;
+        const { r, c } = selectedCell;
+        const key = `${r}-${c}`;
+        const typed = letter.toUpperCase();
+        const correct = cellsInfo.get(key)?.letter;
+        setGridState((prev) => ({ ...prev, [key]: typed }));
+        if (correct && typed !== correct) {
+            setWrongCells((prev) => new Set(prev).add(key));
+        } else {
+            setWrongCells((prev) => { const n = new Set(prev); n.delete(key); return n; });
+        }
+        const nextCell = getNextCell(r, c, direction, 1);
+        if (nextCell) setSelectedCell(nextCell);
+    };
+
+    const handleBackspace = () => {
+        if (levelComplete || !selectedCell) return;
+        const { r, c } = selectedCell;
+        const key = `${r}-${c}`;
+        if (gridState[key]) {
+            setGridState((prev) => { const n = { ...prev }; delete n[key]; return n; });
+            setWrongCells((prev) => { const n = new Set(prev); n.delete(key); return n; });
+        } else {
+            const prevCell = getNextCell(r, c, direction, -1);
+            if (prevCell) {
+                setSelectedCell(prevCell);
+                setGridState((prev) => { const n = { ...prev }; delete n[`${prevCell.r}-${prevCell.c}`]; return n; });
+                setWrongCells((prev) => { const n = new Set(prev); n.delete(`${prevCell.r}-${prevCell.c}`); return n; });
+            }
+        }
+    };
+
+    const toggleDirection = () => {
+        setDirection((d) => (d === 'across' ? 'down' : 'across'));
+    };
+
+    /* ── Clue Next/Prev Navigation ── */
+    const navigateClue = (step: 1 | -1) => {
+        if (level.clues.length === 0) return;
+        const currentIdx = level.clues.findIndex(c => c.num === activeClueNum && c.dir === direction);
+        let nextIdx = (currentIdx + step + level.clues.length) % level.clues.length;
+        const nextClue = level.clues[nextIdx];
+        setSelectedCell({ r: nextClue.row, c: nextClue.col });
+        setDirection(nextClue.dir);
+    };
+
+    /* ── Hardware Keyboard ── */
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (levelComplete || !selectedCell) return;
         const { r, c } = selectedCell;
 
         if (e.key === 'Backspace') {
             e.preventDefault();
-            if (gridState[`${r}-${c}`]) {
-                setGridState((prev) => { const n = { ...prev }; delete n[`${r}-${c}`]; return n; });
-                setWrongCells((prev) => { const n = new Set(prev); n.delete(`${r}-${c}`); return n; });
-            } else {
-                const prevCell = getNextCell(r, c, direction, -1);
-                if (prevCell) {
-                    setSelectedCell(prevCell);
-                    setGridState((prev) => { const n = { ...prev }; delete n[`${prevCell.r}-${prevCell.c}`]; return n; });
-                    setWrongCells((prev) => { const n = new Set(prev); n.delete(`${prevCell.r}-${prevCell.c}`); return n; });
-                }
-            }
+            handleBackspace();
         } else if (['ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp'].includes(e.key)) {
             e.preventDefault();
             let next = null;
@@ -141,19 +183,39 @@ export default function CrosswordGame() {
             if (e.key === 'ArrowUp') { next = cellsInfo.has(`${r - 1}-${c}`) ? { r: r - 1, c } : null; setDirection('down'); }
             if (next) setSelectedCell(next);
         } else if (/^[a-zA-Z]$/.test(e.key)) {
-            const key = `${r}-${c}`;
-            const typed = e.key.toUpperCase();
-            const correct = cellsInfo.get(key)?.letter;
-            setGridState((prev) => ({ ...prev, [key]: typed }));
-            if (correct && typed !== correct) {
-                setWrongCells((prev) => new Set(prev).add(key));
-            } else {
-                setWrongCells((prev) => { const n = new Set(prev); n.delete(key); return n; });
-            }
-            const nextCell = getNextCell(r, c, direction, 1);
-            if (nextCell) setSelectedCell(nextCell);
+            enterLetter(e.key);
         }
     };
+
+    /* ── Global Key Listener for Desktop ── */
+    useEffect(() => {
+        if (screen !== 'play' || levelComplete) return;
+
+        const onGlobalKeyDown = (e: KeyboardEvent) => {
+            const tag = (e.target as HTMLElement)?.tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+            if (e.key === 'Backspace') {
+                e.preventDefault();
+                handleBackspace();
+            } else if (['ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp'].includes(e.key)) {
+                e.preventDefault();
+                if (!selectedCell) return;
+                const { r, c } = selectedCell;
+                let next = null;
+                if (e.key === 'ArrowRight') { next = cellsInfo.has(`${r}-${c + 1}`) ? { r, c: c + 1 } : null; setDirection('across'); }
+                if (e.key === 'ArrowLeft') { next = cellsInfo.has(`${r}-${c - 1}`) ? { r, c: c - 1 } : null; setDirection('across'); }
+                if (e.key === 'ArrowDown') { next = cellsInfo.has(`${r + 1}-${c}`) ? { r: r + 1, c } : null; setDirection('down'); }
+                if (e.key === 'ArrowUp') { next = cellsInfo.has(`${r - 1}-${c}`) ? { r: r - 1, c } : null; setDirection('down'); }
+                if (next) setSelectedCell(next);
+            } else if (/^[a-zA-Z]$/.test(e.key) && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                enterLetter(e.key);
+            }
+        };
+
+        window.addEventListener('keydown', onGlobalKeyDown);
+        return () => window.removeEventListener('keydown', onGlobalKeyDown);
+    }, [screen, levelComplete, selectedCell, direction, cellsInfo, gridState]);
 
     /* ── Active clue ── */
     const getActiveClueNum = () => {
@@ -400,32 +462,59 @@ export default function CrosswordGame() {
             </header>
 
             {/* Active Clue Banner */}
-            <div className="bg-amber-50 border-b border-amber-100">
-                <div className="max-w-4xl mx-auto px-4 py-3 flex items-center gap-3">
-                    {activeClue ? (
-                        <>
-                            <span className="flex-shrink-0 px-2.5 py-1 rounded-md bg-amber-200/60 text-amber-800 text-xs font-bold uppercase">
-                                {activeClue.num}{activeClue.dir === 'across' ? 'A' : 'D'}
-                            </span>
-                            <span className="text-amber-900 text-sm font-medium">{activeClue.text}</span>
-                        </>
-                    ) : (
-                        <span className="text-amber-600/60 text-sm italic">Tap a cell to start</span>
-                    )}
+            <div className="bg-amber-50 border-b border-amber-200/80 sticky top-14 z-10 shadow-xs">
+                <div className="max-w-4xl mx-auto px-3 sm:px-4 py-2.5 flex items-center justify-between gap-2">
+                    <button
+                        type="button"
+                        onClick={() => navigateClue(-1)}
+                        className="p-1.5 rounded-lg bg-white border border-amber-200 text-amber-800 hover:bg-amber-100 active:scale-95 transition-all cursor-pointer"
+                        title="Previous Clue"
+                    >
+                        <ChevronLeft className="w-4 h-4" />
+                    </button>
+
+                    <div 
+                        onClick={toggleDirection}
+                        className="flex-1 flex items-center justify-center gap-2 cursor-pointer select-none text-center min-w-0"
+                    >
+                        {activeClue ? (
+                            <>
+                                <span className="flex-shrink-0 px-2 py-0.5 rounded-md bg-amber-500 text-white text-xs font-black uppercase tracking-wider">
+                                    {activeClue.num}{activeClue.dir === 'across' ? ' Across' : ' Down'}
+                                </span>
+                                <span className="text-amber-950 text-xs sm:text-sm font-semibold truncate">
+                                    {activeClue.text}
+                                </span>
+                            </>
+                        ) : (
+                            <span className="text-amber-700/70 text-xs sm:text-sm italic">Tap a cell to begin</span>
+                        )}
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={() => navigateClue(1)}
+                        className="p-1.5 rounded-lg bg-white border border-amber-200 text-amber-800 hover:bg-amber-100 active:scale-95 transition-all cursor-pointer"
+                        title="Next Clue"
+                    >
+                        <ChevronRight className="w-4 h-4" />
+                    </button>
                 </div>
             </div>
 
             {/* Main Content */}
-            <main className="flex-1 flex flex-col lg:flex-row gap-6 max-w-5xl mx-auto w-full px-4 pt-6 pb-24">
+            <main className="flex-1 flex flex-col lg:flex-row gap-6 max-w-5xl mx-auto w-full px-3 sm:px-4 pt-4 sm:pt-6 pb-24">
 
-                {/* Grid */}
-                <div className="flex justify-center lg:justify-start" onClick={() => inputRef.current?.focus()}>
-                    <div className="inline-block">
-                        {/* Grid container */}
+                {/* Grid & Mobile On-Screen Keyboard */}
+                <div className="flex-1 flex flex-col items-center">
+                    {/* Grid container with responsive auto-fit */}
+                    <div className="w-full flex justify-center items-center overflow-hidden py-1">
                         <div
-                            className="inline-grid gap-0 rounded-xl overflow-hidden shadow-xl border border-slate-200"
+                            className="grid gap-0 rounded-xl overflow-hidden shadow-lg border-2 border-slate-300 bg-slate-300/80"
                             style={{
-                                gridTemplateColumns: `repeat(${level.cols}, 1fr)`,
+                                gridTemplateColumns: `repeat(${level.cols}, minmax(0, 1fr))`,
+                                width: `min(100%, ${level.cols * 44}px)`,
+                                maxWidth: `${level.cols * 48}px`
                             }}
                         >
                             {Array.from({ length: level.rows * level.cols }, (_, idx) => {
@@ -446,8 +535,7 @@ export default function CrosswordGame() {
                                     return (
                                         <div
                                             key={key}
-                                            className="w-11 h-11 sm:w-14 sm:h-14"
-                                            style={{ background: '#e2e8f0' }}
+                                            className="aspect-square bg-slate-200/90"
                                         />
                                     );
                                 }
@@ -457,8 +545,8 @@ export default function CrosswordGame() {
                                         key={key}
                                         onClick={() => handleCellClick(r, c)}
                                         className={`
-                                            relative w-11 h-11 sm:w-14 sm:h-14 flex items-center justify-center
-                                            cursor-pointer select-none transition-colors duration-150
+                                            relative aspect-square flex items-center justify-center
+                                            cursor-pointer select-none touch-manipulation transition-colors duration-150
                                             border border-slate-200
                                             ${isSelected
                                                 ? 'bg-amber-400 text-white z-10 ring-2 ring-amber-500 ring-offset-1'
@@ -470,15 +558,15 @@ export default function CrosswordGame() {
                                     >
                                         {/* Number label */}
                                         {info.num && (
-                                            <span className={`absolute top-0.5 left-1 text-[9px] sm:text-[10px] font-bold leading-none ${
-                                                isSelected ? 'text-white/80' : 'text-slate-400'
+                                            <span className={`absolute top-0.5 left-1 text-[8px] sm:text-[10px] font-bold leading-none ${
+                                                isSelected ? 'text-white/90' : 'text-slate-400'
                                             }`}>
                                                 {info.num}
                                             </span>
                                         )}
 
                                         {/* Letter */}
-                                        <span className={`text-base sm:text-xl font-bold ${
+                                        <span className={`text-sm sm:text-lg md:text-xl font-black ${
                                             isSelected
                                                 ? 'text-white'
                                                 : isWrong
@@ -494,28 +582,135 @@ export default function CrosswordGame() {
                             })}
                         </div>
                     </div>
+
+                    {/* On-Screen Mobile Virtual Keyboard */}
+                    <div className="w-full max-w-md mx-auto mt-4 px-1 select-none">
+                        <div className="flex items-center justify-between text-xs text-slate-500 mb-1.5 px-1">
+                            <span className="font-semibold text-slate-600 text-[11px]">
+                                Typing: <strong className="text-amber-700 uppercase">{direction}</strong>
+                            </span>
+                            <button
+                                type="button"
+                                onClick={toggleDirection}
+                                className="text-[11px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-md hover:bg-amber-100 flex items-center gap-1 cursor-pointer transition-all active:scale-95"
+                            >
+                                <RefreshCw className="w-3 h-3" /> Turn to {direction === 'across' ? 'Down' : 'Across'}
+                            </button>
+                        </div>
+
+                        {/* Keys Rows */}
+                        <div className="space-y-1 sm:space-y-1.5">
+                            {/* Row 1 */}
+                            <div className="flex gap-1 justify-center">
+                                {['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'].map((k) => (
+                                    <button
+                                        key={k}
+                                        type="button"
+                                        onClick={() => enterLetter(k)}
+                                        className="flex-1 min-w-0 h-9 sm:h-11 bg-white hover:bg-amber-50 active:bg-amber-200 border border-slate-300 rounded-lg text-slate-900 font-black text-xs sm:text-sm shadow-xs touch-manipulation cursor-pointer flex items-center justify-center transition-colors"
+                                    >
+                                        {k}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Row 2 */}
+                            <div className="flex gap-1 justify-center px-2">
+                                {['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'].map((k) => (
+                                    <button
+                                        key={k}
+                                        type="button"
+                                        onClick={() => enterLetter(k)}
+                                        className="flex-1 min-w-0 h-9 sm:h-11 bg-white hover:bg-amber-50 active:bg-amber-200 border border-slate-300 rounded-lg text-slate-900 font-black text-xs sm:text-sm shadow-xs touch-manipulation cursor-pointer flex items-center justify-center transition-colors"
+                                    >
+                                        {k}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Row 3 */}
+                            <div className="flex gap-1 justify-center">
+                                <button
+                                    type="button"
+                                    onClick={toggleDirection}
+                                    className="flex-[1.3] min-w-0 h-9 sm:h-11 bg-amber-100 hover:bg-amber-200 active:bg-amber-300 border border-amber-300 rounded-lg text-amber-900 font-black text-[11px] sm:text-xs shadow-xs touch-manipulation cursor-pointer flex items-center justify-center gap-1 transition-colors px-1"
+                                    title="Toggle Direction"
+                                >
+                                    <RefreshCw className="w-3.5 h-3.5" />
+                                    <span className="hidden xs:inline">{direction === 'across' ? 'Down' : 'Across'}</span>
+                                </button>
+
+                                {['Z', 'X', 'C', 'V', 'B', 'N', 'M'].map((k) => (
+                                    <button
+                                        key={k}
+                                        type="button"
+                                        onClick={() => enterLetter(k)}
+                                        className="flex-1 min-w-0 h-9 sm:h-11 bg-white hover:bg-amber-50 active:bg-amber-200 border border-slate-300 rounded-lg text-slate-900 font-black text-xs sm:text-sm shadow-xs touch-manipulation cursor-pointer flex items-center justify-center transition-colors"
+                                    >
+                                        {k}
+                                    </button>
+                                ))}
+
+                                <button
+                                    type="button"
+                                    onClick={handleBackspace}
+                                    className="flex-[1.3] min-w-0 h-9 sm:h-11 bg-slate-200 hover:bg-slate-300 active:bg-slate-400 border border-slate-300 rounded-lg text-slate-800 font-bold text-xs shadow-xs touch-manipulation cursor-pointer flex items-center justify-center gap-1 transition-colors px-1"
+                                    title="Backspace"
+                                >
+                                    <Delete className="w-4 h-4" />
+                                    <span className="hidden xs:inline text-[10px]">Del</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Clues Panel */}
-                <div className="flex-1 min-w-0">
-                    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                        {/* Across */}
-                        <div className="p-5 pb-4">
-                            <h3 className="text-xs font-bold uppercase tracking-[0.15em] text-slate-400 mb-3">Across</h3>
-                            <div className="space-y-1">
+                <div className="w-full lg:w-80 flex-shrink-0">
+                    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-4">
+                        {/* Mobile Clue Tabs */}
+                        <div className="lg:hidden flex items-center gap-2 border-b border-slate-100 pb-3 mb-3">
+                            <button
+                                type="button"
+                                onClick={() => { setMobileClueTab('across'); setDirection('across'); }}
+                                className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                                    mobileClueTab === 'across'
+                                        ? 'bg-slate-900 text-white'
+                                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                }`}
+                            >
+                                Across ({level.clues.filter(c => c.dir === 'across').length})
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => { setMobileClueTab('down'); setDirection('down'); }}
+                                className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                                    mobileClueTab === 'down'
+                                        ? 'bg-slate-900 text-white'
+                                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                }`}
+                            >
+                                Down ({level.clues.filter(c => c.dir === 'down').length})
+                            </button>
+                        </div>
+
+                        {/* Across Clues */}
+                        <div className={`${mobileClueTab === 'across' ? 'block' : 'hidden lg:block'} pb-4`}>
+                            <h3 className="text-xs font-bold uppercase tracking-[0.15em] text-slate-400 mb-2">Across</h3>
+                            <div className="space-y-1 max-h-56 lg:max-h-64 overflow-y-auto pr-1">
                                 {level.clues.filter((c) => c.dir === 'across').map((c) => {
                                     const isActive = direction === 'across' && activeClueNum === c.num;
                                     return (
                                         <button
                                             key={`a-${c.num}`}
                                             onClick={() => { handleCellClick(c.row, c.col); setDirection('across'); }}
-                                            className={`w-full text-left text-sm px-3 py-2.5 rounded-lg transition-all ${
+                                            className={`w-full text-left text-xs sm:text-sm px-2.5 py-2 rounded-lg transition-all cursor-pointer ${
                                                 isActive
-                                                    ? 'bg-amber-100 text-amber-900 font-semibold'
+                                                    ? 'bg-amber-100 text-amber-950 font-bold border-l-4 border-amber-500'
                                                     : 'text-slate-600 hover:bg-slate-50'
                                             }`}
                                         >
-                                            <span className="font-bold text-slate-400 mr-2 w-5 inline-block">{c.num}.</span>
+                                            <span className="font-bold text-slate-400 mr-1.5 inline-block">{c.num}.</span>
                                             {c.text}
                                         </button>
                                     );
@@ -523,25 +718,25 @@ export default function CrosswordGame() {
                             </div>
                         </div>
 
-                        <div className="h-px bg-slate-100 mx-5" />
+                        <div className="hidden lg:block h-px bg-slate-100 my-3" />
 
-                        {/* Down */}
-                        <div className="p-5 pt-4">
-                            <h3 className="text-xs font-bold uppercase tracking-[0.15em] text-slate-400 mb-3">Down</h3>
-                            <div className="space-y-1">
+                        {/* Down Clues */}
+                        <div className={`${mobileClueTab === 'down' ? 'block' : 'hidden lg:block'} pt-1`}>
+                            <h3 className="text-xs font-bold uppercase tracking-[0.15em] text-slate-400 mb-2">Down</h3>
+                            <div className="space-y-1 max-h-56 lg:max-h-64 overflow-y-auto pr-1">
                                 {level.clues.filter((c) => c.dir === 'down').map((c) => {
                                     const isActive = direction === 'down' && activeClueNum === c.num;
                                     return (
                                         <button
                                             key={`d-${c.num}`}
                                             onClick={() => { handleCellClick(c.row, c.col); setDirection('down'); }}
-                                            className={`w-full text-left text-sm px-3 py-2.5 rounded-lg transition-all ${
+                                            className={`w-full text-left text-xs sm:text-sm px-2.5 py-2 rounded-lg transition-all cursor-pointer ${
                                                 isActive
-                                                    ? 'bg-amber-100 text-amber-900 font-semibold'
+                                                    ? 'bg-amber-100 text-amber-950 font-bold border-l-4 border-amber-500'
                                                     : 'text-slate-600 hover:bg-slate-50'
                                             }`}
                                         >
-                                            <span className="font-bold text-slate-400 mr-2 w-5 inline-block">{c.num}.</span>
+                                            <span className="font-bold text-slate-400 mr-1.5 inline-block">{c.num}.</span>
                                             {c.text}
                                         </button>
                                     );

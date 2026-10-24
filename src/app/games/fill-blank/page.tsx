@@ -531,7 +531,7 @@ export default function FillInTheBlankGame() {
                                                 type="button"
                                                 disabled={feedback !== null}
                                                 onClick={() => handleSelectOption(opt)}
-                                                className={`p-4 rounded-2xl border-2 font-bold text-base sm:text-lg transition-all text-center cursor-pointer active:scale-98 ${btnStyle}`}
+                                                className={`p-3.5 sm:p-4 rounded-2xl border-2 font-bold text-base sm:text-lg transition-all text-center cursor-pointer active:scale-98 touch-manipulation select-none ${btnStyle}`}
                                             >
                                                 {opt}
                                             </button>

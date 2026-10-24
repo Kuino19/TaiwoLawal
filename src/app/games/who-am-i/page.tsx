@@ -583,7 +583,7 @@ export default function WhoAmIGame() {
                                             key={oIdx}
                                             type="button"
                                             onClick={() => handleGuess(opt)}
-                                            className={`p-3.5 sm:p-4 rounded-xl border-2 text-left font-bold text-sm sm:text-base transition-all cursor-pointer ${
+                                            className={`p-3.5 sm:p-4 rounded-xl border-2 text-left font-bold text-sm sm:text-base transition-all cursor-pointer active:scale-98 touch-manipulation select-none ${
                                                 selectedName === opt
                                                     ? 'bg-amber-500/20 border-amber-400 text-white'
                                                     : 'bg-slate-750 border-slate-650 hover:bg-slate-700 hover:border-amber-400/60 text-slate-100'

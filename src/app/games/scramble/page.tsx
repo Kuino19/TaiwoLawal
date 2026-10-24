@@ -187,7 +187,7 @@ export default function VerseScrambleGame() {
                         <select 
                             value={levelIndex} 
                             onChange={(e) => setLevelIndex(Number(e.target.value))}
-                            className="bg-amber-50 border border-amber-200 text-amber-900 font-bold text-xs px-3 py-1.5 rounded-full cursor-pointer focus:outline-none"
+                            className="bg-amber-50 border border-amber-200 text-amber-900 font-bold text-xs px-2.5 py-1.5 rounded-full cursor-pointer focus:outline-none max-w-[125px] sm:max-w-xs truncate"
                         >
                             {MASSIVE_VERSES.map((v, idx) => (
                                 <option key={idx} value={idx}>
@@ -247,7 +247,7 @@ export default function VerseScrambleGame() {
                                     exit={{ scale: 0.8, opacity: 0 }}
                                     key={w.id}
                                     onClick={() => !isWin && handleDeselectWord(w)}
-                                    className={`px-3.5 py-2 rounded-xl font-medium text-base sm:text-lg transition-colors cursor-pointer ${
+                                    className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl font-medium text-sm sm:text-lg transition-colors cursor-pointer select-none touch-manipulation ${
                                         isWin 
                                         ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 font-semibold cursor-default' 
                                         : 'bg-amber-100 text-amber-900 hover:bg-amber-200 border border-amber-300 shadow-xs'
@@ -263,7 +263,7 @@ export default function VerseScrambleGame() {
                 {/* Pool Words Area */}
                 {!isWin ? (
                     <div className="flex-1">
-                        <div className="flex flex-wrap gap-2 sm:gap-2.5 justify-center">
+                        <div className="flex flex-wrap gap-1.5 sm:gap-2.5 justify-center">
                             <AnimatePresence>
                                 {pool.map((w) => (
                                     <motion.button
@@ -273,7 +273,7 @@ export default function VerseScrambleGame() {
                                         exit={{ scale: 0.8, opacity: 0 }}
                                         key={w.id}
                                         onClick={() => handleSelectWord(w)}
-                                        className="px-4 py-2.5 bg-white rounded-xl font-medium text-base sm:text-lg text-slate-700 hover:text-slate-950 border-2 border-slate-200 hover:border-amber-400 shadow-xs cursor-pointer active:scale-95 transition-all"
+                                        className="px-3 py-2 sm:px-4 sm:py-2.5 bg-white rounded-xl font-medium text-sm sm:text-lg text-slate-700 hover:text-slate-950 border-2 border-slate-200 hover:border-amber-400 shadow-xs cursor-pointer active:scale-95 transition-all select-none touch-manipulation"
                                     >
                                         {w.word}
                                     </motion.button>

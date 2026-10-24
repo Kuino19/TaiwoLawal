@@ -349,18 +349,18 @@ export default function MemoryMatchGame() {
                             className="flex flex-col"
                         >
                             {/* HUD Bar */}
-                            <div className="flex items-center justify-between mb-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-                                <div className="flex items-center gap-2 text-slate-700 text-sm font-medium">
+                            <div className="flex items-center justify-between mb-4 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200 shadow-xs">
+                                <div className="flex items-center gap-1.5 sm:gap-2 text-slate-700 text-xs sm:text-sm font-medium">
                                     <Clock className="w-4 h-4 text-amber-500" />
                                     <span>Time: <strong className="font-mono text-slate-900">{formatTime(secondsElapsed)}</strong></span>
                                 </div>
 
                                 <div className="flex items-center gap-1">
-                                    <span className="text-xs text-slate-400 uppercase font-bold mr-1">Rating:</span>
+                                    <span className="hidden xs:inline text-xs text-slate-400 uppercase font-bold mr-1">Rating:</span>
                                     {[1, 2, 3].map(s => (
                                         <Star
                                             key={s}
-                                            className={`w-4 h-4 ${
+                                            className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${
                                                 s <= starCount
                                                     ? 'text-amber-400 fill-amber-400'
                                                     : 'text-slate-200'
@@ -369,24 +369,24 @@ export default function MemoryMatchGame() {
                                     ))}
                                 </div>
 
-                                <div className="flex items-center gap-4 text-sm font-medium">
+                                <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm font-medium">
                                     <span className="text-slate-600">Moves: <strong className="text-slate-900">{moves}</strong></span>
-                                    <span className="text-emerald-700 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 text-xs">
-                                        {matchesFound} / {pairCount} Pairs
+                                    <span className="text-emerald-700 font-bold bg-emerald-50 px-2 sm:px-2.5 py-0.5 rounded-full border border-emerald-200 text-[11px] sm:text-xs">
+                                        {matchesFound}/{pairCount}
                                     </span>
                                 </div>
                             </div>
 
                             {/* Card Grid */}
                             <div
-                                className={`grid gap-2.5 sm:gap-3.5 mx-auto w-full ${
+                                className={`grid gap-2 sm:gap-3.5 mx-auto w-full ${
                                     difficulty === 'easy'
                                         ? 'grid-cols-3 sm:grid-cols-4 max-w-xl'
                                         : difficulty === 'medium'
                                         ? 'grid-cols-4 max-w-2xl'
                                         : difficulty === 'hard'
-                                        ? 'grid-cols-4 sm:grid-cols-6 max-w-3xl'
-                                        : 'grid-cols-5 sm:grid-cols-6 max-w-4xl'
+                                        ? 'grid-cols-3 min-[420px]:grid-cols-4 sm:grid-cols-6 max-w-3xl'
+                                        : 'grid-cols-3 min-[400px]:grid-cols-4 sm:grid-cols-5 md:grid-cols-6 max-w-4xl'
                                 }`}
                             >
                                 {cards.map((card, idx) => {
@@ -399,7 +399,7 @@ export default function MemoryMatchGame() {
                                             whileHover={{ scale: card.isMatched ? 1 : 1.03 }}
                                             whileTap={{ scale: card.isMatched ? 1 : 0.96 }}
                                             onClick={() => handleCardClick(idx)}
-                                            className={`aspect-[4/5] rounded-2xl p-2 sm:p-2.5 flex flex-col items-center justify-center text-center cursor-pointer select-none transition-all duration-300 relative ${
+                                            className={`aspect-[4/5] rounded-2xl p-1.5 sm:p-2.5 flex flex-col items-center justify-center text-center cursor-pointer select-none touch-manipulation transition-all duration-300 relative ${
                                                 card.isMatched
                                                     ? 'bg-emerald-50 border-2 border-emerald-400 text-emerald-950 shadow-xs opacity-90'
                                                     : isRevealed
@@ -409,12 +409,12 @@ export default function MemoryMatchGame() {
                                         >
                                             {isRevealed ? (
                                                 <div className="flex flex-col items-center justify-center h-full w-full">
-                                                    <span className="text-2xl sm:text-3xl mb-1">{card.emoji}</span>
-                                                    <span className="font-bold text-xs sm:text-sm leading-tight text-slate-900 line-clamp-3">
+                                                    <span className="text-xl sm:text-2xl md:text-3xl mb-0.5 sm:mb-1">{card.emoji}</span>
+                                                    <span className="font-bold text-[10px] sm:text-xs md:text-sm leading-tight text-slate-900 line-clamp-3">
                                                         {card.text}
                                                     </span>
                                                     {card.isMatched && (
-                                                        <span className="text-[10px] text-emerald-700 font-bold mt-1">
+                                                        <span className="text-[9px] sm:text-[10px] text-emerald-700 font-bold mt-0.5 sm:mt-1">
                                                             ✓ Matched
                                                         </span>
                                                     )}
