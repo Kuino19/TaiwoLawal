@@ -2,111 +2,77 @@
 
 import { useState, useEffect } from 'react';
 import { triggerRealisticConfetti } from '@/lib/confettiBurst';
-import { ArrowLeft, CheckCircle2, RotateCcw, ChevronRight, Lightbulb, Trophy, Sparkles } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, RotateCcw, ChevronRight, Lightbulb, Trophy, Sparkles, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const VERSES = [
-    {
-        reference: "Philippians 4:13",
-        text: "I can do all things through Christ who strengthens me"
-    },
-    {
-        reference: "Proverbs 3:5",
-        text: "Trust in the LORD with all your heart and lean not on your own understanding"
-    },
-    {
-        reference: "Psalm 23:1",
-        text: "The LORD is my shepherd I lack nothing"
-    },
-    {
-        reference: "Psalm 119:105",
-        text: "Your word is a lamp for my feet a light on my path"
-    },
-    {
-        reference: "Romans 12:12",
-        text: "Be joyful in hope patient in affliction faithful in prayer"
-    },
-    {
-        reference: "Matthew 5:14",
-        text: "You are the light of the world"
-    },
-    {
-        reference: "Galatians 5:22",
-        text: "The fruit of the Spirit is love joy peace forbearance kindness goodness faithfulness"
-    },
-    {
-        reference: "Ephesians 4:32",
-        text: "Be kind and compassionate to one another forgiving each other"
-    },
-    {
-        reference: "John 14:6",
-        text: "I am the way and the truth and the life"
-    },
-    {
-        reference: "Joshua 1:9",
-        text: "Be strong and courageous do not be afraid"
-    },
-    {
-        reference: "Isaiah 40:31",
-        text: "Those who hope in the LORD will renew their strength"
-    },
-    {
-        reference: "Romans 8:31",
-        text: "If God is for us who can be against us"
-    },
-    {
-        reference: "1 John 4:19",
-        text: "We love because He first loved us"
-    },
-    {
-        reference: "Jeremiah 29:11",
-        text: "For I know the plans I have for you declares the LORD"
-    },
-    {
-        reference: "Psalm 46:1",
-        text: "God is our refuge and strength an ever present help in trouble"
-    },
-    {
-        reference: "Matthew 6:33",
-        text: "Seek first His kingdom and His righteousness"
-    },
-    {
-        reference: "Psalm 100:1",
-        text: "Shout for joy to the LORD all the earth"
-    },
-    {
-        reference: "1 Peter 5:7",
-        text: "Cast all your anxiety on Him because He cares for you"
-    },
-    {
-        reference: "Hebrews 11:1",
-        text: "Faith is confidence in what we hope for and assurance about what we do not see"
-    },
-    {
-        reference: "Proverbs 18:10",
-        text: "The name of the LORD is a fortified tower the righteous run to it and are safe"
-    },
-    {
-        reference: "Psalm 139:14",
-        text: "I praise you because I am fearfully and wonderfully made"
-    },
-    {
-        reference: "Colossians 3:23",
-        text: "Whatever you do work at it with all your heart as working for the Lord"
-    },
-    {
-        reference: "John 3:16",
-        text: "For God so loved the world that He gave His one and only Son"
-    },
-    {
-        reference: "Psalm 118:24",
-        text: "This is the day the LORD has made let us rejoice and be glad in it"
-    },
-    {
-        reference: "Philippians 4:4",
-        text: "Rejoice in the Lord always I will say it again Rejoice"
-    }
+interface VerseData {
+    id: number;
+    reference: string;
+    text: string;
+    pack: string;
+}
+
+const MASSIVE_VERSES: VerseData[] = [
+    // Pack 1: Faith & Foundations (1-10)
+    { id: 1, pack: "Faith & Foundations", reference: "Philippians 4:13", text: "I can do all things through Christ who strengthens me" },
+    { id: 2, pack: "Faith & Foundations", reference: "Proverbs 3:5", text: "Trust in the LORD with all your heart and lean not on your own understanding" },
+    { id: 3, pack: "Faith & Foundations", reference: "Psalm 23:1", text: "The LORD is my shepherd I lack nothing" },
+    { id: 4, pack: "Faith & Foundations", reference: "Genesis 1:1", text: "In the beginning God created the heavens and the earth" },
+    { id: 5, pack: "Faith & Foundations", reference: "John 14:6", text: "I am the way and the truth and the life" },
+    { id: 6, pack: "Faith & Foundations", reference: "Hebrews 11:1", text: "Now faith is confidence in what we hope for and assurance about what we do not see" },
+    { id: 7, pack: "Faith & Foundations", reference: "Matthew 6:33", text: "Seek first His kingdom and His righteousness and all these things will be given to you" },
+    { id: 8, pack: "Faith & Foundations", reference: "Romans 1:16", text: "For I am not ashamed of the gospel because it is the power of God that brings salvation" },
+    { id: 9, pack: "Faith & Foundations", reference: "Ephesians 2:8", text: "For it is by grace you have been saved through faith and this is not from yourselves" },
+    { id: 10, pack: "Faith & Foundations", reference: "2 Corinthians 5:7", text: "For we live by faith not by sight" },
+
+    // Pack 2: Strength & Courage (11-20)
+    { id: 11, pack: "Strength & Courage", reference: "Joshua 1:9", text: "Be strong and courageous do not be afraid do not be discouraged" },
+    { id: 12, pack: "Strength & Courage", reference: "Isaiah 40:31", text: "Those who hope in the LORD will renew their strength they will soar on wings like eagles" },
+    { id: 13, pack: "Strength & Courage", reference: "Romans 8:31", text: "If God is for us who can be against us" },
+    { id: 14, pack: "Strength & Courage", reference: "Psalm 46:1", text: "God is our refuge and strength an ever present help in trouble" },
+    { id: 15, pack: "Strength & Courage", reference: "Psalm 27:1", text: "The LORD is my light and my salvation whom shall I fear" },
+    { id: 16, pack: "Strength & Courage", reference: "2 Timothy 1:7", text: "For God has not given us a spirit of fear but of power and of love and of a sound mind" },
+    { id: 17, pack: "Strength & Courage", reference: "Deuteronomy 31:6", text: "Be strong and bold do not fear for the LORD your God goes with you" },
+    { id: 18, pack: "Strength & Courage", reference: "Ephesians 6:10", text: "Be strong in the Lord and in His mighty power" },
+    { id: 19, pack: "Strength & Courage", reference: "1 Corinthians 16:13", text: "Be on your guard stand firm in the faith be courageous be strong" },
+    { id: 20, pack: "Strength & Courage", reference: "Psalm 18:2", text: "The LORD is my rock my fortress and my deliverer" },
+
+    // Pack 3: Peace, Love & Wisdom (21-30)
+    { id: 21, pack: "Peace, Love & Wisdom", reference: "1 John 4:19", text: "We love because He first loved us" },
+    { id: 22, pack: "Peace, Love & Wisdom", reference: "Psalm 119:105", text: "Your word is a lamp for my feet a light on my path" },
+    { id: 23, pack: "Peace, Love & Wisdom", reference: "Romans 12:12", text: "Be joyful in hope patient in affliction faithful in prayer" },
+    { id: 24, pack: "Peace, Love & Wisdom", reference: "Galatians 5:22", text: "The fruit of the Spirit is love joy peace forbearance kindness goodness faithfulness" },
+    { id: 25, pack: "Peace, Love & Wisdom", reference: "Ephesians 4:32", text: "Be kind and compassionate to one another forgiving each other" },
+    { id: 26, pack: "Peace, Love & Wisdom", reference: "John 15:12", text: "My command is this Love each other as I have loved you" },
+    { id: 27, pack: "Peace, Love & Wisdom", reference: "Colossians 3:14", text: "And over all these virtues put on love which binds them all together in perfect unity" },
+    { id: 28, pack: "Peace, Love & Wisdom", reference: "James 1:5", text: "If any of you lacks wisdom you should ask God who gives generously to all" },
+    { id: 29, pack: "Peace, Love & Wisdom", reference: "Proverbs 15:1", text: "A gentle answer turns away wrath but a harsh word stirs up anger" },
+    { id: 30, pack: "Peace, Love & Wisdom", reference: "Philippians 4:7", text: "And the peace of God which transcends all understanding will guard your hearts" },
+
+    // Pack 4: Praise, Joy & Promises (31-40)
+    { id: 31, pack: "Praise, Joy & Promises", reference: "Jeremiah 29:11", text: "For I know the plans I have for you declares the LORD plans to prosper you" },
+    { id: 32, pack: "Praise, Joy & Promises", reference: "Psalm 100:1", text: "Shout for joy to the LORD all the earth worship the LORD with gladness" },
+    { id: 33, pack: "Praise, Joy & Promises", reference: "1 Peter 5:7", text: "Cast all your anxiety on Him because He cares for you" },
+    { id: 34, pack: "Praise, Joy & Promises", reference: "Proverbs 18:10", text: "The name of the LORD is a fortified tower the righteous run to it and are safe" },
+    { id: 35, pack: "Praise, Joy & Promises", reference: "Psalm 139:14", text: "I praise you because I am fearfully and wonderfully made" },
+    { id: 36, pack: "Praise, Joy & Promises", reference: "Psalm 118:24", text: "This is the day the LORD has made let us rejoice and be glad in it" },
+    { id: 37, pack: "Praise, Joy & Promises", reference: "Philippians 4:4", text: "Rejoice in the Lord always I will say it again Rejoice" },
+    { id: 38, pack: "Praise, Joy & Promises", reference: "1 Thessalonians 5:16", text: "Rejoice always pray continually give thanks in all circumstances" },
+    { id: 39, pack: "Praise, Joy & Promises", reference: "Psalm 34:8", text: "Taste and see that the LORD is good blessed is the one who takes refuge in Him" },
+    { id: 40, pack: "Praise, Joy & Promises", reference: "Lamentations 3:23", text: "They are new every morning great is your faithfulness" },
+
+    // Pack 5: Victory & Eternal Life (41-50)
+    { id: 41, pack: "Victory & Eternal Life", reference: "John 3:16", text: "For God so loved the world that He gave His one and only Son" },
+    { id: 42, pack: "Victory & Eternal Life", reference: "Romans 8:28", text: "And we know that in all things God works for the good of those who love Him" },
+    { id: 43, pack: "Victory & Eternal Life", reference: "1 Corinthians 15:57", text: "Thanks be to God He gives us the victory through our Lord Jesus Christ" },
+    { id: 44, pack: "Victory & Eternal Life", reference: "Romans 6:23", text: "For the wages of sin is death but the gift of God is eternal life in Christ Jesus" },
+    { id: 45, pack: "Victory & Eternal Life", reference: "Revelation 21:4", text: "He will wipe every tear from their eyes there will be no more death or mourning" },
+    { id: 46, pack: "Victory & Eternal Life", reference: "John 10:10", text: "I have come that they may have life and have it to the full" },
+    { id: 47, pack: "Victory & Eternal Life", reference: "Matthew 28:20", text: "And surely I am with you always to the very end of the age" },
+    { id: 48, pack: "Victory & Eternal Life", reference: "Hebrews 13:8", text: "Jesus Christ is the same yesterday and today and forever" },
+    { id: 49, pack: "Victory & Eternal Life", reference: "Colossians 3:23", text: "Whatever you do work at it with all your heart as working for the Lord" },
+    { id: 50, pack: "Victory & Eternal Life", reference: "Romans 8:38", text: "Neither death nor life shall be able to separate us from the love of God" }
 ];
 
 type WordObj = { id: string; word: string };
@@ -127,20 +93,21 @@ export default function VerseScrambleGame() {
     const [selected, setSelected] = useState<WordObj[]>([]);
     const [isWin, setIsWin] = useState(false);
     const [showHint, setShowHint] = useState(false);
+    const [selectedPack, setSelectedPack] = useState<string>('All');
 
     // Load progress
     useEffect(() => {
         try {
-            const saved = localStorage.getItem('verse_scramble_highest_level');
+            const saved = localStorage.getItem('verse_scramble_highest_level_v2');
             if (saved) {
                 const lvl = Number(saved);
                 setHighestUnlocked(lvl);
-                if (lvl > 0 && lvl < VERSES.length) setLevelIndex(lvl);
+                if (lvl > 0 && lvl < MASSIVE_VERSES.length) setLevelIndex(lvl);
             }
         } catch {}
     }, []);
 
-    const currentVerse = VERSES[levelIndex];
+    const currentVerse = MASSIVE_VERSES[levelIndex];
 
     // Initialize the level
     useEffect(() => {
@@ -151,7 +118,7 @@ export default function VerseScrambleGame() {
         setShowHint(false);
     }, [levelIndex, currentVerse]);
 
-    // Check for win by comparing reconstructed sentence
+    // Check for win
     useEffect(() => {
         if (isWin) return;
         if (selected.length > 0 && pool.length === 0) {
@@ -160,12 +127,11 @@ export default function VerseScrambleGame() {
                 setIsWin(true);
                 triggerRealisticConfetti();
 
-                // Unlock next level
                 const nextLevel = levelIndex + 1;
-                if (nextLevel > highestUnlocked && nextLevel < VERSES.length) {
+                if (nextLevel > highestUnlocked && nextLevel < MASSIVE_VERSES.length) {
                     setHighestUnlocked(nextLevel);
                     try {
-                        localStorage.setItem('verse_scramble_highest_level', String(nextLevel));
+                        localStorage.setItem('verse_scramble_highest_level_v2', String(nextLevel));
                     } catch {}
                 }
             }
@@ -190,10 +156,20 @@ export default function VerseScrambleGame() {
     };
 
     const handleNextLevel = () => {
-        if (levelIndex < VERSES.length - 1) {
+        if (levelIndex < MASSIVE_VERSES.length - 1) {
             setLevelIndex(prev => prev + 1);
         }
     };
+
+    // Filter verses for selector
+    const PACK_NAMES = [
+        "All Verses",
+        "Faith & Foundations",
+        "Strength & Courage",
+        "Peace, Love & Wisdom",
+        "Praise, Joy & Promises",
+        "Victory & Eternal Life"
+    ];
 
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
@@ -208,15 +184,14 @@ export default function VerseScrambleGame() {
                         <span>🔤 Verse Scramble</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        {/* Level selector */}
                         <select 
                             value={levelIndex} 
                             onChange={(e) => setLevelIndex(Number(e.target.value))}
                             className="bg-amber-50 border border-amber-200 text-amber-900 font-bold text-xs px-3 py-1.5 rounded-full cursor-pointer focus:outline-none"
                         >
-                            {VERSES.map((v, idx) => (
+                            {MASSIVE_VERSES.map((v, idx) => (
                                 <option key={idx} value={idx}>
-                                    Level {idx + 1}: {v.reference}
+                                    Verse {idx + 1}: {v.reference} ({v.pack.split('&')[0]})
                                 </option>
                             ))}
                         </select>
@@ -225,19 +200,19 @@ export default function VerseScrambleGame() {
             </div>
 
             <div className="flex-1 max-w-3xl w-full mx-auto p-4 sm:p-8 flex flex-col">
-                <div className="text-center mb-6">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200 mb-2">
-                        <Sparkles className="w-3.5 h-3.5" /> Scripture Challenge
+                <div className="text-center mb-5">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200 mb-2">
+                        <Sparkles className="w-3.5 h-3.5" /> Pack: {currentVerse.pack} • Verse {levelIndex + 1}/50
                     </div>
                     <h2 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900 mb-1">
                         {currentVerse.reference}
                     </h2>
                     <p className="text-slate-500 text-sm">
-                        Tap the scrambled words in order to reveal the Holy Scripture!
+                        Tap words to reconstruct the Holy Scripture in correct sequence!
                     </p>
                 </div>
 
-                {/* Hint banner if requested */}
+                {/* Hint banner */}
                 {showHint && (
                     <motion.div 
                         initial={{ opacity: 0, y: -10 }}
@@ -249,7 +224,7 @@ export default function VerseScrambleGame() {
                 )}
 
                 {/* Selected Words Area */}
-                <div className={`bg-white rounded-2xl shadow-sm border-2 p-6 mb-6 min-h-[160px] flex items-center justify-center transition-all ${
+                <div className={`bg-white rounded-2xl shadow-sm border-2 p-6 mb-5 min-h-[160px] flex items-center justify-center transition-all ${
                     isWin ? 'border-emerald-400 bg-emerald-50/30' : 'border-slate-200'
                 }`}>
                     <div className="flex flex-wrap gap-2 items-center justify-center">
@@ -261,7 +236,7 @@ export default function VerseScrambleGame() {
                                     exit={{ opacity: 0 }}
                                     className="text-slate-300 italic text-sm sm:text-base"
                                 >
-                                    Tap words below to place them here...
+                                    Tap words below to arrange them here...
                                 </motion.span>
                             )}
                             {selected.map((w) => (
@@ -288,7 +263,7 @@ export default function VerseScrambleGame() {
                 {/* Pool Words Area */}
                 {!isWin ? (
                     <div className="flex-1">
-                        <div className="flex flex-wrap gap-2.5 sm:gap-3 justify-center">
+                        <div className="flex flex-wrap gap-2 sm:gap-2.5 justify-center">
                             <AnimatePresence>
                                 {pool.map((w) => (
                                     <motion.button
@@ -340,18 +315,18 @@ export default function VerseScrambleGame() {
                             </button>
                         </>
                     )}
-                    {isWin && levelIndex < VERSES.length - 1 && (
+                    {isWin && levelIndex < MASSIVE_VERSES.length - 1 && (
                         <motion.button
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             onClick={handleNextLevel}
                             className="flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-95 shadow-lg shadow-emerald-600/25 transition-all active:scale-95 cursor-pointer text-sm"
                         >
-                            Next Verse ({levelIndex + 2}/{VERSES.length})
+                            Next Verse ({levelIndex + 2}/{MASSIVE_VERSES.length})
                             <ChevronRight className="w-4 h-4" />
                         </motion.button>
                     )}
-                    {isWin && levelIndex === VERSES.length - 1 && (
+                    {isWin && levelIndex === MASSIVE_VERSES.length - 1 && (
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
@@ -359,7 +334,7 @@ export default function VerseScrambleGame() {
                         >
                             <div className="flex items-center gap-2 px-6 py-3 rounded-full font-bold text-emerald-800 bg-emerald-100 border border-emerald-200 text-sm">
                                 <Trophy className="w-5 h-5 text-amber-500" />
-                                You have conquered all 25 verses!
+                                You have conquered all 50 verses in all 5 packs!
                             </div>
                             <Link 
                                 href="/games"

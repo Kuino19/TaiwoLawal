@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Check, X, RotateCcw, Trophy, Clock, Flame, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -13,7 +13,7 @@ interface TrueFalseItem {
     explanation: string;
 }
 
-const STATEMENTS_POOL: TrueFalseItem[] = [
+const MASSIVE_STATEMENTS_POOL: TrueFalseItem[] = [
     {
         id: 1,
         statement: "Moses was permitted to cross over and enter the promised land of Canaan.",
@@ -133,6 +133,96 @@ const STATEMENTS_POOL: TrueFalseItem[] = [
         statement: "In 2025, Foursquare Gospel Church in Nigeria celebrated its Platinum Jubilee (70th Anniversary).",
         isTrue: true,
         explanation: "True! 70 fruitful years in Nigeria (1955–2025)."
+    },
+    {
+        id: 21,
+        statement: "Lazarus was dead in the tomb for two days before Jesus raised him to life.",
+        isTrue: false,
+        explanation: "False! Lazarus had been in the tomb for four days when Jesus called him out!"
+    },
+    {
+        id: 22,
+        statement: "The Apostle John was exiled to the island of Patmos where he wrote Revelation.",
+        isTrue: true,
+        explanation: "True! John was exiled for the word of God and the testimony of Jesus."
+    },
+    {
+        id: 23,
+        statement: "Solomon built the great ark of acacia wood that survived the flood.",
+        isTrue: false,
+        explanation: "False! Noah built the ark; Solomon built the First Temple in Jerusalem."
+    },
+    {
+        id: 24,
+        statement: "Apostle Paul was Roman citizen by birth.",
+        isTrue: true,
+        explanation: "True! His Roman citizenship granted him legal rights and safe appeal to Caesar."
+    },
+    {
+        id: 25,
+        statement: "Zacchaeus was a tall Roman centurion who commanded 100 soldiers.",
+        isTrue: false,
+        explanation: "False! Zacchaeus was a short chief tax collector who climbed a sycamore tree."
+    },
+    {
+        id: 26,
+        statement: "The fruit of the Spirit listed in Galatians 5 contains nine virtues.",
+        isTrue: true,
+        explanation: "True! Love, joy, peace, forbearance, kindness, goodness, faithfulness, gentleness, self-control."
+    },
+    {
+        id: 27,
+        statement: "The first Foursquare meeting in Nigeria took place at Tafawa Balewa Square in Lagos.",
+        isTrue: false,
+        explanation: "False! The first meeting took place at Yankee Bar in Yaba, Lagos in 1955."
+    },
+    {
+        id: 28,
+        statement: "Shadrach, Meshach, and Abednego bowed down to King Nebuchadnezzar's golden image.",
+        isTrue: false,
+        explanation: "False! They refused to bow, were thrown into the fiery furnace, and God delivered them unharmed!"
+    },
+    {
+        id: 29,
+        statement: "Rev. (Dr.) Sam Aboyeji is the General Overseer of Foursquare Nigeria in 2026.",
+        isTrue: true,
+        explanation: "True! He leads Foursquare Nigeria in the Decade of SOARING."
+    },
+    {
+        id: 30,
+        statement: "Elijah was fed by ravens by the brook Cherith during a prolonged drought.",
+        isTrue: true,
+        explanation: "True! Ravens brought him bread and meat morning and evening as God commanded."
+    },
+    {
+        id: 31,
+        statement: "Stephen was the first apostle to preach the gospel in Rome.",
+        isTrue: false,
+        explanation: "False! Stephen was martyred by stoning in Jerusalem."
+    },
+    {
+        id: 32,
+        statement: "The walls of Jericho fell flat after the Israelites shouted on the seventh day.",
+        isTrue: true,
+        explanation: "True! Joshua 6 records that when the trumpets sounded and the army shouted, the wall collapsed."
+    },
+    {
+        id: 33,
+        statement: "Foursquare Nigeria has over 5,000 churches across the country as of 2025.",
+        isTrue: true,
+        explanation: "True! Growing across all 36 states and the FCT."
+    },
+    {
+        id: 34,
+        statement: "Judas betrayed Jesus with a handshake in the Garden of Gethsemane.",
+        isTrue: false,
+        explanation: "False! Judas betrayed Jesus with a deceitful kiss."
+    },
+    {
+        id: 35,
+        statement: "God spoke to young Samuel three times during the night in the tabernacle.",
+        isTrue: true,
+        explanation: "True! Samuel answered: 'Speak, Lord, for your servant is listening.'"
     }
 ];
 
@@ -147,6 +237,7 @@ function shuffle<T>(arr: T[]): T[] {
 
 export default function TrueOrFalseGame() {
     const [gameState, setGameState] = useState<'start' | 'playing' | 'end'>('start');
+    const [roundCount, setRoundCount] = useState<12 | 20 | 30>(12);
     const [questions, setQuestions] = useState<TrueFalseItem[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [score, setScore] = useState(0);
@@ -155,10 +246,9 @@ export default function TrueOrFalseGame() {
     const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
     const [selectedAnswer, setSelectedAnswer] = useState<boolean | null>(null);
 
-    const ROUND_COUNT = 12;
-
-    const startNewGame = () => {
-        const shuffled = shuffle(STATEMENTS_POOL).slice(0, ROUND_COUNT);
+    const startNewGame = (count = roundCount) => {
+        setRoundCount(count);
+        const shuffled = shuffle(MASSIVE_STATEMENTS_POOL).slice(0, count);
         setQuestions(shuffled);
         setCurrentIndex(0);
         setScore(0);
@@ -197,7 +287,7 @@ export default function TrueOrFalseGame() {
                 setGameState('end');
                 triggerRealisticConfetti();
             }
-        }, 1500);
+        }, 1400);
     };
 
     return (
@@ -238,30 +328,47 @@ export default function TrueOrFalseGame() {
                             </div>
 
                             <div>
-                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 mb-3">
-                                    <Sparkles className="w-3.5 h-3.5" /> Rapid-Fire Judgment
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 mb-2">
+                                    <Sparkles className="w-3.5 h-3.5" /> 35+ Biblical & Historical Facts
                                 </div>
                                 <h1 className="text-4xl sm:text-5xl font-black text-white mb-2">
                                     True or False?
                                 </h1>
-                                <p className="text-slate-300 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
+                                <p className="text-slate-300 text-sm max-w-md mx-auto leading-relaxed">
                                     Are these Bible and church statements fact or myth? Decide quickly and build massive score combos!
                                 </p>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-3 max-w-xs mx-auto text-xs">
-                                <div className="bg-slate-700/60 p-3 rounded-2xl border border-slate-600">
-                                    <span className="text-emerald-400 font-bold text-base block">12 Statements</span>
-                                    <span className="text-slate-400">Per Session</span>
-                                </div>
-                                <div className="bg-slate-700/60 p-3 rounded-2xl border border-slate-600">
-                                    <span className="text-cyan-400 font-bold text-base block">+10 Pts</span>
-                                    <span className="text-slate-400">Per Correct</span>
+                            {/* Length Selector */}
+                            <div className="space-y-1.5 text-left max-w-sm mx-auto">
+                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block text-center">
+                                    Choose Blitz Length
+                                </label>
+                                <div className="grid grid-cols-3 gap-2">
+                                    {[
+                                        { count: 12, label: '12 Statements', sub: 'Quick Blitz' },
+                                        { count: 20, label: '20 Statements', sub: 'Championship' },
+                                        { count: 30, label: '30 Statements', sub: 'Grand Tour' }
+                                    ].map(b => (
+                                        <button
+                                            key={b.count}
+                                            type="button"
+                                            onClick={() => setRoundCount(b.count as any)}
+                                            className={`p-3 rounded-2xl border text-center transition-all cursor-pointer font-bold ${
+                                                roundCount === b.count
+                                                    ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300 ring-1 ring-emerald-400'
+                                                    : 'bg-slate-700/60 border-slate-600 text-slate-400 hover:text-white'
+                                            }`}
+                                        >
+                                            <div className="text-xs">{b.label}</div>
+                                            <div className="text-[10px] text-slate-400 font-normal">{b.sub}</div>
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
 
                             <button
-                                onClick={startNewGame}
+                                onClick={() => startNewGame(roundCount)}
                                 className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-400 to-cyan-500 hover:from-emerald-300 hover:to-cyan-400 text-slate-950 font-black text-lg shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-98"
                             >
                                 Start Blitz
@@ -295,7 +402,6 @@ export default function TrueOrFalseGame() {
 
                             {/* Statement Card */}
                             <div className="bg-slate-800 p-6 sm:p-8 rounded-3xl border border-slate-700 shadow-xl relative overflow-hidden text-center">
-                                {/* Feedback Banner */}
                                 {feedback && (
                                     <motion.div
                                         initial={{ opacity: 0, y: -5 }}
@@ -326,7 +432,6 @@ export default function TrueOrFalseGame() {
                                     &ldquo;{currentQ.statement}&rdquo;
                                 </h2>
 
-                                {/* Large True / False Buttons */}
                                 <div className="grid grid-cols-2 gap-4">
                                     <button
                                         type="button"
@@ -393,7 +498,7 @@ export default function TrueOrFalseGame() {
 
                             <div className="flex flex-col sm:flex-row justify-center gap-3 pt-2">
                                 <button
-                                    onClick={startNewGame}
+                                    onClick={() => startNewGame(roundCount)}
                                     className="flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-400 to-cyan-500 text-slate-950 px-7 py-3.5 rounded-xl font-bold text-sm hover:opacity-90 transition-all cursor-pointer"
                                 >
                                     <RotateCcw className="w-4 h-4" />

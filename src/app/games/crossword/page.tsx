@@ -21,6 +21,10 @@ export default function CrosswordGame() {
     const [levelComplete, setLevelComplete] = useState(false);
     const [completedLevels, setCompletedLevels] = useState<number[]>([]);
     const [wrongCells, setWrongCells] = useState<Set<string>>(new Set());
+    const [currentPage, setCurrentPage] = useState(0);
+
+    const LEVELS_PER_PAGE = 10;
+    const totalPages = Math.ceil(LEVELS.length / LEVELS_PER_PAGE);
 
     // Load completed levels from localStorage
     useEffect(() => {
@@ -212,54 +216,156 @@ export default function CrosswordGame() {
                     </div>
                 </div>
 
-                {/* Level Cards */}
-                <div className="max-w-lg mx-auto px-4 pb-24 space-y-4">
-                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">Select a Level</p>
-                    {LEVELS.map((lv, idx) => {
-                        const isCompleted = completedLevels.includes(idx);
-                        const isLocked = idx > 0 && !completedLevels.includes(idx - 1);
+                {/* Progress Summary Card */}
+                <div className="max-w-lg mx-auto px-4 mb-6">
+                    <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs">
+                        <div className="flex items-center justify-between text-xs font-medium text-slate-600 mb-2">
+                            <span>Total Progress</span>
+                            <span className="font-bold text-amber-700">
+                                {completedLevels.length} of {LEVELS.length} Completed ({Math.round((completedLevels.length / LEVELS.length) * 100)}%)
+                            </span>
+                        </div>
+                        <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+                            <div
+                                className="h-full bg-gradient-to-r from-amber-400 to-amber-600 transition-all duration-500 rounded-full"
+                                style={{ width: `${(completedLevels.length / LEVELS.length) * 100}%` }}
+                            />
+                        </div>
+                    </div>
+                </div>
 
-                        return (
-                            <motion.button
-                                key={lv.id}
-                                whileHover={!isLocked ? { scale: 1.02 } : {}}
-                                whileTap={!isLocked ? { scale: 0.98 } : {}}
-                                onClick={() => !isLocked && startLevel(idx)}
-                                disabled={isLocked}
-                                className={`w-full text-left rounded-2xl p-5 border-2 transition-all duration-200 ${
-                                    isLocked
-                                        ? 'border-slate-100 bg-slate-50 opacity-50 cursor-not-allowed'
-                                        : isCompleted
-                                            ? 'border-emerald-200 bg-emerald-50/50 hover:border-emerald-300 hover:shadow-md cursor-pointer'
-                                            : 'border-slate-200 bg-white hover:border-amber-300 hover:shadow-lg hover:shadow-amber-500/10 cursor-pointer'
-                                }`}
-                            >
-                                <div className="flex items-center gap-4">
-                                    {/* Level Number */}
-                                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg flex-shrink-0 ${
-                                        isLocked
-                                            ? 'bg-slate-100 text-slate-300'
-                                            : isCompleted
-                                                ? 'bg-emerald-100 text-emerald-600'
-                                                : 'bg-amber-100 text-amber-700'
-                                    }`}>
-                                        {isLocked ? <Lock className="w-5 h-5" /> : isCompleted ? <CheckCircle2 className="w-5 h-5" /> : idx + 1}
-                                    </div>
+                {/* Page Navigation Tabs */}
+                <div className="max-w-lg mx-auto px-4 mb-4">
+                    <div className="flex items-center justify-between gap-1 overflow-x-auto pb-1 no-scrollbar">
+                        {Array.from({ length: totalPages }).map((_, pIdx) => {
+                            const start = pIdx * LEVELS_PER_PAGE + 1;
+                            const end = Math.min((pIdx + 1) * LEVELS_PER_PAGE, LEVELS.length);
+                            const isActive = currentPage === pIdx;
+                            const pageCompletedCount = completedLevels.filter(
+                                (l) => l >= pIdx * LEVELS_PER_PAGE && l < (pIdx + 1) * LEVELS_PER_PAGE
+                            ).length;
 
-                                    {/* Info */}
-                                    <div className="flex-1 min-w-0">
-                                        <h3 className="font-bold text-slate-900 text-base">{lv.title}</h3>
-                                        <p className="text-slate-400 text-sm">{lv.subtitle} · {lv.clues.length} clues</p>
-                                    </div>
-
-                                    {/* Arrow */}
-                                    {!isLocked && (
-                                        <ChevronRight className={`w-5 h-5 flex-shrink-0 ${isCompleted ? 'text-emerald-400' : 'text-slate-300'}`} />
+                            return (
+                                <button
+                                    key={pIdx}
+                                    type="button"
+                                    onClick={() => setCurrentPage(pIdx)}
+                                    className={`px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 ${
+                                        isActive
+                                            ? 'bg-slate-900 text-white shadow-sm'
+                                            : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                                    }`}
+                                >
+                                    <span>{start}–{end}</span>
+                                    {pageCompletedCount > 0 && (
+                                        <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                                            isActive ? 'bg-amber-400 text-slate-950 font-black' : 'bg-emerald-100 text-emerald-800'
+                                        }`}>
+                                            {pageCompletedCount}/{LEVELS_PER_PAGE}
+                                        </span>
                                     )}
-                                </div>
-                            </motion.button>
-                        );
-                    })}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {/* Paginated Level Cards */}
+                <div className="max-w-lg mx-auto px-4 pb-12 space-y-3">
+                    <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">
+                        <span>Levels {currentPage * LEVELS_PER_PAGE + 1} – {Math.min((currentPage + 1) * LEVELS_PER_PAGE, LEVELS.length)}</span>
+                        <span>Page {currentPage + 1} of {totalPages}</span>
+                    </div>
+
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={currentPage}
+                            initial={{ opacity: 0, x: 10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -10 }}
+                            transition={{ duration: 0.2 }}
+                            className="space-y-3"
+                        >
+                            {LEVELS.slice(currentPage * LEVELS_PER_PAGE, (currentPage + 1) * LEVELS_PER_PAGE).map((lv, pageIdx) => {
+                                const idx = currentPage * LEVELS_PER_PAGE + pageIdx;
+                                const isCompleted = completedLevels.includes(idx);
+                                const isLocked = idx > 0 && !completedLevels.includes(idx - 1);
+
+                                return (
+                                    <motion.button
+                                        key={lv.id}
+                                        whileHover={!isLocked ? { scale: 1.01 } : {}}
+                                        whileTap={!isLocked ? { scale: 0.99 } : {}}
+                                        onClick={() => !isLocked && startLevel(idx)}
+                                        disabled={isLocked}
+                                        className={`w-full text-left rounded-2xl p-4 sm:p-5 border-2 transition-all duration-200 ${
+                                            isLocked
+                                                ? 'border-slate-150 bg-slate-50 opacity-50 cursor-not-allowed'
+                                                : isCompleted
+                                                    ? 'border-emerald-200 bg-emerald-50/40 hover:border-emerald-300 hover:shadow-md cursor-pointer'
+                                                    : 'border-slate-200 bg-white hover:border-amber-300 hover:shadow-lg hover:shadow-amber-500/10 cursor-pointer'
+                                        }`}
+                                    >
+                                        <div className="flex items-center gap-3.5">
+                                            {/* Level Number */}
+                                            <div className={`w-11 h-11 rounded-xl flex items-center justify-center font-bold text-base flex-shrink-0 ${
+                                                isLocked
+                                                    ? 'bg-slate-100 text-slate-300'
+                                                    : isCompleted
+                                                        ? 'bg-emerald-100 text-emerald-600'
+                                                        : 'bg-amber-100 text-amber-700'
+                                            }`}>
+                                                {isLocked ? <Lock className="w-4 h-4" /> : isCompleted ? <CheckCircle2 className="w-4 h-4" /> : idx + 1}
+                                            </div>
+
+                                            {/* Info */}
+                                            <div className="flex-1 min-w-0">
+                                                <h3 className="font-bold text-slate-900 text-sm sm:text-base leading-snug">{lv.title}</h3>
+                                                <p className="text-slate-400 text-xs sm:text-sm mt-0.5">{lv.subtitle} · {lv.clues.length} clues</p>
+                                            </div>
+
+                                            {/* Status Badge / Arrow */}
+                                            {!isLocked && (
+                                                <div className="flex items-center gap-1.5 flex-shrink-0">
+                                                    {isCompleted && (
+                                                        <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-full">
+                                                            Solved
+                                                        </span>
+                                                    )}
+                                                    <ChevronRight className={`w-4 h-4 ${isCompleted ? 'text-emerald-500' : 'text-slate-300'}`} />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </motion.button>
+                                );
+                            })}
+                        </motion.div>
+                    </AnimatePresence>
+
+                    {/* Bottom Pagination Controls */}
+                    <div className="flex items-center justify-between pt-4 border-t border-slate-200">
+                        <button
+                            type="button"
+                            disabled={currentPage === 0}
+                            onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
+                            className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-bold text-xs disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-all cursor-pointer flex items-center gap-1"
+                        >
+                            <ArrowLeft className="w-3.5 h-3.5" /> Previous 10
+                        </button>
+
+                        <span className="text-xs font-mono font-bold text-slate-500">
+                            Page {currentPage + 1} / {totalPages}
+                        </span>
+
+                        <button
+                            type="button"
+                            disabled={currentPage === totalPages - 1}
+                            onClick={() => setCurrentPage(p => Math.min(totalPages - 1, p + 1))}
+                            className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-bold text-xs disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-all cursor-pointer flex items-center gap-1"
+                        >
+                            Next 10 <ChevronRight className="w-3.5 h-3.5" />
+                        </button>
+                    </div>
                 </div>
             </div>
         );

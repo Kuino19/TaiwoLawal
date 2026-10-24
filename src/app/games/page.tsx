@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ChevronRight, Gamepad2, Sparkles, Trophy, Zap, Clock, Brain } from 'lucide-react';
+import { ArrowLeft, ChevronRight, Gamepad2, Sparkles, Trophy, Zap, Clock, Brain, Flame } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 type Game = {
@@ -12,8 +12,9 @@ type Game = {
     description: string;
     href: string;
     emoji: string;
-    badge?: string;
-    badgeColor?: string;
+    badge: string;
+    badgeColor: string;
+    highlight: string;
     status: 'live' | 'coming_soon';
 };
 
@@ -22,44 +23,48 @@ const GAMES: Game[] = [
         title: 'Bible Crossword',
         category: 'puzzle',
         categoryLabel: 'Puzzle & Word',
-        description: 'Solve crossword puzzles based on Holy Scripture across 50 progressive levels.',
+        description: 'Solve crossword puzzles based on Holy Scripture across 50 progressive, paginated levels.',
         href: '/games/crossword',
         emoji: '✝️',
         badge: '50 Levels',
         badgeColor: 'bg-purple-100 text-purple-700 border-purple-200',
+        highlight: 'Paginated 10/page',
         status: 'live',
     },
     {
         title: 'Verse Scramble',
         category: 'scripture',
         categoryLabel: 'Scripture Memory',
-        description: 'Tap and rearrange scrambled words to piece together 25 inspiring Bible verses.',
+        description: 'Tap and rearrange scrambled words to piece together 50 inspiring Bible verses in 5 thematic packs.',
         href: '/games/scramble',
         emoji: '🔤',
-        badge: '25 Verses',
+        badge: '50 Verses',
         badgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
+        highlight: '5 Thematic Packs',
         status: 'live',
     },
     {
         title: 'Bible Trivia Rush',
         category: 'speed',
         categoryLabel: 'Speed & Trivia',
-        description: 'Answer as many Bible & Church history questions as you can before the 60-second timer expires!',
+        description: 'Answer as many Bible & Church questions as you can before time expires or lives run out!',
         href: '/games/rush',
         emoji: '⏱️',
-        badge: '60s Blitz',
+        badge: '3 Modes',
         badgeColor: 'bg-cyan-100 text-cyan-800 border-cyan-200',
+        highlight: 'Classic, Marathon & Survival',
         status: 'live',
     },
     {
         title: 'Bible Memory Match',
         category: 'memory',
         categoryLabel: 'Memory & Focus',
-        description: 'Flip cards to connect each Bible hero with their biblical deed in Easy, Medium, or Hard grids.',
+        description: 'Flip cards to connect each Bible hero with their biblical deed in Easy, Medium, Hard, or Expert grids.',
         href: '/games/memory',
         emoji: '🃏',
-        badge: 'New!',
+        badge: '36 Pairs',
         badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+        highlight: '4 Grid Sizes & Decks',
         status: 'live',
     },
     {
@@ -69,19 +74,21 @@ const GAMES: Game[] = [
         description: 'Read progressive clues about Bible and Foursquare heroes to guess their secret identity!',
         href: '/games/who-am-i',
         emoji: '🕵️',
-        badge: 'New!',
+        badge: '28 Mysteries',
         badgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
+        highlight: 'Progressive Clues & Points',
         status: 'live',
     },
     {
         title: 'Fill-in-the-Blank',
         category: 'scripture',
         categoryLabel: 'Scripture Mastery',
-        description: 'Fill in the missing words from famous Bible scriptures and Foursquare catechism truths.',
+        description: 'Fill in missing words from famous Bible scriptures and Foursquare catechism truths.',
         href: '/games/fill-blank',
         emoji: '✏️',
-        badge: 'New!',
+        badge: '30+ Verses',
         badgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+        highlight: 'Sprint & Championship',
         status: 'live',
     },
     {
@@ -91,8 +98,9 @@ const GAMES: Game[] = [
         description: 'Rapid-fire statements about biblical events and church history. Is it fact or fiction?',
         href: '/games/true-false',
         emoji: '⚡',
-        badge: 'New!',
+        badge: '35+ Facts',
         badgeColor: 'bg-rose-100 text-rose-800 border-rose-200',
+        highlight: '3 Blitz Lengths',
         status: 'live',
     },
 ];
@@ -123,14 +131,14 @@ export default function GamesHub() {
                     </div>
 
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200 mb-3">
-                        <Sparkles className="w-3.5 h-3.5 text-amber-600" /> Faith & Fun Arcade
+                        <Sparkles className="w-3.5 h-3.5 text-amber-600" /> Massive Faith Arcade
                     </div>
 
                     <h1 className="font-serif font-bold text-4xl sm:text-6xl text-slate-900 mb-3 tracking-tight">
                         Bible Games Hub
                     </h1>
                     <p className="text-slate-500 max-w-lg mx-auto text-sm sm:text-base leading-relaxed mb-6">
-                        Learn God&apos;s Word, exercise your brain, and have wholesome Christian fun! Choose any of our 7 interactive games.
+                        Expand your scriptural knowledge and memory across 7 massive games packed with hundreds of questions, verses, and levels!
                     </p>
 
                     {/* Filter Tabs */}
@@ -140,7 +148,7 @@ export default function GamesHub() {
                             { id: 'speed', label: '⚡ Speed & Blitz' },
                             { id: 'scripture', label: '📖 Scripture Word' },
                             { id: 'memory', label: '🧠 Memory & Detective' },
-                            { id: 'puzzle', label: '🧩 Crosswords' },
+                            { id: 'puzzle', label: '🧩 Crosswords (50 Levels)' },
                         ].map(tab => (
                             <button
                                 key={tab.id}
@@ -182,11 +190,9 @@ export default function GamesHub() {
                                             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
                                                 {game.categoryLabel}
                                             </span>
-                                            {game.badge && (
-                                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${game.badgeColor}`}>
-                                                    {game.badge}
-                                                </span>
-                                            )}
+                                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${game.badgeColor}`}>
+                                                {game.badge}
+                                            </span>
                                         </div>
                                         <h2 className="font-serif font-bold text-slate-900 text-lg group-hover:text-amber-600 transition-colors">
                                             {game.title}
@@ -194,6 +200,9 @@ export default function GamesHub() {
                                         <p className="text-slate-500 text-xs sm:text-sm leading-relaxed mt-1">
                                             {game.description}
                                         </p>
+                                        <div className="mt-2.5 inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700 bg-amber-50/80 px-2.5 py-0.5 rounded-md">
+                                            <span>✨ {game.highlight}</span>
+                                        </div>
                                     </div>
                                     <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-amber-500 group-hover:translate-x-1 flex-shrink-0 transition-all mt-2" />
                                 </div>

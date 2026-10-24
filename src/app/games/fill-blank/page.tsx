@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, CheckCircle2, XCircle, RotateCcw, Trophy, ChevronRight, Sparkles, BookOpen, Flame } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, XCircle, RotateCcw, Trophy, ChevronRight, Sparkles, Flame } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { triggerRealisticConfetti } from '@/lib/confettiBurst';
 
@@ -12,11 +12,11 @@ interface BlankQuestion {
     blankWord: string;
     sentenceAfter: string;
     reference: string;
-    options: string[]; // 4 choices
+    options: string[];
     explanation?: string;
 }
 
-const BLANK_QUESTIONS: BlankQuestion[] = [
+const MASSIVE_BLANK_QUESTIONS: BlankQuestion[] = [
     {
         id: 1,
         sentenceBefore: "In the beginning God created the",
@@ -151,6 +151,141 @@ const BLANK_QUESTIONS: BlankQuestion[] = [
         reference: "Romans 12:12",
         options: ["prayer", "giving", "worship", "fasting"],
         explanation: "A practical tripartite instruction for every Christian believer."
+    },
+    {
+        id: 16,
+        sentenceBefore: "You are the",
+        blankWord: "light",
+        sentenceAfter: "of the world. A town built on a hill cannot be hidden.",
+        reference: "Matthew 5:14",
+        options: ["light", "salt", "joy", "hope"],
+        explanation: "Jesus called His disciples to let their good deeds shine before everyone!"
+    },
+    {
+        id: 17,
+        sentenceBefore: "If God is for us, who can be",
+        blankWord: "against",
+        sentenceAfter: "us?",
+        reference: "Romans 8:31",
+        options: ["against", "beside", "above", "behind"],
+        explanation: "Nothing can conquer a child of God when the Almighty stands with them!"
+    },
+    {
+        id: 18,
+        sentenceBefore: "We love because He",
+        blankWord: "first",
+        sentenceAfter: "loved us.",
+        reference: "1 John 4:19",
+        options: ["first", "always", "truly", "freely"],
+        explanation: "Our love for God and others is an overflow of God's prior love for us."
+    },
+    {
+        id: 19,
+        sentenceBefore: "The name of the LORD is a fortified",
+        blankWord: "tower",
+        sentenceAfter: "; the righteous run to it and are safe.",
+        reference: "Proverbs 18:10",
+        options: ["tower", "shield", "temple", "mountain"],
+        explanation: "God's holy name is an impenetrable refuge in times of trouble."
+    },
+    {
+        id: 20,
+        sentenceBefore: "Seek first His kingdom and His",
+        blankWord: "righteousness",
+        sentenceAfter: ", and all these things will be given to you as well.",
+        reference: "Matthew 6:33",
+        options: ["righteousness", "holiness", "peace", "grace"],
+        explanation: "Put God's priorities first, and He will provide for every earthly need."
+    },
+    {
+        id: 21,
+        sentenceBefore: "Cast all your",
+        blankWord: "anxiety",
+        sentenceAfter: "on Him because He cares for you.",
+        reference: "1 Peter 5:7",
+        options: ["anxiety", "money", "sins", "fears"],
+        explanation: "Do not carry worries alone; cast them upon our compassionate Father!"
+    },
+    {
+        id: 22,
+        sentenceBefore: "Faith is confidence in what we",
+        blankWord: "hope",
+        sentenceAfter: "for and assurance about what we do not see.",
+        reference: "Hebrews 11:1",
+        options: ["hope", "pray", "ask", "work"],
+        explanation: "Faith turns spiritual promises into present reality."
+    },
+    {
+        id: 23,
+        sentenceBefore: "Jesus Christ is the same yesterday and today and",
+        blankWord: "forever",
+        sentenceAfter: ".",
+        reference: "Hebrews 13:8",
+        options: ["forever", "always", "in all things", "to the end"],
+        explanation: "The cornerstone scripture of the Foursquare Gospel movement!"
+    },
+    {
+        id: 24,
+        sentenceBefore: "Be completely humble and gentle; be patient, bearing with one another in",
+        blankWord: "love",
+        sentenceAfter: ".",
+        reference: "Ephesians 4:2",
+        options: ["love", "peace", "joy", "truth"],
+        explanation: "Paul urges believers to live worthy of the calling they have received."
+    },
+    {
+        id: 25,
+        sentenceBefore: "Foursquare Gospel Church was founded in 1923 by Aimee Semple",
+        blankWord: "McPherson",
+        sentenceAfter: "in Los Angeles.",
+        reference: "Foursquare History",
+        options: ["McPherson", "Curtis", "Moody", "Spurgeon"],
+        explanation: "Sister Aimee conducted revivals and opened the historic Angelus Temple."
+    },
+    {
+        id: 26,
+        sentenceBefore: "In 2025, Foursquare Nigeria celebrated its",
+        blankWord: "Platinum",
+        sentenceAfter: "Jubilee mark of 70 years of fruitful ministry.",
+        reference: "Foursquare Milestones",
+        options: ["Platinum", "Golden", "Diamond", "Silver"],
+        explanation: "Celebrating 70 years from 1955 to 2025 across Nigeria!"
+    },
+    {
+        id: 27,
+        sentenceBefore: "The thief comes only to steal and kill and destroy; I have come that they may have",
+        blankWord: "life",
+        sentenceAfter: ", and have it to the full.",
+        reference: "John 10:10",
+        options: ["life", "joy", "peace", "wealth"],
+        explanation: "Jesus came to give us abundant, eternal life!"
+    },
+    {
+        id: 28,
+        sentenceBefore: "God is our refuge and",
+        blankWord: "strength",
+        sentenceAfter: ", an ever-present help in trouble.",
+        reference: "Psalm 46:1",
+        options: ["strength", "rock", "tower", "healer"],
+        explanation: "Therefore we will not fear, though the earth give way."
+    },
+    {
+        id: 29,
+        sentenceBefore: "Rejoice in the Lord",
+        blankWord: "always",
+        sentenceAfter: ". I will say it again: Rejoice!",
+        reference: "Philippians 4:4",
+        options: ["always", "daily", "greatly", "forever"],
+        explanation: "True joy is rooted in Christ, not temporary circumstances."
+    },
+    {
+        id: 30,
+        sentenceBefore: "For where two or three gather in my name, there am I with",
+        blankWord: "them",
+        sentenceAfter: ".",
+        reference: "Matthew 18:20",
+        options: ["them", "you", "the church", "believers"],
+        explanation: "Jesus promises His living presence whenever believers assemble in His name!"
     }
 ];
 
@@ -165,6 +300,7 @@ function shuffle<T>(arr: T[]): T[] {
 
 export default function FillInTheBlankGame() {
     const [gameState, setGameState] = useState<'start' | 'playing' | 'end'>('start');
+    const [roundCount, setRoundCount] = useState<10 | 20>(10);
     const [questions, setQuestions] = useState<BlankQuestion[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [score, setScore] = useState(0);
@@ -173,10 +309,9 @@ export default function FillInTheBlankGame() {
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
 
-    const TOTAL_QUESTIONS = 10;
-
-    const startNewGame = () => {
-        const shuffled = shuffle(BLANK_QUESTIONS).slice(0, TOTAL_QUESTIONS).map(q => ({
+    const startNewGame = (count = roundCount) => {
+        setRoundCount(count);
+        const shuffled = shuffle(MASSIVE_BLANK_QUESTIONS).slice(0, count).map(q => ({
             ...q,
             options: shuffle(q.options)
         }));
@@ -218,7 +353,7 @@ export default function FillInTheBlankGame() {
                 setGameState('end');
                 triggerRealisticConfetti();
             }
-        }, 1500);
+        }, 1400);
     };
 
     return (
@@ -259,29 +394,49 @@ export default function FillInTheBlankGame() {
                             </div>
 
                             <div>
-                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200 mb-3">
-                                    <Sparkles className="w-3.5 h-3.5" /> Scripture Mastery
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200 mb-2">
+                                    <Sparkles className="w-3.5 h-3.5" /> 30+ Sacred Scripture Verses
                                 </div>
                                 <h1 className="text-3xl sm:text-4xl font-serif font-bold text-slate-900 mb-2">
                                     Fill-in-the-Blank
                                 </h1>
                                 <p className="text-slate-500 text-sm max-w-md mx-auto leading-relaxed">
-                                    Test how well you remember Holy Scripture and Foursquare catechism by picking the missing holy word!
+                                    Recall and complete holy words in famous scriptures and Foursquare catechisms!
                                 </p>
                             </div>
 
-                            <div className="bg-amber-50/60 p-4 rounded-2xl border border-amber-200/80 max-w-sm mx-auto text-xs text-amber-900 space-y-1">
-                                <div className="font-bold">✨ Fast Rules</div>
-                                <p>• 10 Scripture questions per round</p>
-                                <p>• +10 points for each correct word</p>
-                                <p>• Bonus points for 3+ answer streaks!</p>
+                            {/* Length Selector */}
+                            <div className="space-y-1.5 text-left max-w-xs mx-auto">
+                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block text-center">
+                                    Choose Question Count
+                                </label>
+                                <div className="grid grid-cols-2 gap-2">
+                                    {[
+                                        { count: 10, label: '10 Verses', detail: 'Quick Sprint' },
+                                        { count: 20, label: '20 Verses', detail: 'Championship' }
+                                    ].map(c => (
+                                        <button
+                                            key={c.count}
+                                            type="button"
+                                            onClick={() => setRoundCount(c.count as any)}
+                                            className={`p-3 rounded-2xl border text-center transition-all cursor-pointer ${
+                                                roundCount === c.count
+                                                    ? 'bg-amber-50 border-amber-500 text-amber-950 font-bold ring-1 ring-amber-500 shadow-xs'
+                                                    : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
+                                            }`}
+                                        >
+                                            <div className="text-sm font-bold">{c.label}</div>
+                                            <div className="text-[10px] text-slate-400">{c.detail}</div>
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
 
                             <button
-                                onClick={startNewGame}
+                                onClick={() => startNewGame(roundCount)}
                                 className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-base shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-98"
                             >
-                                Start Game <ChevronRight className="w-5 h-5" />
+                                Start Challenge <ChevronRight className="w-5 h-5" />
                             </button>
                         </motion.div>
                     )}
@@ -293,7 +448,7 @@ export default function FillInTheBlankGame() {
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -20 }}
-                            className="flex flex-col space-y-5"
+                            className="flex flex-col space-y-4"
                         >
                             {/* HUD */}
                             <div className="flex items-center justify-between text-xs font-medium">
@@ -318,7 +473,6 @@ export default function FillInTheBlankGame() {
                                     </span>
                                 </div>
 
-                                {/* The Sentence with Highlighted Blank */}
                                 <div className="text-xl sm:text-2xl font-serif text-slate-900 leading-relaxed mb-6">
                                     <span>&ldquo;{currentQ.sentenceBefore} </span>
                                     <span className={`inline-block px-3 py-0.5 rounded-xl border-2 font-bold transition-all ${
@@ -333,7 +487,6 @@ export default function FillInTheBlankGame() {
                                     <span> {currentQ.sentenceAfter}&rdquo;</span>
                                 </div>
 
-                                {/* Explanation Banner on feedback */}
                                 {feedback && (
                                     <motion.div
                                         initial={{ opacity: 0, y: 5 }}
@@ -358,7 +511,6 @@ export default function FillInTheBlankGame() {
                                     </motion.div>
                                 )}
 
-                                {/* Option Buttons */}
                                 <div className="grid grid-cols-2 gap-3">
                                     {currentQ.options.map((opt, oIdx) => {
                                         const isSelected = selectedOption === opt;
@@ -404,7 +556,7 @@ export default function FillInTheBlankGame() {
 
                             <div>
                                 <h2 className="text-3xl font-serif font-bold text-slate-900 mb-1">
-                                    Round Completed!
+                                    Challenge Completed!
                                 </h2>
                                 <p className="text-slate-500 text-sm">
                                     You have hidden God&apos;s Word in your heart!
@@ -421,7 +573,7 @@ export default function FillInTheBlankGame() {
 
                             <div className="flex flex-col sm:flex-row justify-center gap-3 pt-2">
                                 <button
-                                    onClick={startNewGame}
+                                    onClick={() => startNewGame(roundCount)}
                                     className="flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white px-7 py-3.5 rounded-xl font-bold text-sm shadow-md hover:opacity-95 transition-all cursor-pointer"
                                 >
                                     <RotateCcw className="w-4 h-4" />
