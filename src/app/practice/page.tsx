@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import PracticeClient from './PracticeClient';
 
 export const metadata: Metadata = {
-    title: 'Foursquare Idimu Children Quiz Practice Stage | Taiwo Lawal',
-    description: 'Practice questions for the Book of Numbers and Standard of Attainment for children preparing for the Bible quiz competition.',
+    title: 'Foursquare Children Bible & Current Affairs Quiz Championship | Idimu Missionary District',
+    description: 'Official Bible & Current Affairs Quiz Competition for children and teens across Foursquare Gospel Church in Nigeria. Compete in Book of Numbers, Standard of Attainment, and Church History.',
 };
 
 export default function PracticePage() {

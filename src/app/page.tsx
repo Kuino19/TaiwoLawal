@@ -184,7 +184,7 @@ export default function Home() {
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link href="/practice"
                             className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-white transition-all hover:opacity-90 hover:scale-[1.02] bg-gradient-to-r from-amber-500 to-amber-600 shadow-lg shadow-amber-500/20">
-                            Children Quiz Practice
+                            Children Quiz Championship
                             <ArrowRight className="w-4 h-4" />
                         </Link>
                         <Link href="/quiz"

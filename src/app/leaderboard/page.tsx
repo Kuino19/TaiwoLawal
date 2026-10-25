@@ -1,7 +1,10 @@
 import { adminDatabases } from '@/lib/server/appwrite';
 import { Query } from 'node-appwrite';
-import { Trophy, Flame } from 'lucide-react';
+import { Trophy, Flame, Sparkles, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
+import fs from 'fs';
+import path from 'path';
 import LeaderboardClient from '@/components/LeaderboardClient';
 
 const DB_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'main-db';
@@ -22,6 +25,36 @@ interface Attempt {
 interface Quiz {
     id: string;
     title: string;
+}
+
+const FOURSQUARE_QUIZZES: Quiz[] = [
+    { id: 'current_affairs', title: 'Foursquare Current Affairs' },
+    { id: 'numbers', title: 'The Book of Numbers' },
+    { id: 'standard', title: 'Standard of Attainment' },
+    { id: 'combined', title: 'Idimu Grand Championship' },
+];
+
+function getLocalCompetitionAttempts(): Attempt[] {
+    try {
+        const filePath = path.join(process.cwd(), 'src', 'data', 'competition_attempts.json');
+        if (fs.existsSync(filePath)) {
+            const raw = fs.readFileSync(filePath, 'utf-8');
+            const parsed = JSON.parse(raw);
+            return parsed.map((d: any) => ({
+                $id: d.id,
+                participant_name: `${d.contestantName} (${d.churchDistrict})`,
+                quiz_title: d.subjectTitle,
+                quiz_id: d.subjectId,
+                score: d.score,
+                total: d.total,
+                percentage: d.percentage,
+                $createdAt: d.date,
+            }));
+        }
+    } catch (e) {
+        console.error('Error reading local attempts:', e);
+    }
+    return [];
 }
 
 async function getAttempts(): Promise<Attempt[]> {
@@ -65,7 +98,18 @@ export default async function LeaderboardPage({
     searchParams: Promise<{ quiz?: string }>;
 }) {
     const { quiz: quizId } = await searchParams;
-    const [attempts, quizzes] = await Promise.all([getAttempts(), getQuizzes()]);
+    const [remoteAttempts, remoteQuizzes] = await Promise.all([getAttempts(), getQuizzes()]);
+    const localAttempts = getLocalCompetitionAttempts();
+
+    const allQuizzes = [
+        ...FOURSQUARE_QUIZZES,
+        ...remoteQuizzes.filter(q => !FOURSQUARE_QUIZZES.some(fq => fq.id === q.id))
+    ];
+
+    const allAttempts = [
+        ...localAttempts,
+        ...remoteAttempts.filter(a => !localAttempts.some(la => la.$id === a.$id))
+    ].sort((a, b) => b.percentage - a.percentage || b.score - a.score);
 
     return (
         <div className="min-h-screen" style={{ background: '#0d0520' }}>
@@ -100,14 +144,14 @@ export default async function LeaderboardPage({
                         Leader<span className="text-gradient-gold">board</span>
                     </h1>
                     <p className="text-white/50 font-sans text-lg max-w-md mx-auto mb-8">
-                        Top performers across all quizzes. Select a quiz tab to see its rankings.
+                        Top performers across all competitions. Select a quiz tab to see its rankings.
                     </p>
 
                     {/* Quick stats */}
                     <div className="inline-flex items-center gap-2 text-sm font-sans"
                         style={{ color: 'rgba(255,255,255,0.4)' }}>
                         <Flame className="w-4 h-4 text-gold-400" />
-                        {attempts.length} total submissions
+                        {allAttempts.length} total competition submissions
                     </div>
                 </div>
 
@@ -115,10 +159,45 @@ export default async function LeaderboardPage({
                     style={{ background: 'linear-gradient(to bottom, transparent, #0d0520)' }} />
             </div>
 
+            {/* Foursquare Competition Featured Callout */}
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 -mt-4 mb-6 relative z-20">
+                <div className="bg-gradient-to-r from-amber-500/20 via-purple-900/40 to-slate-900 border border-amber-400/40 rounded-3xl p-5 sm:p-6 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+                    <div className="flex items-center gap-3.5 text-center sm:text-left">
+                        <div className="relative w-14 h-14 rounded-2xl overflow-hidden border border-amber-300 bg-white flex-shrink-0 shadow-sm">
+                            <Image
+                                src="/foursquare-logo.png"
+                                alt="Foursquare Logo"
+                                fill
+                                sizes="56px"
+                                className="object-contain p-1"
+                            />
+                        </div>
+                        <div>
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-300 bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-400/30">
+                                Official Children Quiz
+                            </span>
+                            <h3 className="font-serif font-bold text-white text-lg mt-0.5">
+                                Foursquare Idimu Children Quiz Championship
+                            </h3>
+                            <p className="text-xs text-white/60">
+                                Book of Numbers, Standard of Attainment & Foursquare Current Affairs
+                            </p>
+                        </div>
+                    </div>
+
+                    <Link
+                        href="/practice"
+                        className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg flex items-center gap-1.5 whitespace-nowrap transition-all"
+                    >
+                        Enter Competition <ArrowRight className="w-4 h-4" />
+                    </Link>
+                </div>
+            </div>
+
             {/* ── Client Section (tabs + board) ── */}
             <LeaderboardClient
-                attempts={attempts}
-                quizzes={quizzes}
+                attempts={allAttempts}
+                quizzes={allQuizzes}
                 defaultQuizId={quizId}
             />
         </div>
