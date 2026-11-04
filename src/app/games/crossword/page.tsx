@@ -1,10 +1,14 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { triggerConfettiBurst } from '@/lib/confettiBurst';
-import { ArrowLeft, CheckCircle2, ChevronRight, ChevronLeft, Trophy, Lock, Sparkles, RotateCcw, RefreshCw, Delete } from 'lucide-react';
+import { triggerRealisticConfetti } from '@/lib/confettiBurst';
+import { ArrowLeft, CheckCircle2, ChevronRight, ChevronLeft, Trophy, Lock, Sparkles, RotateCcw, RefreshCw, Delete, Lightbulb, CheckSquare, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { gameSound, triggerHaptic } from '@/lib/gameSound';
+import { earnTalents, spendTalents, unlockAchievement, recordGameWin, getPlayerProfile } from '@/lib/gameProfile';
+import GameTopBar from '@/components/games/GameTopBar';
+import ShareScoreButton from '@/components/games/ShareScoreButton';
 
 /* ───────────────────── Types ───────────────────── */
 
@@ -23,6 +27,7 @@ export default function CrosswordGame() {
     const [wrongCells, setWrongCells] = useState<Set<string>>(new Set());
     const [currentPage, setCurrentPage] = useState(0);
     const [mobileClueTab, setMobileClueTab] = useState<'across' | 'down'>('across');
+    const [hintNotice, setHintNotice] = useState<string | null>(null);
 
     const LEVELS_PER_PAGE = 10;
     const totalPages = Math.ceil(LEVELS.length / LEVELS_PER_PAGE);
@@ -84,10 +89,96 @@ export default function CrosswordGame() {
         });
         if (allCorrect && Object.keys(gridState).length >= filledCount) {
             setLevelComplete(true);
-            setCompletedLevels((prev) => [...new Set([...prev, currentLevel])]);
-            triggerConfettiBurst();
+            const nextCompleted = [...new Set([...completedLevels, currentLevel])];
+            setCompletedLevels(nextCompleted);
+            
+            // Audio, Haptic & Gamification
+            gameSound.playFanfare();
+            triggerHaptic('heavy');
+            triggerRealisticConfetti();
+            earnTalents(25);
+            recordGameWin('crossword');
+
+            if (nextCompleted.length >= 5) unlockAchievement('scribe_5');
+            if (nextCompleted.length >= 25) unlockAchievement('crossword_25');
         }
-    }, [gridState, cellsInfo, currentLevel, levelComplete]);
+    }, [gridState, cellsInfo, currentLevel, levelComplete, completedLevels]);
+
+    /* ── Lifeline Hints ── */
+    const handleRevealLetterHint = () => {
+        if (levelComplete || !selectedCell) return;
+        const key = `${selectedCell.r}-${selectedCell.c}`;
+        const correctLetter = cellsInfo.get(key)?.letter;
+        if (!correctLetter) return;
+
+        if (gridState[key] === correctLetter) {
+            setHintNotice("This cell is already correct!");
+            setTimeout(() => setHintNotice(null), 2000);
+            return;
+        }
+
+        const success = spendTalents(15);
+        if (!success) {
+            gameSound.playError();
+            triggerHaptic('error');
+            setHintNotice("Need 15 Talents 🪙 for Letter Hint!");
+            setTimeout(() => setHintNotice(null), 2500);
+            return;
+        }
+
+        gameSound.playSuccess();
+        triggerHaptic('success');
+        setGridState((prev) => ({ ...prev, [key]: correctLetter }));
+        setWrongCells((prev) => { const n = new Set(prev); n.delete(key); return n; });
+        setHintNotice("Letter Revealed! (-15 🪙)");
+        setTimeout(() => setHintNotice(null), 2000);
+
+        const nextCell = getNextCell(selectedCell.r, selectedCell.c, direction, 1);
+        if (nextCell) setSelectedCell(nextCell);
+    };
+
+    const handleCheckWordHint = () => {
+        if (levelComplete || !activeClue) return;
+
+        const success = spendTalents(20);
+        if (!success) {
+            gameSound.playError();
+            triggerHaptic('error');
+            setHintNotice("Need 20 Talents 🪙 to Check Word!");
+            setTimeout(() => setHintNotice(null), 2500);
+            return;
+        }
+
+        let errorsFound = 0;
+        const newWrong = new Set(wrongCells);
+
+        for (let i = 0; i < activeClue.answer.length; i++) {
+            const r = activeClue.dir === 'across' ? activeClue.row : activeClue.row + i;
+            const c = activeClue.dir === 'across' ? activeClue.col + i : activeClue.col;
+            const key = `${r}-${c}`;
+            const typed = (gridState[key] || '').toUpperCase();
+            const correct = activeClue.answer[i];
+
+            if (typed && typed !== correct) {
+                newWrong.add(key);
+                errorsFound++;
+            } else if (typed === correct) {
+                newWrong.delete(key);
+            }
+        }
+
+        setWrongCells(newWrong);
+        if (errorsFound > 0) {
+            gameSound.playError();
+            triggerHaptic('error');
+            setHintNotice(`Found ${errorsFound} incorrect letter${errorsFound > 1 ? 's' : ''}!`);
+        } else {
+            gameSound.playSuccess();
+            triggerHaptic('success');
+            setHintNotice("Word letters checked! Looking good ✨");
+        }
+        setTimeout(() => setHintNotice(null), 2500);
+    };
 
     /* ── Select first cell on level start ── */
     useEffect(() => {
@@ -102,6 +193,8 @@ export default function CrosswordGame() {
     const handleCellClick = (r: number, c: number) => {
         const info = cellsInfo.get(`${r}-${c}`);
         if (!info) return;
+        gameSound.playTap();
+        triggerHaptic('tap');
         if (selectedCell?.r === r && selectedCell?.c === c) {
             if (info.across && info.down) setDirection((d) => (d === 'across' ? 'down' : 'across'));
         } else {
@@ -125,6 +218,10 @@ export default function CrosswordGame() {
         const key = `${r}-${c}`;
         const typed = letter.toUpperCase();
         const correct = cellsInfo.get(key)?.letter;
+        
+        gameSound.playTap();
+        triggerHaptic('tap');
+
         setGridState((prev) => ({ ...prev, [key]: typed }));
         if (correct && typed !== correct) {
             setWrongCells((prev) => new Set(prev).add(key));
@@ -139,6 +236,8 @@ export default function CrosswordGame() {
         if (levelComplete || !selectedCell) return;
         const { r, c } = selectedCell;
         const key = `${r}-${c}`;
+        gameSound.playTap();
+        triggerHaptic('tap');
         if (gridState[key]) {
             setGridState((prev) => { const n = { ...prev }; delete n[key]; return n; });
             setWrongCells((prev) => { const n = new Set(prev); n.delete(key); return n; });
@@ -253,6 +352,13 @@ export default function CrosswordGame() {
     if (screen === 'menu') {
         return (
             <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-amber-50/30">
+                <GameTopBar
+                    title="Bible Crossword (50 Levels)"
+                    backHref="/games"
+                    backLabel="Games"
+                    theme="light"
+                />
+
                 {/* Hero */}
                 <div className="relative overflow-hidden">
                     <div className="absolute inset-0 pointer-events-none">
@@ -260,12 +366,8 @@ export default function CrosswordGame() {
                         <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full bg-indigo-200/20 blur-3xl" />
                     </div>
 
-                    <div className="relative max-w-2xl mx-auto px-4 pt-24 pb-12 text-center">
-                        <Link href="/games" className="inline-flex items-center gap-2 text-slate-400 hover:text-slate-600 transition-colors text-sm mb-8">
-                            <ArrowLeft className="w-4 h-4" /> Back to Games
-                        </Link>
-
-                        <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/25">
+                    <div className="relative max-w-2xl mx-auto px-4 pt-10 pb-8 text-center">
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/25">
                             <span className="text-3xl">✝️</span>
                         </div>
 
@@ -437,36 +539,33 @@ export default function CrosswordGame() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-amber-50/30 flex flex-col">
 
-            {/* Top Bar */}
-            <header className="sticky top-0 z-20 bg-white/95 backdrop-blur-lg border-b border-slate-100 shadow-sm">
-                <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
-                    <button
-                        onClick={() => { resetLevel(); setScreen('menu'); }}
-                        className="flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors text-sm font-medium"
-                    >
-                        <ArrowLeft className="w-4 h-4" /> Levels
-                    </button>
-
-                    <h2 className="font-serif font-bold text-slate-800 text-base">
-                        {level.title}
-                    </h2>
-
+            {/* Top Bar with Profile Stats */}
+            <GameTopBar
+                title={`Level ${currentLevel + 1}: ${level.title}`}
+                backHref="#"
+                backLabel="Levels"
+                theme="light"
+                extraPill={
                     <button
                         onClick={resetLevel}
-                        className="flex items-center gap-1.5 text-slate-400 hover:text-slate-600 transition-colors text-sm"
-                        title="Reset"
+                        className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-500 transition-colors"
+                        title="Reset Grid"
                     >
                         <RotateCcw className="w-4 h-4" />
                     </button>
-                </div>
-            </header>
+                }
+            />
 
             {/* Active Clue Banner */}
             <div className="bg-amber-50 border-b border-amber-200/80 sticky top-14 z-10 shadow-xs">
                 <div className="max-w-4xl mx-auto px-3 sm:px-4 py-2.5 flex items-center justify-between gap-2">
                     <button
                         type="button"
-                        onClick={() => navigateClue(-1)}
+                        onClick={() => {
+                            gameSound.playTap();
+                            triggerHaptic('tap');
+                            navigateClue(-1);
+                        }}
                         className="p-1.5 rounded-lg bg-white border border-amber-200 text-amber-800 hover:bg-amber-100 active:scale-95 transition-all cursor-pointer"
                         title="Previous Clue"
                     >
@@ -474,7 +573,11 @@ export default function CrosswordGame() {
                     </button>
 
                     <div 
-                        onClick={toggleDirection}
+                        onClick={() => {
+                            gameSound.playTap();
+                            triggerHaptic('tap');
+                            toggleDirection();
+                        }}
                         className="flex-1 flex items-center justify-center gap-2 cursor-pointer select-none text-center min-w-0"
                     >
                         {activeClue ? (
@@ -493,12 +596,51 @@ export default function CrosswordGame() {
 
                     <button
                         type="button"
-                        onClick={() => navigateClue(1)}
+                        onClick={() => {
+                            gameSound.playTap();
+                            triggerHaptic('tap');
+                            navigateClue(1);
+                        }}
                         className="p-1.5 rounded-lg bg-white border border-amber-200 text-amber-800 hover:bg-amber-100 active:scale-95 transition-all cursor-pointer"
                         title="Next Clue"
                     >
                         <ChevronRight className="w-4 h-4" />
                     </button>
+                </div>
+            </div>
+
+            {/* Lifelines Hint Bar */}
+            <div className="bg-white/95 border-b border-slate-200/80 py-1.5 px-3">
+                <div className="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                        <button
+                            type="button"
+                            onClick={handleRevealLetterHint}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-bold text-xs shadow-2xs active:scale-95 transition-all cursor-pointer"
+                            title="Reveal letter in current cell (-15 Talents)"
+                        >
+                            <Lightbulb className="w-3.5 h-3.5 text-amber-600" />
+                            <span>Reveal Letter</span>
+                            <span className="text-[10px] text-amber-700 bg-amber-200/80 px-1.5 py-0.2 rounded-full font-extrabold">-15 🪙</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={handleCheckWordHint}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 font-bold text-xs shadow-2xs active:scale-95 transition-all cursor-pointer"
+                            title="Check current word for errors (-20 Talents)"
+                        >
+                            <CheckSquare className="w-3.5 h-3.5 text-purple-600" />
+                            <span>Check Word</span>
+                            <span className="text-[10px] text-purple-700 bg-purple-200/80 px-1.5 py-0.2 rounded-full font-extrabold">-20 🪙</span>
+                        </button>
+                    </div>
+
+                    {hintNotice && (
+                        <span className="text-xs font-bold text-amber-900 bg-amber-100 border border-amber-300 px-3 py-1 rounded-xl animate-bounce">
+                            {hintNotice}
+                        </span>
+                    )}
                 </div>
             </div>
 
@@ -781,7 +923,22 @@ export default function CrosswordGame() {
                             </div>
 
                             <h2 className="font-serif font-bold text-3xl text-slate-900 mb-1">Brilliant!</h2>
-                            <p className="text-slate-500 text-sm mb-8">You completed "{level.title}"</p>
+                            <p className="text-slate-500 text-sm mb-4">You completed &ldquo;{level.title}&rdquo;</p>
+
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-black mb-6">
+                                <span>🪙 +25 Talents Earned!</span>
+                            </div>
+
+                            {/* WhatsApp Challenge Share */}
+                            <div className="mb-6">
+                                <ShareScoreButton
+                                    gameName="Bible Crossword"
+                                    resultDetails={`Solved Level ${currentLevel + 1}: "${level.title}" with 100% accuracy!`}
+                                    urlPath="/games/crossword"
+                                    variant="whatsapp"
+                                    className="w-full"
+                                />
+                            </div>
 
                             {currentLevel < LEVELS.length - 1 ? (
                                 <div className="space-y-3">

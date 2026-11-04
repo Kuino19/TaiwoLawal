@@ -2,9 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Clock, Trophy, Play, RotateCcw, XCircle, CheckCircle2, Flame, Heart, Sparkles, Shield } from 'lucide-react';
+import { ArrowLeft, Clock, Trophy, Play, RotateCcw, XCircle, CheckCircle2, Flame, Heart, Sparkles, Shield, Zap, Wand2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { triggerRealisticConfetti } from '@/lib/confettiBurst';
+import { gameSound, triggerHaptic } from '@/lib/gameSound';
+import { earnTalents, spendTalents, unlockAchievement, recordGameWin } from '@/lib/gameProfile';
+import GameTopBar from '@/components/games/GameTopBar';
+import ShareScoreButton from '@/components/games/ShareScoreButton';
 
 type GameMode = 'classic' | 'marathon' | 'survival';
 
@@ -138,6 +142,8 @@ export default function TriviaRushGame() {
     const [currentQIndex, setCurrentQIndex] = useState(0);
     const [questions, setQuestions] = useState<TriviaItem[]>([]);
     const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
+    const [disabledOptions, setDisabledOptions] = useState<number[]>([]);
+    const [lifelineNotice, setLifelineNotice] = useState<string | null>(null);
 
     // Load High Scores
     useEffect(() => {
@@ -159,6 +165,65 @@ export default function TriviaRushGame() {
         setTimeLeft(chosenMode === 'marathon' ? 120 : 60);
         setGameState('playing');
         setFeedback(null);
+        setDisabledOptions([]);
+        setLifelineNotice(null);
+    };
+
+    // Lifeline: 50:50 (Eliminate 2 wrong choices)
+    const handleUse5050 = () => {
+        if (gameState !== 'playing' || feedback !== null) return;
+        if (disabledOptions.length > 0) {
+            setLifelineNotice("50:50 already used on this question!");
+            setTimeout(() => setLifelineNotice(null), 2000);
+            return;
+        }
+
+        const success = spendTalents(20);
+        if (!success) {
+            gameSound.playError();
+            triggerHaptic('error');
+            setLifelineNotice("Need 20 Talents 🪙 for 50:50!");
+            setTimeout(() => setLifelineNotice(null), 2500);
+            return;
+        }
+
+        gameSound.playSuccess();
+        triggerHaptic('success');
+
+        const currentQ = questions[currentQIndex];
+        const wrongIndices = currentQ.options
+            .map((_, i) => i)
+            .filter(i => i !== currentQ.a);
+        const toEliminate = shuffleArray(wrongIndices).slice(0, 2);
+
+        setDisabledOptions(toEliminate);
+        setLifelineNotice("2 wrong answers eliminated! (-20 🪙)");
+        setTimeout(() => setLifelineNotice(null), 2500);
+    };
+
+    // Lifeline: +15s Time Boost
+    const handleUseTimeBoost = () => {
+        if (gameState !== 'playing' || feedback !== null) return;
+        if (mode === 'survival') {
+            setLifelineNotice("Time Boost not available in Survival!");
+            setTimeout(() => setLifelineNotice(null), 2000);
+            return;
+        }
+
+        const success = spendTalents(25);
+        if (!success) {
+            gameSound.playError();
+            triggerHaptic('error');
+            setLifelineNotice("Need 25 Talents 🪙 for +15s Boost!");
+            setTimeout(() => setLifelineNotice(null), 2500);
+            return;
+        }
+
+        gameSound.playSuccess();
+        triggerHaptic('success');
+        setTimeLeft(prev => prev + 15);
+        setLifelineNotice("+15 Seconds Added! (-25 🪙)");
+        setTimeout(() => setLifelineNotice(null), 2500);
     };
 
     // Timer logic for timed modes
@@ -166,7 +231,12 @@ export default function TriviaRushGame() {
         let timer: NodeJS.Timeout;
         if (gameState === 'playing' && mode !== 'survival' && timeLeft > 0) {
             timer = setInterval(() => {
-                setTimeLeft(prev => prev - 1);
+                setTimeLeft(prev => {
+                    if (prev <= 5 && prev > 1) {
+                        gameSound.playTick();
+                    }
+                    return prev - 1;
+                });
             }, 1000);
         } else if (timeLeft === 0 && gameState === 'playing' && mode !== 'survival') {
             endGame();
@@ -176,6 +246,9 @@ export default function TriviaRushGame() {
 
     const endGame = () => {
         setGameState('end');
+        gameSound.playFanfare();
+        triggerHaptic('heavy');
+
         setScore(currentScore => {
             const best = highScores[mode] || 0;
             if (currentScore > best) {
@@ -185,26 +258,39 @@ export default function TriviaRushGame() {
                     localStorage.setItem('trivia_rush_high_scores_v2', JSON.stringify(updated));
                 } catch {}
                 triggerRealisticConfetti();
-            } else if (currentScore >= 80) {
+            } else if (currentScore >= 60) {
                 triggerRealisticConfetti();
             }
+
+            // Award talents based on score
+            const earned = Math.max(10, Math.floor(currentScore / 4));
+            earnTalents(earned);
+            recordGameWin('trivia');
+
             return currentScore;
         });
     };
 
     const handleAnswer = (selectedIndex: number) => {
-        if (feedback !== null) return;
+        if (feedback !== null || disabledOptions.includes(selectedIndex)) return;
 
         const isCorrect = selectedIndex === questions[currentQIndex].a;
         setFeedback(isCorrect ? 'correct' : 'incorrect');
 
         if (isCorrect) {
+            gameSound.playSuccess();
+            triggerHaptic('success');
             const newStreak = streak + 1;
             setStreak(newStreak);
             if (newStreak > highestStreak) setHighestStreak(newStreak);
+            if (newStreak >= 5) {
+                unlockAchievement('trivia_streak_5');
+            }
             const streakBonus = newStreak >= 5 ? 5 : newStreak >= 3 ? 2 : 0;
             setScore(prev => prev + 10 + streakBonus);
         } else {
+            gameSound.playError();
+            triggerHaptic('error');
             setStreak(0);
             if (mode === 'survival') {
                 const nextLives = lives - 1;
@@ -223,33 +309,31 @@ export default function TriviaRushGame() {
 
         setTimeout(() => {
             setFeedback(null);
+            setDisabledOptions([]);
             if (currentQIndex < questions.length - 1) {
                 setCurrentQIndex(prev => prev + 1);
             } else {
                 endGame();
             }
-        }, 450);
+        }, 500);
     };
 
     const currentBest = highScores[mode] || 0;
 
     return (
         <div className="min-h-screen bg-slate-900 text-white flex flex-col font-sans">
-            {/* Header */}
-            <div className="bg-slate-800/80 border-b border-slate-800 sticky top-0 z-10 backdrop-blur-md">
-                <div className="max-w-3xl mx-auto px-4 h-16 flex items-center justify-between">
-                    <Link href="/games" className="text-slate-400 hover:text-white transition-colors flex items-center gap-2 text-sm font-medium">
-                        <ArrowLeft className="w-4 h-4" />
-                        <span>Games</span>
-                    </Link>
-                    <div className="font-bold text-lg tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-amber-400">
-                        ⚡ TRIVIA RUSH
+            {/* Top Bar with Profile Stats */}
+            <GameTopBar
+                title="Bible Trivia Rush"
+                backHref="/games"
+                backLabel="Games"
+                theme="dark"
+                extraPill={
+                    <div className="flex items-center gap-1 text-xs text-amber-400 font-bold bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 rounded-full">
+                        <Trophy className="w-3.5 h-3.5" /> {currentBest}
                     </div>
-                    <div className="flex items-center gap-1.5 text-xs text-amber-400 font-bold bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full">
-                        <Trophy className="w-3.5 h-3.5" /> Best: {currentBest}
-                    </div>
-                </div>
-            </div>
+                }
+            />
 
             <div className="flex-1 w-full max-w-2xl mx-auto p-4 flex flex-col justify-center">
                 <AnimatePresence mode="wait">
@@ -288,7 +372,11 @@ export default function TriviaRushGame() {
                                         <button
                                             key={m.id}
                                             type="button"
-                                            onClick={() => setMode(m.id as GameMode)}
+                                            onClick={() => {
+                                                gameSound.playTap();
+                                                triggerHaptic('tap');
+                                                setMode(m.id as GameMode);
+                                            }}
                                             className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
                                                 isSel
                                                     ? 'bg-gradient-to-br from-cyan-500/20 to-amber-500/20 border-cyan-400 text-white ring-1 ring-cyan-400'
@@ -305,7 +393,11 @@ export default function TriviaRushGame() {
 
                             <div>
                                 <button 
-                                    onClick={() => startGame(mode)}
+                                    onClick={() => {
+                                        gameSound.playTap();
+                                        triggerHaptic('tap');
+                                        startGame(mode);
+                                    }}
                                     className="inline-flex items-center gap-3 bg-gradient-to-r from-cyan-400 to-amber-400 hover:from-cyan-300 hover:to-amber-300 text-slate-950 px-9 py-4 rounded-full font-black text-lg shadow-xl shadow-cyan-500/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
                                 >
                                     <Play className="w-6 h-6 fill-slate-950" />
@@ -325,7 +417,7 @@ export default function TriviaRushGame() {
                             className="flex-1 flex flex-col justify-center"
                         >
                             {/* HUD */}
-                            <div className="flex items-center justify-between mb-5 bg-slate-800/90 p-4 rounded-2xl border border-slate-700 shadow-md">
+                            <div className="flex items-center justify-between mb-3 bg-slate-800/90 p-4 rounded-2xl border border-slate-700 shadow-md">
                                 <div className="flex flex-col">
                                     <span className="text-slate-400 text-xs font-bold uppercase tracking-widest">Score</span>
                                     <span className="text-3xl font-black text-cyan-400">{score}</span>
@@ -367,12 +459,47 @@ export default function TriviaRushGame() {
                                 )}
                             </div>
 
+                            {/* Lifelines Bar */}
+                            <div className="flex items-center justify-between gap-2 mb-3 px-1">
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={handleUse5050}
+                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-cyan-500/30 text-cyan-300 font-bold text-xs shadow-xs active:scale-95 transition-all cursor-pointer"
+                                        title="Eliminate two wrong choices (-20 Talents)"
+                                    >
+                                        <Wand2 className="w-3.5 h-3.5 text-cyan-400" />
+                                        <span>50:50</span>
+                                        <span className="text-[10px] bg-cyan-950 px-1.5 py-0.2 rounded-full text-cyan-200 border border-cyan-500/40">-20 🪙</span>
+                                    </button>
+
+                                    {mode !== 'survival' && (
+                                        <button
+                                            type="button"
+                                            onClick={handleUseTimeBoost}
+                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-amber-500/30 text-amber-300 font-bold text-xs shadow-xs active:scale-95 transition-all cursor-pointer"
+                                            title="Add 15 seconds to timer (-25 Talents)"
+                                        >
+                                            <Clock className="w-3.5 h-3.5 text-amber-400" />
+                                            <span>+15s Time</span>
+                                            <span className="text-[10px] bg-amber-950 px-1.5 py-0.2 rounded-full text-amber-200 border border-amber-500/40">-25 🪙</span>
+                                        </button>
+                                    )}
+                                </div>
+
+                                {lifelineNotice && (
+                                    <span className="text-xs font-bold text-cyan-300 bg-cyan-500/15 border border-cyan-500/30 px-2.5 py-1 rounded-xl animate-pulse truncate">
+                                        {lifelineNotice}
+                                    </span>
+                                )}
+                            </div>
+
                             {/* Question Card */}
                             <motion.div 
                                 key={currentQIndex}
                                 initial={{ x: 20, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
-                                className="bg-slate-800/95 p-6 sm:p-8 rounded-3xl border border-slate-700 shadow-2xl relative overflow-hidden"
+                                className="bg-slate-800/95 p-5 sm:p-7 rounded-3xl border border-slate-700 shadow-2xl relative overflow-hidden"
                             >
                                 {/* Feedback overlay */}
                                 <AnimatePresence>
@@ -406,20 +533,28 @@ export default function TriviaRushGame() {
                                     Question {currentQIndex + 1}
                                 </div>
 
-                                <h2 className="text-xl sm:text-2xl font-bold leading-snug mb-6 text-white">
+                                <h2 className="text-lg sm:text-2xl font-bold leading-snug mb-5 text-white">
                                     {questions[currentQIndex]?.q}
                                 </h2>
 
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    {questions[currentQIndex]?.options.map((opt, i) => (
-                                        <button
-                                            key={i}
-                                            onClick={() => handleAnswer(i)}
-                                            className="w-full text-left p-3.5 sm:p-4 rounded-2xl bg-slate-700/60 hover:bg-slate-700 border-2 border-slate-600 hover:border-cyan-400 transition-all font-semibold text-base sm:text-lg cursor-pointer active:scale-98 touch-manipulation select-none"
-                                        >
-                                            {opt}
-                                        </button>
-                                    ))}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+                                    {questions[currentQIndex]?.options.map((opt, i) => {
+                                        const isEliminated = disabledOptions.includes(i);
+                                        return (
+                                            <button
+                                                key={i}
+                                                disabled={isEliminated}
+                                                onClick={() => handleAnswer(i)}
+                                                className={`w-full text-left p-3.5 sm:p-4 rounded-2xl border-2 transition-all font-semibold text-sm sm:text-base cursor-pointer active:scale-98 touch-manipulation select-none ${
+                                                    isEliminated
+                                                        ? 'bg-slate-800/40 border-slate-700/40 text-slate-600 line-through opacity-40 cursor-not-allowed'
+                                                        : 'bg-slate-700/60 hover:bg-slate-700 border-slate-600 hover:border-cyan-400 text-white'
+                                                }`}
+                                            >
+                                                {opt}
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             </motion.div>
                         </motion.div>
@@ -431,7 +566,7 @@ export default function TriviaRushGame() {
                             key="end"
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="text-center space-y-6 bg-slate-800 p-8 sm:p-10 rounded-3xl border border-slate-700 shadow-2xl"
+                            className="text-center space-y-5 bg-slate-800 p-6 sm:p-8 rounded-3xl border border-slate-700 shadow-2xl"
                         >
                             <div className="w-20 h-20 mx-auto bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/25">
                                 <Trophy className="w-10 h-10 text-slate-950" />
@@ -442,8 +577,13 @@ export default function TriviaRushGame() {
                                     {mode === 'survival' && lives <= 0 ? "Out of Lives!" : "Rush Completed!"}
                                 </h2>
                                 <p className="text-slate-400 text-sm">You answered with wisdom and lightning speed</p>
-                                <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500 my-4">
+                                
+                                <div className="text-5xl sm:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500 my-3">
                                     {score} <span className="text-2xl text-slate-400 font-medium">pts</span>
+                                </div>
+
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold mb-4">
+                                    <span>🪙 +{Math.max(10, Math.floor(score / 4))} Talents Earned!</span>
                                 </div>
 
                                 <div className="flex items-center justify-center gap-6 text-sm text-slate-300">
@@ -459,20 +599,38 @@ export default function TriviaRushGame() {
                                 </div>
                             </div>
 
-                            <div className="flex flex-col sm:flex-row justify-center gap-3 pt-4">
+                            {/* WhatsApp Challenge Share */}
+                            <div className="pt-2">
+                                <ShareScoreButton
+                                    gameName="Bible Trivia Rush"
+                                    resultDetails={`Scored ${score} pts in ${mode.toUpperCase()} mode with a ${highestStreak}-question streak!`}
+                                    urlPath="/games/rush"
+                                    variant="whatsapp"
+                                    className="w-full"
+                                />
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row justify-center gap-2.5 pt-2">
                                 <button 
-                                    onClick={() => startGame(mode)}
-                                    className="flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-400 to-amber-400 text-slate-950 px-7 py-3.5 rounded-xl font-bold text-sm hover:opacity-90 transition-all cursor-pointer"
+                                    onClick={() => {
+                                        gameSound.playTap();
+                                        triggerHaptic('tap');
+                                        startGame(mode);
+                                    }}
+                                    className="flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-400 to-amber-400 text-slate-950 px-6 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-all cursor-pointer"
                                 >
                                     <RotateCcw className="w-4 h-4" />
                                     Play Again
                                 </button>
-                                <Link 
-                                    href="/games"
-                                    className="flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 text-white px-7 py-3.5 rounded-xl font-bold text-sm transition-all"
+                                <button 
+                                    onClick={() => {
+                                        gameSound.playTap();
+                                        setGameState('start');
+                                    }}
+                                    className="flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-xl font-bold text-sm transition-all cursor-pointer"
                                 >
-                                    All Games
-                                </Link>
+                                    Change Mode
+                                </button>
                             </div>
                         </motion.div>
                     )}

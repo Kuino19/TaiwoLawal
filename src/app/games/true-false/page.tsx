@@ -5,6 +5,10 @@ import Link from 'next/link';
 import { ArrowLeft, Check, X, RotateCcw, Trophy, Clock, Flame, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { triggerRealisticConfetti } from '@/lib/confettiBurst';
+import { gameSound, triggerHaptic } from '@/lib/gameSound';
+import { earnTalents, recordGameWin } from '@/lib/gameProfile';
+import GameTopBar from '@/components/games/GameTopBar';
+import ShareScoreButton from '@/components/games/ShareScoreButton';
 
 interface TrueFalseItem {
     id: number;
@@ -269,12 +273,16 @@ export default function TrueOrFalseGame() {
         setFeedback(isCorrect ? 'correct' : 'wrong');
 
         if (isCorrect) {
+            gameSound.playSuccess();
+            triggerHaptic('success');
             const newStreak = streak + 1;
             setStreak(newStreak);
             if (newStreak > highestStreak) setHighestStreak(newStreak);
             const streakBonus = newStreak >= 3 ? 5 : 0;
             setScore(prev => prev + 10 + streakBonus);
         } else {
+            gameSound.playError();
+            triggerHaptic('error');
             setStreak(0);
         }
 
@@ -285,32 +293,31 @@ export default function TrueOrFalseGame() {
                 setCurrentIndex(prev => prev + 1);
             } else {
                 setGameState('end');
+                gameSound.playFanfare();
+                triggerHaptic('heavy');
                 triggerRealisticConfetti();
+                earnTalents(20);
+                recordGameWin('true_false');
             }
         }, 1400);
     };
 
     return (
         <div className="min-h-screen bg-slate-900 text-white flex flex-col font-sans">
-            {/* Header */}
-            <div className="bg-slate-800/80 border-b border-slate-800 sticky top-0 z-20 backdrop-blur-md">
-                <div className="max-w-3xl mx-auto px-4 h-16 flex items-center justify-between">
-                    <Link href="/games" className="text-slate-400 hover:text-white transition-colors flex items-center gap-2 text-sm font-medium">
-                        <ArrowLeft className="w-4 h-4" />
-                        <span>Games</span>
-                    </Link>
-                    <div className="font-bold text-lg tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-                        ⚡ TRUE OR FALSE
-                    </div>
-                    {gameState === 'playing' ? (
-                        <div className="text-xs font-mono font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-3 py-1.5 rounded-full">
-                            Score: {score} pts
+            {/* Top Bar with Profile Stats */}
+            <GameTopBar
+                title="True or False Blitz"
+                backHref="/games"
+                backLabel="Games"
+                theme="dark"
+                extraPill={
+                    gameState === 'playing' ? (
+                        <div className="text-xs font-mono font-bold bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 px-2.5 py-1 rounded-full">
+                            {score} pts
                         </div>
-                    ) : (
-                        <div className="w-16" />
-                    )}
-                </div>
-            </div>
+                    ) : null
+                }
+            />
 
             <div className="flex-1 max-w-2xl w-full mx-auto p-4 flex flex-col justify-center">
                 <AnimatePresence mode="wait">
@@ -491,8 +498,23 @@ export default function TrueOrFalseGame() {
                                     {score} <span className="text-2xl text-slate-400 font-medium">pts</span>
                                 </div>
 
-                                <div className="text-xs text-slate-400">
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold mb-3">
+                                    <span>🪙 +20 Talents Earned!</span>
+                                </div>
+
+                                <div className="text-xs text-slate-400 mb-4">
                                     Longest Streak: <strong className="text-amber-400">{highestStreak} in a row</strong>
+                                </div>
+
+                                {/* WhatsApp Challenge Share */}
+                                <div className="max-w-sm mx-auto">
+                                    <ShareScoreButton
+                                        gameName="Bible True or False Blitz"
+                                        resultDetails={`Scored ${score} pts in the ${roundCount}-statement True or False Blitz with a ${highestStreak}-streak!`}
+                                        urlPath="/games/true-false"
+                                        variant="whatsapp"
+                                        className="w-full"
+                                    />
                                 </div>
                             </div>
 

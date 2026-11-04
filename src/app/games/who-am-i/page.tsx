@@ -5,6 +5,10 @@ import Link from 'next/link';
 import { ArrowLeft, HelpCircle, Trophy, RotateCcw, ChevronRight, CheckCircle2, XCircle, Sparkles, Award } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { triggerRealisticConfetti } from '@/lib/confettiBurst';
+import { gameSound, triggerHaptic } from '@/lib/gameSound';
+import { earnTalents, unlockAchievement, recordGameWin } from '@/lib/gameProfile';
+import GameTopBar from '@/components/games/GameTopBar';
+import ShareScoreButton from '@/components/games/ShareScoreButton';
 
 interface MysteryCharacter {
     id: number;
@@ -362,6 +366,8 @@ export default function WhoAmIGame() {
 
     const handleRevealNextClue = () => {
         if (clueLevel < 3) {
+            gameSound.playTap();
+            triggerHaptic('tap');
             setClueLevel((prev) => (prev + 1) as 2 | 3);
         }
     };
@@ -375,7 +381,16 @@ export default function WhoAmIGame() {
 
         setFeedback(isCorrect ? 'correct' : 'wrong');
         if (isCorrect) {
+            gameSound.playSuccess();
+            triggerHaptic('success');
             setScore(prev => prev + pointsAwarded);
+
+            if (clueLevel === 1) {
+                unlockAchievement('prophet_insight');
+            }
+        } else {
+            gameSound.playError();
+            triggerHaptic('error');
         }
 
         setRoundHistory(prev => [...prev, { char: currentChar, won: isCorrect, points: pointsAwarded }]);
@@ -389,7 +404,11 @@ export default function WhoAmIGame() {
                 setCurrentIndex(prev => prev + 1);
             } else {
                 setGameState('end');
+                gameSound.playFanfare();
+                triggerHaptic('heavy');
                 triggerRealisticConfetti();
+                earnTalents(30);
+                recordGameWin('who_am_i');
             }
         }, 1600);
     };
@@ -398,25 +417,20 @@ export default function WhoAmIGame() {
 
     return (
         <div className="min-h-screen bg-slate-900 text-white flex flex-col font-sans">
-            {/* Header */}
-            <div className="bg-slate-800/80 border-b border-slate-800 sticky top-0 z-20 backdrop-blur-md">
-                <div className="max-w-3xl mx-auto px-4 h-16 flex items-center justify-between">
-                    <Link href="/games" className="text-slate-400 hover:text-white transition-colors flex items-center gap-2 text-sm font-medium">
-                        <ArrowLeft className="w-4 h-4" />
-                        <span>Games</span>
-                    </Link>
-                    <div className="font-bold text-lg tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-300">
-                        🕵️ WHO AM I?
-                    </div>
-                    {gameState === 'playing' ? (
-                        <div className="text-xs font-mono font-bold bg-amber-500/10 border border-amber-500/30 text-amber-300 px-3 py-1.5 rounded-full">
-                            Score: {score} pts
+            {/* Top Bar with Profile Stats */}
+            <GameTopBar
+                title="Who Am I? (Mystery)"
+                backHref="/games"
+                backLabel="Games"
+                theme="dark"
+                extraPill={
+                    gameState === 'playing' ? (
+                        <div className="text-xs font-mono font-bold bg-amber-500/15 border border-amber-500/30 text-amber-300 px-2.5 py-1 rounded-full">
+                            {score} pts
                         </div>
-                    ) : (
-                        <div className="w-16" />
-                    )}
-                </div>
-            </div>
+                    ) : null
+                }
+            />
 
             <div className="flex-1 max-w-2xl w-full mx-auto p-4 flex flex-col justify-center">
                 <AnimatePresence mode="wait">
@@ -531,7 +545,7 @@ export default function WhoAmIGame() {
                                     )}
                                 </AnimatePresence>
 
-                                <div className="flex items-center gap-2 mb-4">
+                                <div className="flex items-center gap-2 mb-3">
                                     <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-xl">
                                         📜
                                     </div>
@@ -542,6 +556,35 @@ export default function WhoAmIGame() {
                                         <span className="text-[11px] text-slate-400">
                                             {clueLevel} of 3 clues revealed
                                         </span>
+                                    </div>
+                                </div>
+
+                                {/* Dynamic Mystery Silhouette */}
+                                <div className="flex justify-center mb-4">
+                                    <div className={`relative w-24 h-24 rounded-3xl flex items-center justify-center border transition-all duration-500 ${
+                                        clueLevel === 1
+                                            ? 'bg-slate-900 border-amber-500/20 shadow-inner'
+                                            : clueLevel === 2
+                                            ? 'bg-amber-950/40 border-amber-500/40 shadow-md'
+                                            : 'bg-amber-900/60 border-amber-400 shadow-lg shadow-amber-500/20'
+                                    }`}>
+                                        <span className={`text-4xl transition-all duration-500 select-none ${
+                                            clueLevel === 1
+                                                ? 'blur-md opacity-30 grayscale'
+                                                : clueLevel === 2
+                                                ? 'blur-xs opacity-65'
+                                                : 'blur-none opacity-90'
+                                        }`}>
+                                            👤
+                                        </span>
+                                        {clueLevel === 1 && (
+                                            <div className="absolute inset-0 flex items-center justify-center">
+                                                <span className="text-3xl font-black text-amber-400/80 animate-pulse">?</span>
+                                            </div>
+                                        )}
+                                        <div className="absolute -bottom-2 px-2.5 py-0.5 rounded-full bg-slate-950 border border-amber-500/30 text-[10px] font-bold text-amber-300">
+                                            {clueLevel === 1 ? 'Shadowed' : clueLevel === 2 ? 'Outlines Emerging' : 'Nearly Revealed'}
+                                        </div>
                                     </div>
                                 </div>
 
@@ -620,9 +663,23 @@ export default function WhoAmIGame() {
                                 <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500 my-4">
                                     {score} <span className="text-2xl text-slate-400 font-medium">pts</span>
                                 </div>
-                                <p className="text-xs text-slate-400">
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold mb-4">
+                                    <span>🪙 +30 Talents Earned!</span>
+                                </div>
+                                <p className="text-xs text-slate-400 mb-4">
                                     Solved {roundHistory.filter(r => r.won).length} out of {characters.length} mysteries correctly!
                                 </p>
+
+                                {/* WhatsApp Challenge Share */}
+                                <div className="max-w-sm mx-auto">
+                                    <ShareScoreButton
+                                        gameName="Who Am I? (Mystery)"
+                                        resultDetails={`Uncovered ${roundHistory.filter(r => r.won).length} of ${characters.length} Bible mysteries and scored ${score} pts!`}
+                                        urlPath="/games/who-am-i"
+                                        variant="whatsapp"
+                                        className="w-full"
+                                    />
+                                </div>
                             </div>
 
                             <div className="flex flex-col sm:flex-row justify-center gap-3 pt-2">

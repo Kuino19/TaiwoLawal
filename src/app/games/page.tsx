@@ -1,9 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ChevronRight, Gamepad2, Sparkles, Trophy, Zap, Clock, Brain, Flame } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { ArrowLeft, ChevronRight, Gamepad2, Sparkles, Trophy, Zap, Clock, Brain, Flame, Volume2, VolumeX, Gift, CheckCircle2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { gameSound, triggerHaptic } from '@/lib/gameSound';
+import { getPlayerProfile, PlayerProfile, checkAndUpdateStreak, claimDailyManna } from '@/lib/gameProfile';
+import AchievementsModal from '@/components/games/AchievementsModal';
+import { triggerRealisticConfetti } from '@/lib/confettiBurst';
 
 type Game = {
     title: string;
@@ -23,90 +27,135 @@ const GAMES: Game[] = [
         title: 'Bible Crossword',
         category: 'puzzle',
         categoryLabel: 'Puzzle & Word',
-        description: 'Solve crossword puzzles based on Holy Scripture across 50 progressive, paginated levels.',
+        description: 'Solve crossword puzzles based on Holy Scripture across 50 progressive, paginated levels with lifelines.',
         href: '/games/crossword',
         emoji: '✝️',
         badge: '50 Levels',
         badgeColor: 'bg-purple-100 text-purple-700 border-purple-200',
-        highlight: 'Paginated 10/page',
+        highlight: 'Hints & 50 Levels',
         status: 'live',
     },
     {
         title: 'Verse Scramble',
         category: 'scripture',
         categoryLabel: 'Scripture Memory',
-        description: 'Tap and rearrange scrambled words to piece together 50 inspiring Bible verses in 5 thematic packs.',
+        description: 'Tap and rearrange scrambled words to piece together 50 inspiring Bible verses with combo speed multipliers!',
         href: '/games/scramble',
         emoji: '🔤',
         badge: '50 Verses',
         badgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
-        highlight: '5 Thematic Packs',
+        highlight: 'Combo Rush & Share Cards',
         status: 'live',
     },
     {
         title: 'Bible Trivia Rush',
         category: 'speed',
         categoryLabel: 'Speed & Trivia',
-        description: 'Answer as many Bible & Church questions as you can before time expires or lives run out!',
+        description: 'Answer Bible & Church questions before time expires or lives run out! Includes 50:50 and Time Boost lifelines.',
         href: '/games/rush',
         emoji: '⏱️',
         badge: '3 Modes',
         badgeColor: 'bg-cyan-100 text-cyan-800 border-cyan-200',
-        highlight: 'Classic, Marathon & Survival',
+        highlight: '50:50 & Time Lifelines',
         status: 'live',
     },
     {
         title: 'Bible Memory Match',
         category: 'memory',
         categoryLabel: 'Memory & Focus',
-        description: 'Flip cards to connect each Bible hero with their biblical deed in Easy, Medium, Hard, or Expert grids.',
+        description: 'Flip cards to connect Bible heroes with their deeds. Play solo or challenge a friend in 2-Player Pass & Play!',
         href: '/games/memory',
         emoji: '🃏',
         badge: '36 Pairs',
         badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
-        highlight: '4 Grid Sizes & Decks',
+        highlight: 'Solo & 2-Player Pass-and-Play',
         status: 'live',
     },
     {
         title: 'Who Am I? (Mystery)',
         category: 'memory',
         categoryLabel: 'Detective Mystery',
-        description: 'Read progressive clues about Bible and Foursquare heroes to guess their secret identity!',
+        description: 'Inspect progressive clues to reveal the secret identity with unblurring silhouettes and risk-reward points!',
         href: '/games/who-am-i',
         emoji: '🕵️',
         badge: '28 Mysteries',
         badgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
-        highlight: 'Progressive Clues & Points',
+        highlight: 'Unblurring Silhouette & Clues',
         status: 'live',
     },
     {
         title: 'Fill-in-the-Blank',
         category: 'scripture',
         categoryLabel: 'Scripture Mastery',
-        description: 'Fill in missing words from famous Bible scriptures and Foursquare catechism truths.',
+        description: 'Fill in missing words from famous Bible scriptures with hints and immediate scripture context explanations.',
         href: '/games/fill-blank',
         emoji: '✏️',
         badge: '30+ Verses',
         badgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
-        highlight: 'Sprint & Championship',
+        highlight: 'Hints & Scripture Context',
         status: 'live',
     },
     {
         title: 'Bible True or False Blitz',
         category: 'speed',
         categoryLabel: 'Discernment & Speed',
-        description: 'Rapid-fire statements about biblical events and church history. Is it fact or fiction?',
+        description: 'Rapid-fire statements about biblical events and church history with instant biblical explanations.',
         href: '/games/true-false',
         emoji: '⚡',
         badge: '35+ Facts',
         badgeColor: 'bg-rose-100 text-rose-800 border-rose-200',
-        highlight: '3 Blitz Lengths',
+        highlight: 'Instant Explanations',
         status: 'live',
     },
 ];
 
 export default function GamesHub() {
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
+    const [profile, setProfile] = useState<PlayerProfile>(() => getPlayerProfile());
+    const [muted, setMuted] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [canClaimManna, setCanClaimManna] = useState(false);
+    const [mannaClaimedNotice, setMannaClaimedNotice] = useState<string | null>(null);
+
+    useEffect(() => {
+        setMuted(gameSound.isMuted());
+        const streakInfo = checkAndUpdateStreak();
+        setCanClaimManna(streakInfo.canClaimManna);
+        setProfile(getPlayerProfile());
+
+        const handleProfileUpdate = (e: Event) => {
+            const customEvent = e as CustomEvent<PlayerProfile>;
+            if (customEvent.detail) {
+                setProfile(customEvent.detail);
+            } else {
+                setProfile(getPlayerProfile());
+            }
+        };
+
+        window.addEventListener('bible_games_profile_updated', handleProfileUpdate);
+        return () => {
+            window.removeEventListener('bible_games_profile_updated', handleProfileUpdate);
+        };
+    }, []);
+
+    const handleToggleMute = () => {
+        const next = gameSound.toggleMute();
+        setMuted(next);
+        triggerHaptic('tap');
+    };
+
+    const handleClaimDailyManna = () => {
+        gameSound.playSuccess();
+        triggerHaptic('success');
+        const res = claimDailyManna();
+        if (res.success) {
+            triggerRealisticConfetti();
+            setCanClaimManna(false);
+            setMannaClaimedNotice(`+${res.bonus} Talents Claimed!`);
+            setProfile(getPlayerProfile());
+            setTimeout(() => setMannaClaimedNotice(null), 4000);
+        }
+    };
 
     const filteredGames = selectedCategory === 'all'
         ? GAMES
@@ -114,32 +163,136 @@ export default function GamesHub() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-amber-50/40 font-sans pb-20">
+            {/* Top Player Status Bar */}
+            <div className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-20">
+                <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
+                    <Link
+                        href="/"
+                        onClick={() => {
+                            gameSound.playTap();
+                            triggerHaptic('tap');
+                        }}
+                        className="inline-flex items-center gap-1.5 text-slate-500 hover:text-slate-800 text-xs sm:text-sm font-semibold transition-colors"
+                    >
+                        <ArrowLeft className="w-4 h-4" /> Home
+                    </Link>
+
+                    {/* Stats & Tools */}
+                    <div className="flex items-center gap-2">
+                        {/* Talents pill */}
+                        <div
+                            title="Your Talents (Faith Coins)"
+                            className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 border border-amber-300 text-amber-900 shadow-xs"
+                        >
+                            <span className="text-base">🪙</span>
+                            <span>{profile.talents}</span>
+                        </div>
+
+                        {/* Streak */}
+                        <div
+                            title={`Daily Streak: ${profile.streak} days`}
+                            className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-orange-100 border border-orange-200 text-orange-800"
+                        >
+                            <span className="text-sm">🔥</span>
+                            <span>{profile.streak}d</span>
+                        </div>
+
+                        {/* Trophy Cabinet */}
+                        <button
+                            type="button"
+                            onClick={() => {
+                                gameSound.playTap();
+                                triggerHaptic('tap');
+                                setShowModal(true);
+                            }}
+                            title="Trophy Cabinet & Badges"
+                            className="flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-bold bg-slate-100 hover:bg-amber-100 text-slate-700 hover:text-amber-800 border border-slate-200 transition-colors cursor-pointer"
+                        >
+                            <Trophy className="w-3.5 h-3.5 text-amber-600" />
+                            <span className="hidden sm:inline">Badges</span>
+                            <span className="bg-amber-200/80 text-amber-900 px-1.5 py-0.2 rounded-full text-[10px]">
+                                {profile.unlockedAchievements?.length || 0}
+                            </span>
+                        </button>
+
+                        {/* Sound Toggle */}
+                        <button
+                            type="button"
+                            onClick={handleToggleMute}
+                            title={muted ? 'Unmute Sound' : 'Mute Sound'}
+                            className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-600 transition-colors cursor-pointer"
+                        >
+                            {muted ? (
+                                <VolumeX className="w-4 h-4 text-rose-500" />
+                            ) : (
+                                <Volume2 className="w-4 h-4 text-emerald-600" />
+                            )}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             {/* Hero */}
-            <div className="relative overflow-hidden pt-24 pb-8 sm:pb-12">
+            <div className="relative overflow-hidden pt-8 pb-6 sm:pb-8">
                 <div className="absolute inset-0 pointer-events-none">
                     <div className="absolute top-12 left-1/4 w-80 h-80 rounded-full bg-amber-200/30 blur-3xl" />
                     <div className="absolute bottom-0 right-1/4 w-72 h-72 rounded-full bg-purple-200/25 blur-3xl" />
                 </div>
 
                 <div className="relative max-w-4xl mx-auto px-4 text-center">
-                    <Link href="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-slate-600 transition-colors text-sm mb-6">
-                        <ArrowLeft className="w-4 h-4" /> Back Home
-                    </Link>
-
-                    <div className="w-20 h-20 mx-auto mb-4 rounded-3xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/25">
-                        <Gamepad2 className="w-10 h-10 text-white" />
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 rounded-3xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/25">
+                        <Gamepad2 className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
                     </div>
 
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200 mb-3">
-                        <Sparkles className="w-3.5 h-3.5 text-amber-600" /> Massive Faith Arcade
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200 mb-2">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-600" /> Enhanced Faith Arcade
                     </div>
 
-                    <h1 className="font-serif font-bold text-4xl sm:text-6xl text-slate-900 mb-3 tracking-tight">
+                    <h1 className="font-serif font-bold text-3xl sm:text-5xl text-slate-900 mb-2 tracking-tight">
                         Bible Games Hub
                     </h1>
-                    <p className="text-slate-500 max-w-lg mx-auto text-sm sm:text-base leading-relaxed mb-6">
-                        Expand your scriptural knowledge and memory across 7 massive games packed with hundreds of questions, verses, and levels!
+                    <p className="text-slate-500 max-w-lg mx-auto text-xs sm:text-sm leading-relaxed mb-5">
+                        Expand your scriptural knowledge and memory across 7 massive games packed with sound effects, lifelines, and multiplayer fun!
                     </p>
+
+                    {/* Daily Manna Gift Banner */}
+                    <div className="max-w-md mx-auto mb-6">
+                        {canClaimManna ? (
+                            <motion.div
+                                initial={{ scale: 0.95 }}
+                                animate={{ scale: 1 }}
+                                className="bg-gradient-to-r from-amber-500 to-orange-500 text-white p-3.5 rounded-2xl shadow-lg shadow-amber-500/20 flex items-center justify-between gap-3 text-left"
+                            >
+                                <div className="flex items-center gap-2.5">
+                                    <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-lg">
+                                        🎁
+                                    </div>
+                                    <div>
+                                        <div className="font-bold text-xs">Daily Manna Available!</div>
+                                        <div className="text-[11px] text-amber-100">Claim today&apos;s free Talents (+25)</div>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={handleClaimDailyManna}
+                                    className="px-3.5 py-1.5 rounded-xl bg-white text-amber-900 font-bold text-xs shadow-sm hover:bg-amber-50 active:scale-95 transition-all cursor-pointer whitespace-nowrap"
+                                >
+                                    Claim Gift
+                                </button>
+                            </motion.div>
+                        ) : (
+                            <div className="bg-amber-50 border border-amber-200/80 rounded-2xl p-2.5 px-4 flex items-center justify-between text-xs text-amber-800">
+                                <div className="flex items-center gap-2">
+                                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                                    <span>
+                                        {mannaClaimedNotice || (
+                                            <>Daily Manna claimed! Current streak: <strong>{profile.streak} days 🔥</strong></>
+                                        )}
+                                    </span>
+                                </div>
+                                <span className="text-[11px] font-bold text-amber-600">Come back tomorrow</span>
+                            </div>
+                        )}
+                    </div>
 
                     {/* Filter Tabs */}
                     <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
@@ -153,7 +306,11 @@ export default function GamesHub() {
                             <button
                                 key={tab.id}
                                 type="button"
-                                onClick={() => setSelectedCategory(tab.id)}
+                                onClick={() => {
+                                    gameSound.playTap();
+                                    triggerHaptic('tap');
+                                    setSelectedCategory(tab.id);
+                                }}
                                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                                     selectedCategory === tab.id
                                         ? 'bg-slate-900 text-white shadow-sm'
@@ -179,6 +336,10 @@ export default function GamesHub() {
                         >
                             <Link
                                 href={game.href}
+                                onClick={() => {
+                                    gameSound.playTap();
+                                    triggerHaptic('tap');
+                                }}
                                 className="block w-full text-left rounded-3xl p-5 sm:p-6 border border-slate-200 bg-white hover:border-amber-400 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-200 group relative overflow-hidden"
                             >
                                 <div className="flex items-start gap-4">
@@ -211,6 +372,13 @@ export default function GamesHub() {
                     ))}
                 </div>
             </div>
+
+            {/* Achievements Modal */}
+            <AchievementsModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                profile={profile}
+            />
         </div>
     );
 }

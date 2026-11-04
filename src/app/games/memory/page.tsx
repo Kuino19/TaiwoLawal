@@ -2,9 +2,13 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, RotateCcw, Trophy, Clock, Sparkles, Star, ChevronRight } from 'lucide-react';
+import { ArrowLeft, RotateCcw, Trophy, Clock, Sparkles, Star, ChevronRight, Users, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { triggerRealisticConfetti } from '@/lib/confettiBurst';
+import { gameSound, triggerHaptic } from '@/lib/gameSound';
+import { earnTalents, unlockAchievement, recordGameWin } from '@/lib/gameProfile';
+import GameTopBar from '@/components/games/GameTopBar';
+import ShareScoreButton from '@/components/games/ShareScoreButton';
 
 interface CardPair {
     id: number;
@@ -81,6 +85,7 @@ function shuffle<T>(arr: T[]): T[] {
 export default function MemoryMatchGame() {
     const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard' | 'expert'>('medium');
     const [themeFilter, setThemeFilter] = useState<string>('all');
+    const [playMode, setPlayMode] = useState<'solo' | 'twoPlayer'>('solo');
     const [gameState, setGameState] = useState<'start' | 'playing' | 'won'>('start');
     const [cards, setCards] = useState<CardItem[]>([]);
     const [flippedIndices, setFlippedIndices] = useState<number[]>([]);
@@ -89,6 +94,11 @@ export default function MemoryMatchGame() {
     const [secondsElapsed, setSecondsElapsed] = useState(0);
     const [isLockBoard, setIsLockBoard] = useState(false);
     const [bestScores, setBestScores] = useState<Record<string, number>>({});
+
+    // 2-Player Pass-and-Play State
+    const [playerTurn, setPlayerTurn] = useState<1 | 2>(1);
+    const [p1Score, setP1Score] = useState(0);
+    const [p2Score, setP2Score] = useState(0);
 
     useEffect(() => {
         try {
@@ -99,15 +109,16 @@ export default function MemoryMatchGame() {
 
     const pairCount = difficulty === 'easy' ? 6 : difficulty === 'medium' ? 8 : difficulty === 'hard' ? 12 : 15;
 
-    const startNewGame = (diff = difficulty, theme = themeFilter) => {
+    const startNewGame = (diff = difficulty, theme = themeFilter, mode = playMode) => {
         setDifficulty(diff);
         setThemeFilter(theme);
+        setPlayMode(mode);
         const count = diff === 'easy' ? 6 : diff === 'medium' ? 8 : diff === 'hard' ? 12 : 15;
 
         let pool = MASSIVE_PAIRS;
         if (theme !== 'all') {
             pool = MASSIVE_PAIRS.filter(p => p.category === theme);
-            if (pool.length < count) pool = MASSIVE_PAIRS; // Fallback
+            if (pool.length < count) pool = MASSIVE_PAIRS;
         }
 
         const selectedPairs = shuffle(pool).slice(0, count);
@@ -138,6 +149,9 @@ export default function MemoryMatchGame() {
         setMatchesFound(0);
         setSecondsElapsed(0);
         setIsLockBoard(false);
+        setPlayerTurn(1);
+        setP1Score(0);
+        setP2Score(0);
         setGameState('playing');
     };
 
@@ -156,6 +170,9 @@ export default function MemoryMatchGame() {
         if (cards[index].isMatched || cards[index].isFlipped) return;
         if (flippedIndices.includes(index)) return;
 
+        gameSound.playCardFlip();
+        triggerHaptic('tap');
+
         const updated = [...cards];
         updated[index].isFlipped = true;
         setCards(updated);
@@ -172,7 +189,11 @@ export default function MemoryMatchGame() {
             const secondCard = cards[secondIdx];
 
             if (firstCard.pairId === secondCard.pairId) {
+                // MATCH FOUND!
                 setTimeout(() => {
+                    gameSound.playSuccess();
+                    triggerHaptic('success');
+
                     const matchedCards = [...cards];
                     matchedCards[firstIdx].isMatched = true;
                     matchedCards[secondIdx].isMatched = true;
@@ -182,29 +203,54 @@ export default function MemoryMatchGame() {
                     const newMatches = matchesFound + 1;
                     setMatchesFound(newMatches);
 
+                    if (playMode === 'twoPlayer') {
+                        if (playerTurn === 1) setP1Score(s => s + 1);
+                        else setP2Score(s => s + 1);
+                        // Player keeps turn upon finding a match!
+                    }
+
                     if (newMatches === pairCount) {
                         setGameState('won');
+                        gameSound.playFanfare();
+                        triggerHaptic('heavy');
                         triggerRealisticConfetti();
+                        earnTalents(25);
+                        recordGameWin('memory');
 
-                        const currentBest = bestScores[difficulty] || 999;
-                        if (moves + 1 < currentBest) {
-                            const newBest = { ...bestScores, [difficulty]: moves + 1 };
-                            setBestScores(newBest);
-                            try {
-                                localStorage.setItem('memory_match_best_scores_v2', JSON.stringify(newBest));
-                            } catch {}
+                        if (difficulty === 'hard' || difficulty === 'expert') {
+                            unlockAchievement('memory_champion');
+                        }
+
+                        if (playMode === 'solo') {
+                            const currentBest = bestScores[difficulty] || 999;
+                            if (moves + 1 < currentBest) {
+                                const newBest = { ...bestScores, [difficulty]: moves + 1 };
+                                setBestScores(newBest);
+                                try {
+                                    localStorage.setItem('memory_match_best_scores_v2', JSON.stringify(newBest));
+                                } catch {}
+                            }
                         }
                     }
-                }, 500);
+                }, 450);
             } else {
+                // MISMATCH
                 setTimeout(() => {
+                    gameSound.playError();
+                    triggerHaptic('error');
+
                     const resetCards = [...cards];
                     resetCards[firstIdx].isFlipped = false;
                     resetCards[secondIdx].isFlipped = false;
                     setCards(resetCards);
                     setFlippedIndices([]);
                     setIsLockBoard(false);
-                }, 900);
+
+                    if (playMode === 'twoPlayer') {
+                        // Pass turn to the other player
+                        setPlayerTurn(prev => (prev === 1 ? 2 : 1));
+                    }
+                }, 850);
             }
         }
     };
@@ -223,28 +269,23 @@ export default function MemoryMatchGame() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-amber-50/50 via-white to-orange-50/40 text-slate-800 flex flex-col font-sans">
-            {/* Header */}
-            <div className="bg-white/90 border-b border-slate-200 sticky top-0 z-20 backdrop-blur-md">
-                <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-                    <Link href="/games" className="text-slate-400 hover:text-slate-700 transition-colors flex items-center gap-2 text-sm font-medium">
-                        <ArrowLeft className="w-4 h-4" />
-                        <span>Games</span>
-                    </Link>
-                    <div className="font-serif font-bold text-slate-900 text-lg flex items-center gap-2">
-                        <span>🃏 Bible Memory Match</span>
-                    </div>
-                    {gameState === 'playing' ? (
+            {/* Top Bar with Talents & Badges */}
+            <GameTopBar
+                title="Bible Memory Match"
+                backHref="/games"
+                backLabel="Games"
+                theme="light"
+                extraPill={
+                    gameState === 'playing' ? (
                         <button
                             onClick={() => startNewGame()}
-                            className="text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-full hover:bg-amber-100 flex items-center gap-1 transition-all cursor-pointer"
+                            className="text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full hover:bg-amber-100 flex items-center gap-1 transition-all cursor-pointer"
                         >
-                            <RotateCcw className="w-3.5 h-3.5" /> Restart
+                            <RotateCcw className="w-3.5 h-3.5" /> Reset
                         </button>
-                    ) : (
-                        <div className="w-16" />
-                    )}
-                </div>
-            </div>
+                    ) : null
+                }
+            />
 
             <div className="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-center">
                 <AnimatePresence mode="wait">
@@ -255,43 +296,120 @@ export default function MemoryMatchGame() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95 }}
-                            className="max-w-xl mx-auto text-center space-y-6 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-xl"
+                            className="max-w-xl mx-auto w-full text-center space-y-6 bg-white p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-xl"
                         >
-                            <div className="w-20 h-20 mx-auto bg-gradient-to-br from-amber-400 to-amber-600 rounded-3xl flex items-center justify-center shadow-lg shadow-amber-500/25">
+                            <div className="w-20 h-20 mx-auto bg-gradient-to-br from-emerald-400 to-teal-500 rounded-3xl flex items-center justify-center shadow-lg shadow-emerald-500/25">
                                 <span className="text-4xl">🃏</span>
                             </div>
 
                             <div>
-                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200 mb-2">
-                                    <Sparkles className="w-3.5 h-3.5" /> 36 Bible Character Pairs
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-200 mb-2">
+                                    <Sparkles className="w-3.5 h-3.5 text-emerald-600" /> 36 Bible & Foursquare Pairs
                                 </div>
                                 <h1 className="text-3xl sm:text-4xl font-serif font-bold text-slate-900 mb-2">
                                     Bible Memory Match
                                 </h1>
-                                <p className="text-slate-500 text-sm leading-relaxed max-w-md mx-auto">
-                                    Flip cards to connect each Bible & Church figure with their faith act!
+                                <p className="text-slate-500 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
+                                    Connect Bible heroes to their miraculous deeds! Play solo or challenge family in 2-Player mode.
                                 </p>
                             </div>
 
-                            {/* Deck Theme Selector */}
+                            {/* Mode: Solo vs 2-Player Pass & Play */}
                             <div className="space-y-1.5 text-left">
                                 <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block text-center">
-                                    Select Card Deck Theme
+                                    Game Mode
                                 </label>
-                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                                <div className="grid grid-cols-2 gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            gameSound.playTap();
+                                            triggerHaptic('tap');
+                                            setPlayMode('solo');
+                                        }}
+                                        className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center gap-1 ${
+                                            playMode === 'solo'
+                                                ? 'bg-amber-500 text-white border-amber-600 shadow-md font-bold'
+                                                : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
+                                        }`}
+                                    >
+                                        <User className="w-4 h-4" />
+                                        <span className="text-xs">Solo Memory</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            gameSound.playTap();
+                                            triggerHaptic('tap');
+                                            setPlayMode('twoPlayer');
+                                        }}
+                                        className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center gap-1 ${
+                                            playMode === 'twoPlayer'
+                                                ? 'bg-purple-600 text-white border-purple-700 shadow-md font-bold'
+                                                : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
+                                        }`}
+                                    >
+                                        <Users className="w-4 h-4" />
+                                        <span className="text-xs">👥 2-Player Pass & Play</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Difficulty Selector */}
+                            <div className="space-y-1.5 text-left">
+                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block text-center">
+                                    Grid Size & Difficulty
+                                </label>
+                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                                     {[
-                                        { id: 'all', label: 'All Heroes (36)' },
-                                        { id: 'heroes', label: 'Old Testament' },
-                                        { id: 'miracles', label: 'Miracles & NT' },
-                                        { id: 'foursquare', label: 'Foursquare' }
+                                        { id: 'easy', label: 'Easy (12 Cards)', count: 6 },
+                                        { id: 'medium', label: 'Medium (16 Cards)', count: 8 },
+                                        { id: 'hard', label: 'Hard (24 Cards)', count: 12 },
+                                        { id: 'expert', label: 'Expert (30 Cards)', count: 15 },
+                                    ].map(d => (
+                                        <button
+                                            key={d.id}
+                                            type="button"
+                                            onClick={() => {
+                                                gameSound.playTap();
+                                                triggerHaptic('tap');
+                                                setDifficulty(d.id as any);
+                                            }}
+                                            className={`p-2.5 rounded-2xl border text-center transition-all cursor-pointer ${
+                                                difficulty === d.id
+                                                    ? 'bg-emerald-600 text-white border-emerald-700 shadow-md font-bold'
+                                                    : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
+                                            }`}
+                                        >
+                                            <div className="text-xs">{d.label}</div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Theme Filter */}
+                            <div className="space-y-1.5 text-left">
+                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block text-center">
+                                    Card Theme
+                                </label>
+                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                    {[
+                                        { id: 'all', label: '✨ All 36 Pairs' },
+                                        { id: 'heroes', label: '🛡️ Bible Heroes' },
+                                        { id: 'miracles', label: '🕊️ Miracles & NT' },
+                                        { id: 'foursquare', label: '⛪ Foursquare' },
                                     ].map(t => (
                                         <button
                                             key={t.id}
                                             type="button"
-                                            onClick={() => setThemeFilter(t.id)}
-                                            className={`p-2.5 rounded-xl border text-center font-bold transition-all cursor-pointer ${
+                                            onClick={() => {
+                                                gameSound.playTap();
+                                                triggerHaptic('tap');
+                                                setThemeFilter(t.id);
+                                            }}
+                                            className={`p-2 rounded-xl border text-center text-xs transition-all cursor-pointer ${
                                                 themeFilter === t.id
-                                                    ? 'bg-slate-900 text-white'
+                                                    ? 'bg-slate-900 text-white border-slate-900 font-bold'
                                                     : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                                             }`}
                                         >
@@ -301,40 +419,15 @@ export default function MemoryMatchGame() {
                                 </div>
                             </div>
 
-                            {/* Grid Size Selector */}
-                            <div className="space-y-1.5 text-left">
-                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block text-center">
-                                    Choose Grid Size
-                                </label>
-                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                                    {[
-                                        { id: 'easy', label: 'Easy', detail: '6 Pairs (12 Cards)' },
-                                        { id: 'medium', label: 'Medium', detail: '8 Pairs (16 Cards)' },
-                                        { id: 'hard', label: 'Hard', detail: '12 Pairs (24 Cards)' },
-                                        { id: 'expert', label: 'Expert', detail: '15 Pairs (30 Cards)' },
-                                    ].map(d => (
-                                        <button
-                                            key={d.id}
-                                            type="button"
-                                            onClick={() => setDifficulty(d.id as any)}
-                                            className={`p-3 rounded-2xl border text-center transition-all cursor-pointer ${
-                                                difficulty === d.id
-                                                    ? 'bg-amber-50 border-amber-500 text-amber-950 font-bold ring-1 ring-amber-500 shadow-xs'
-                                                    : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
-                                            }`}
-                                        >
-                                            <div className="text-sm font-bold">{d.label}</div>
-                                            <div className="text-[10px] text-slate-400 font-medium">{d.detail}</div>
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
                             <button
-                                onClick={() => startNewGame(difficulty, themeFilter)}
-                                className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-base shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-98"
+                                onClick={() => {
+                                    gameSound.playTap();
+                                    triggerHaptic('tap');
+                                    startNewGame(difficulty, themeFilter, playMode);
+                                }}
+                                className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-600 text-white font-bold text-base shadow-lg shadow-emerald-500/25 hover:opacity-95 active:scale-98 transition-all cursor-pointer flex items-center justify-center gap-2"
                             >
-                                Play Now <ChevronRight className="w-5 h-5" />
+                                Start Game <ChevronRight className="w-5 h-5" />
                             </button>
                         </motion.div>
                     )}
@@ -346,57 +439,60 @@ export default function MemoryMatchGame() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="flex flex-col"
+                            className="space-y-4"
                         >
-                            {/* HUD Bar */}
-                            <div className="flex items-center justify-between mb-4 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200 shadow-xs">
-                                <div className="flex items-center gap-1.5 sm:gap-2 text-slate-700 text-xs sm:text-sm font-medium">
-                                    <Clock className="w-4 h-4 text-amber-500" />
-                                    <span>Time: <strong className="font-mono text-slate-900">{formatTime(secondsElapsed)}</strong></span>
+                            {/* Score & Turn Banner */}
+                            {playMode === 'twoPlayer' ? (
+                                <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
+                                    <div className={`p-3 rounded-2xl border text-center transition-all ${
+                                        playerTurn === 1 
+                                            ? 'bg-blue-50 border-blue-400 ring-2 ring-blue-400 text-blue-950 font-bold shadow-sm'
+                                            : 'bg-white border-slate-200 text-slate-500 opacity-60'
+                                    }`}>
+                                        <div className="text-xs">🔵 Player 1 {playerTurn === 1 && '(Your Turn!)'}</div>
+                                        <div className="text-xl font-black">{p1Score} <span className="text-xs font-normal">pairs</span></div>
+                                    </div>
+                                    <div className={`p-3 rounded-2xl border text-center transition-all ${
+                                        playerTurn === 2 
+                                            ? 'bg-purple-50 border-purple-400 ring-2 ring-purple-400 text-purple-950 font-bold shadow-sm'
+                                            : 'bg-white border-slate-200 text-slate-500 opacity-60'
+                                    }`}>
+                                        <div className="text-xs">🟣 Player 2 {playerTurn === 2 && '(Your Turn!)'}</div>
+                                        <div className="text-xl font-black">{p2Score} <span className="text-xs font-normal">pairs</span></div>
+                                    </div>
                                 </div>
-
-                                <div className="flex items-center gap-1">
-                                    <span className="hidden xs:inline text-xs text-slate-400 uppercase font-bold mr-1">Rating:</span>
-                                    {[1, 2, 3].map(s => (
-                                        <Star
-                                            key={s}
-                                            className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${
-                                                s <= starCount
-                                                    ? 'text-amber-400 fill-amber-400'
-                                                    : 'text-slate-200'
-                                            }`}
-                                        />
-                                    ))}
+                            ) : (
+                                <div className="flex items-center justify-between bg-white px-4 py-2.5 rounded-2xl border border-slate-200 shadow-xs max-w-md mx-auto text-xs font-bold text-slate-600">
+                                    <div className="flex items-center gap-1 text-emerald-700">
+                                        <span>Matches:</span>
+                                        <span className="text-sm font-black">{matchesFound}/{pairCount}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1 text-amber-700">
+                                        <span>Flips:</span>
+                                        <span className="text-sm font-black">{moves}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1 text-slate-700">
+                                        <Clock className="w-3.5 h-3.5" />
+                                        <span className="font-mono text-sm">{formatTime(secondsElapsed)}</span>
+                                    </div>
                                 </div>
+                            )}
 
-                                <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm font-medium">
-                                    <span className="text-slate-600">Moves: <strong className="text-slate-900">{moves}</strong></span>
-                                    <span className="text-emerald-700 font-bold bg-emerald-50 px-2 sm:px-2.5 py-0.5 rounded-full border border-emerald-200 text-[11px] sm:text-xs">
-                                        {matchesFound}/{pairCount}
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Card Grid */}
-                            <div
-                                className={`grid gap-2 sm:gap-3.5 mx-auto w-full ${
-                                    difficulty === 'easy'
-                                        ? 'grid-cols-3 sm:grid-cols-4 max-w-xl'
-                                        : difficulty === 'medium'
-                                        ? 'grid-cols-4 max-w-2xl'
-                                        : difficulty === 'hard'
-                                        ? 'grid-cols-3 min-[420px]:grid-cols-4 sm:grid-cols-6 max-w-3xl'
-                                        : 'grid-cols-3 min-[400px]:grid-cols-4 sm:grid-cols-5 md:grid-cols-6 max-w-4xl'
-                                }`}
-                            >
+                            {/* Cards Grid */}
+                            <div className={`grid gap-2 sm:gap-3 mx-auto w-full ${
+                                difficulty === 'easy'
+                                    ? 'grid-cols-3 sm:grid-cols-4 max-w-lg'
+                                    : difficulty === 'medium'
+                                    ? 'grid-cols-4 max-w-xl'
+                                    : difficulty === 'hard'
+                                    ? 'grid-cols-4 sm:grid-cols-6 max-w-2xl'
+                                    : 'grid-cols-5 sm:grid-cols-6 max-w-3xl'
+                            }`}>
                                 {cards.map((card, idx) => {
                                     const isRevealed = card.isFlipped || card.isMatched;
-
                                     return (
                                         <motion.div
                                             key={card.uniqueId}
-                                            layout
-                                            whileHover={{ scale: card.isMatched ? 1 : 1.03 }}
                                             whileTap={{ scale: card.isMatched ? 1 : 0.96 }}
                                             onClick={() => handleCardClick(idx)}
                                             className={`aspect-[4/5] rounded-2xl p-1.5 sm:p-2.5 flex flex-col items-center justify-center text-center cursor-pointer select-none touch-manipulation transition-all duration-300 relative ${
@@ -442,58 +538,77 @@ export default function MemoryMatchGame() {
                             key="won"
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="max-w-md mx-auto text-center space-y-6 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-xl"
+                            className="max-w-md mx-auto text-center space-y-5 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xl"
                         >
                             <div className="w-20 h-20 mx-auto bg-gradient-to-br from-emerald-400 to-teal-500 rounded-3xl flex items-center justify-center shadow-lg shadow-emerald-500/25">
                                 <Trophy className="w-10 h-10 text-white" />
                             </div>
 
                             <div>
-                                <h2 className="text-3xl font-serif font-bold text-slate-900 mb-1">
-                                    Praise the Lord!
-                                </h2>
-                                <p className="text-slate-500 text-sm">
-                                    You matched all {pairCount} Bible pairs successfully!
-                                </p>
+                                {playMode === 'twoPlayer' ? (
+                                    <>
+                                        <h2 className="text-3xl font-serif font-bold text-slate-900 mb-1">
+                                            {p1Score > p2Score ? "🔵 Player 1 Wins!" : p2Score > p1Score ? "🟣 Player 2 Wins!" : "🤝 It's a Tie!"}
+                                        </h2>
+                                        <p className="text-slate-500 text-sm">
+                                            Final Score: <strong>Player 1 ({p1Score})</strong> vs <strong>Player 2 ({p2Score})</strong>
+                                        </p>
+                                    </>
+                                ) : (
+                                    <>
+                                        <h2 className="text-3xl font-serif font-bold text-slate-900 mb-1">
+                                            Praise the Lord!
+                                        </h2>
+                                        <p className="text-slate-500 text-sm">
+                                            You matched all {pairCount} Bible pairs successfully!
+                                        </p>
+                                    </>
+                                )}
                             </div>
 
-                            <div className="flex justify-center gap-2">
-                                {[1, 2, 3].map(s => (
-                                    <Star
-                                        key={s}
-                                        className={`w-8 h-8 ${
-                                            s <= starCount
-                                                ? 'text-amber-400 fill-amber-400 animate-bounce'
-                                                : 'text-slate-200'
-                                        }`}
-                                    />
-                                ))}
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold">
+                                <span>🪙 +25 Talents Earned!</span>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                            <div className="grid grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-100 text-xs">
                                 <div>
-                                    <span className="text-xs text-slate-400 uppercase font-bold">Total Time</span>
-                                    <div className="text-2xl font-black font-mono text-slate-800">{formatTime(secondsElapsed)}</div>
+                                    <span className="text-slate-400 uppercase font-bold block">Total Time</span>
+                                    <div className="text-xl font-black font-mono text-slate-800">{formatTime(secondsElapsed)}</div>
                                 </div>
                                 <div>
-                                    <span className="text-xs text-slate-400 uppercase font-bold">Total Flips</span>
-                                    <div className="text-2xl font-black font-mono text-slate-800">{moves} moves</div>
+                                    <span className="text-slate-400 uppercase font-bold block">Total Flips</span>
+                                    <div className="text-xl font-black font-mono text-slate-800">{moves} moves</div>
                                 </div>
                             </div>
 
-                            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                            {/* WhatsApp Challenge Share */}
+                            <div>
+                                <ShareScoreButton
+                                    gameName="Bible Memory Match"
+                                    resultDetails={
+                                        playMode === 'twoPlayer'
+                                            ? `Completed 2-Player Match! Player 1 (${p1Score}) vs Player 2 (${p2Score}) in ${formatTime(secondsElapsed)}!`
+                                            : `Matched all ${pairCount} pairs in ${moves} moves and ${formatTime(secondsElapsed)}!`
+                                    }
+                                    urlPath="/games/memory"
+                                    variant="whatsapp"
+                                    className="w-full"
+                                />
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row gap-2.5 pt-2">
                                 <button
-                                    onClick={() => startNewGame(difficulty, themeFilter)}
-                                    className="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 cursor-pointer hover:opacity-95"
+                                    onClick={() => startNewGame(difficulty, themeFilter, playMode)}
+                                    className="flex-1 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 cursor-pointer hover:opacity-95"
                                 >
                                     <RotateCcw className="w-4 h-4" /> Play Again
                                 </button>
-                                <Link
-                                    href="/games"
-                                    className="px-6 py-3.5 rounded-xl bg-slate-100 text-slate-700 font-semibold text-sm hover:bg-slate-200 flex items-center justify-center"
+                                <button
+                                    onClick={() => setGameState('start')}
+                                    className="px-5 py-3 rounded-xl bg-slate-100 text-slate-700 font-semibold text-xs hover:bg-slate-200 flex items-center justify-center cursor-pointer"
                                 >
-                                    All Games
-                                </Link>
+                                    Change Mode
+                                </button>
                             </div>
                         </motion.div>
                     )}

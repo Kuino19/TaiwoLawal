@@ -1,10 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { triggerRealisticConfetti } from '@/lib/confettiBurst';
-import { ArrowLeft, CheckCircle2, RotateCcw, ChevronRight, Lightbulb, Trophy, Sparkles, BookOpen } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, RotateCcw, ChevronRight, Lightbulb, Trophy, Sparkles, BookOpen, Flame, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { gameSound, triggerHaptic } from '@/lib/gameSound';
+import { earnTalents, unlockAchievement, recordGameWin } from '@/lib/gameProfile';
+import GameTopBar from '@/components/games/GameTopBar';
+import ShareScoreButton from '@/components/games/ShareScoreButton';
 
 interface VerseData {
     id: number;
@@ -93,7 +97,8 @@ export default function VerseScrambleGame() {
     const [selected, setSelected] = useState<WordObj[]>([]);
     const [isWin, setIsWin] = useState(false);
     const [showHint, setShowHint] = useState(false);
-    const [selectedPack, setSelectedPack] = useState<string>('All');
+    const [combo, setCombo] = useState(1);
+    const lastTapTimeRef = useRef<number>(0);
 
     // Load progress
     useEffect(() => {
@@ -116,6 +121,7 @@ export default function VerseScrambleGame() {
         setSelected([]);
         setIsWin(false);
         setShowHint(false);
+        setCombo(1);
     }, [levelIndex, currentVerse]);
 
     // Check for win
@@ -125,7 +131,15 @@ export default function VerseScrambleGame() {
             const currentSentence = selected.map(s => s.word.trim()).join(' ');
             if (currentSentence.toLowerCase() === currentVerse.text.toLowerCase()) {
                 setIsWin(true);
+                gameSound.playFanfare();
+                triggerHaptic('heavy');
                 triggerRealisticConfetti();
+                earnTalents(20);
+                recordGameWin('scramble');
+
+                if (levelIndex >= 4) {
+                    unlockAchievement('scramble_ace');
+                }
 
                 const nextLevel = levelIndex + 1;
                 if (nextLevel > highestUnlocked && nextLevel < MASSIVE_VERSES.length) {
@@ -134,81 +148,117 @@ export default function VerseScrambleGame() {
                         localStorage.setItem('verse_scramble_highest_level_v2', String(nextLevel));
                     } catch {}
                 }
+            } else {
+                gameSound.playError();
+                triggerHaptic('error');
             }
         }
     }, [selected, pool, currentVerse, isWin, levelIndex, highestUnlocked]);
 
     const handleSelectWord = (word: WordObj) => {
+        const now = Date.now();
+        const diff = now - lastTapTimeRef.current;
+        lastTapTimeRef.current = now;
+
+        let nextCombo = combo;
+        if (diff > 0 && diff < 2200) {
+            nextCombo = Math.min(combo + 1, 4);
+            setCombo(nextCombo);
+            if (nextCombo >= 3) {
+                unlockAchievement('combo_master');
+            }
+        } else {
+            nextCombo = 1;
+            setCombo(1);
+        }
+
+        gameSound.playCombo(nextCombo);
+        triggerHaptic('tap');
+
         setPool(prev => prev.filter(w => w.id !== word.id));
         setSelected(prev => [...prev, word]);
     };
 
     const handleDeselectWord = (word: WordObj) => {
+        gameSound.playCardFlip();
+        triggerHaptic('tap');
         setSelected(prev => prev.filter(w => w.id !== word.id));
         setPool(prev => [...prev, word]);
+        setCombo(1);
     };
 
     const handleReset = () => {
+        gameSound.playTap();
+        triggerHaptic('tap');
         const words = currentVerse.text.split(' ').map((w, i) => ({ id: `${i}-${w}-${Math.random()}`, word: w }));
         setPool(shuffleArray(words));
         setSelected([]);
         setIsWin(false);
+        setCombo(1);
     };
 
     const handleNextLevel = () => {
+        gameSound.playTap();
+        triggerHaptic('tap');
         if (levelIndex < MASSIVE_VERSES.length - 1) {
             setLevelIndex(prev => prev + 1);
         }
     };
 
-    // Filter verses for selector
-    const PACK_NAMES = [
-        "All Verses",
-        "Faith & Foundations",
-        "Strength & Courage",
-        "Peace, Love & Wisdom",
-        "Praise, Joy & Promises",
-        "Victory & Eternal Life"
-    ];
-
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-            {/* Header */}
-            <div className="bg-white border-b border-slate-200 sticky top-0 z-10">
-                <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-                    <Link href="/games" className="text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-2 text-sm font-medium">
-                        <ArrowLeft className="w-4 h-4" />
-                        <span className="hidden sm:inline">Games</span>
-                    </Link>
-                    <div className="font-serif font-bold text-slate-800 text-lg flex items-center gap-2">
-                        <span>🔤 Verse Scramble</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <select 
-                            value={levelIndex} 
-                            onChange={(e) => setLevelIndex(Number(e.target.value))}
-                            className="bg-amber-50 border border-amber-200 text-amber-900 font-bold text-xs px-2.5 py-1.5 rounded-full cursor-pointer focus:outline-none max-w-[125px] sm:max-w-xs truncate"
-                        >
-                            {MASSIVE_VERSES.map((v, idx) => (
-                                <option key={idx} value={idx}>
-                                    Verse {idx + 1}: {v.reference} ({v.pack.split('&')[0]})
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
-            </div>
+            {/* Top Bar with Talents & Badges */}
+            <GameTopBar
+                title="Verse Scramble"
+                backHref="/games"
+                backLabel="Games"
+                theme="light"
+                extraPill={
+                    <select 
+                        value={levelIndex} 
+                        onChange={(e) => {
+                            gameSound.playTap();
+                            setLevelIndex(Number(e.target.value));
+                        }}
+                        className="bg-amber-100 border border-amber-300 text-amber-900 font-bold text-xs px-2.5 py-1 rounded-full cursor-pointer focus:outline-none max-w-[120px] sm:max-w-xs truncate"
+                    >
+                        {MASSIVE_VERSES.map((v, idx) => (
+                            <option key={idx} value={idx}>
+                                {idx + 1}. {v.reference}
+                            </option>
+                        ))}
+                    </select>
+                }
+            />
 
             <div className="flex-1 max-w-3xl w-full mx-auto p-4 sm:p-8 flex flex-col">
                 <div className="text-center mb-5">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200 mb-2">
-                        <Sparkles className="w-3.5 h-3.5" /> Pack: {currentVerse.pack} • Verse {levelIndex + 1}/50
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200">
+                            <Sparkles className="w-3.5 h-3.5 text-amber-600" /> {currentVerse.pack} • {levelIndex + 1}/50
+                        </span>
+
+                        {/* Combo Multiplier Badge */}
+                        {combo > 1 && (
+                            <motion.span
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-black uppercase tracking-wider border shadow-xs ${
+                                    combo >= 3 
+                                        ? 'bg-gradient-to-r from-amber-500 to-rose-500 text-white border-amber-400 animate-pulse'
+                                        : 'bg-orange-100 text-orange-800 border-orange-300'
+                                }`}
+                            >
+                                <Zap className="w-3.5 h-3.5" /> {combo}x Speed Combo!
+                            </motion.span>
+                        )}
                     </div>
+
                     <h2 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900 mb-1">
                         {currentVerse.reference}
                     </h2>
-                    <p className="text-slate-500 text-sm">
-                        Tap words to reconstruct the Holy Scripture in correct sequence!
+                    <p className="text-slate-500 text-xs sm:text-sm">
+                        Tap words rapidly to assemble Holy Scripture and build your speed combo!
                     </p>
                 </div>
 
@@ -219,12 +269,12 @@ export default function VerseScrambleGame() {
                         animate={{ opacity: 1, y: 0 }}
                         className="bg-amber-50 border border-amber-200 text-amber-900 p-3.5 rounded-xl text-xs sm:text-sm text-center mb-4"
                     >
-                        <strong>Hint:</strong> The verse begins with: &quot;<em>{currentVerse.text.split(' ').slice(0, 3).join(' ')}...</em>&quot;
+                        <strong>Scripture Clue:</strong> The verse opens with: &quot;<em>{currentVerse.text.split(' ').slice(0, 3).join(' ')}...</em>&quot;
                     </motion.div>
                 )}
 
                 {/* Selected Words Area */}
-                <div className={`bg-white rounded-2xl shadow-sm border-2 p-6 mb-5 min-h-[160px] flex items-center justify-center transition-all ${
+                <div className={`bg-white rounded-2xl shadow-sm border-2 p-5 sm:p-6 mb-5 min-h-[150px] flex items-center justify-center transition-all ${
                     isWin ? 'border-emerald-400 bg-emerald-50/30' : 'border-slate-200'
                 }`}>
                     <div className="flex flex-wrap gap-2 items-center justify-center">
@@ -234,7 +284,7 @@ export default function VerseScrambleGame() {
                                     initial={{ opacity: 0 }} 
                                     animate={{ opacity: 1 }} 
                                     exit={{ opacity: 0 }}
-                                    className="text-slate-300 italic text-sm sm:text-base"
+                                    className="text-slate-300 italic text-sm sm:text-base text-center"
                                 >
                                     Tap words below to arrange them here...
                                 </motion.span>
@@ -285,13 +335,27 @@ export default function VerseScrambleGame() {
                     <motion.div 
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 text-center my-4"
+                        className="bg-emerald-50 border border-emerald-200 rounded-3xl p-6 text-center my-4 shadow-sm"
                     >
                         <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto mb-2" />
                         <h3 className="text-xl font-bold text-emerald-900 mb-1">Praise God! Verse Completed!</h3>
-                        <p className="text-emerald-700 text-sm max-w-md mx-auto">
-                            &quot;{currentVerse.text}.&quot; — <strong>{currentVerse.reference}</strong>
+                        <p className="text-emerald-800 text-sm max-w-md mx-auto mb-3 font-medium">
+                            &ldquo;{currentVerse.text}.&rdquo; — <strong>{currentVerse.reference}</strong>
                         </p>
+                        
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold mb-4">
+                            <span>🪙 +20 Talents Earned!</span>
+                        </div>
+
+                        {/* WhatsApp Share Button */}
+                        <div className="flex justify-center">
+                            <ShareScoreButton
+                                gameName="Verse Scramble"
+                                resultDetails={`Assembled scripture "${currentVerse.reference}" with ${combo}x speed combo!`}
+                                urlPath="/games/scramble"
+                                variant="whatsapp"
+                            />
+                        </div>
                     </motion.div>
                 )}
 
@@ -307,7 +371,11 @@ export default function VerseScrambleGame() {
                                 Reset Words
                             </button>
                             <button
-                                onClick={() => setShowHint(prev => !prev)}
+                                onClick={() => {
+                                    gameSound.playTap();
+                                    triggerHaptic('tap');
+                                    setShowHint(prev => !prev);
+                                }}
                                 className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-amber-700 bg-amber-50 border border-amber-200 hover:bg-amber-100 text-xs transition-colors cursor-pointer"
                             >
                                 <Lightbulb className="w-4 h-4" />

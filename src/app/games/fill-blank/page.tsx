@@ -2,9 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, CheckCircle2, XCircle, RotateCcw, Trophy, ChevronRight, Sparkles, Flame } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, XCircle, RotateCcw, Trophy, ChevronRight, Sparkles, Flame, Lightbulb } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { triggerRealisticConfetti } from '@/lib/confettiBurst';
+import { gameSound, triggerHaptic } from '@/lib/gameSound';
+import { earnTalents, spendTalents, recordGameWin } from '@/lib/gameProfile';
+import GameTopBar from '@/components/games/GameTopBar';
+import ShareScoreButton from '@/components/games/ShareScoreButton';
 
 interface BlankQuestion {
     id: number;
@@ -308,6 +312,7 @@ export default function FillInTheBlankGame() {
     const [highestStreak, setHighestStreak] = useState(0);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
+    const [hintNotice, setHintNotice] = useState<string | null>(null);
 
     const startNewGame = (count = roundCount) => {
         setRoundCount(count);
@@ -322,10 +327,28 @@ export default function FillInTheBlankGame() {
         setHighestStreak(0);
         setSelectedOption(null);
         setFeedback(null);
+        setHintNotice(null);
         setGameState('playing');
     };
 
     const currentQ = questions[currentIndex];
+
+    const handleUseHint = () => {
+        if (feedback !== null || !currentQ) return;
+        const success = spendTalents(10);
+        if (!success) {
+            gameSound.playError();
+            triggerHaptic('error');
+            setHintNotice("Need 10 Talents 🪙 for Letter Hint!");
+            setTimeout(() => setHintNotice(null), 2500);
+            return;
+        }
+
+        gameSound.playSuccess();
+        triggerHaptic('success');
+        setHintNotice(`Hint: Starts with "${currentQ.blankWord[0].toUpperCase()}"! (-10 🪙)`);
+        setTimeout(() => setHintNotice(null), 3500);
+    };
 
     const handleSelectOption = (word: string) => {
         if (feedback !== null) return;
@@ -335,48 +358,52 @@ export default function FillInTheBlankGame() {
         setFeedback(isCorrect ? 'correct' : 'wrong');
 
         if (isCorrect) {
+            gameSound.playSuccess();
+            triggerHaptic('success');
             const newStreak = streak + 1;
             setStreak(newStreak);
             if (newStreak > highestStreak) setHighestStreak(newStreak);
             const streakBonus = newStreak >= 3 ? 5 : 0;
             setScore(prev => prev + 10 + streakBonus);
         } else {
+            gameSound.playError();
+            triggerHaptic('error');
             setStreak(0);
         }
 
         setTimeout(() => {
             setFeedback(null);
             setSelectedOption(null);
+            setHintNotice(null);
             if (currentIndex < questions.length - 1) {
                 setCurrentIndex(prev => prev + 1);
             } else {
                 setGameState('end');
+                gameSound.playFanfare();
+                triggerHaptic('heavy');
                 triggerRealisticConfetti();
+                earnTalents(20);
+                recordGameWin('fill_blank');
             }
         }, 1400);
     };
 
     return (
         <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans">
-            {/* Header */}
-            <div className="bg-white border-b border-slate-200 sticky top-0 z-20">
-                <div className="max-w-3xl mx-auto px-4 h-16 flex items-center justify-between">
-                    <Link href="/games" className="text-slate-400 hover:text-slate-700 transition-colors flex items-center gap-2 text-sm font-medium">
-                        <ArrowLeft className="w-4 h-4" />
-                        <span>Games</span>
-                    </Link>
-                    <div className="font-serif font-bold text-slate-900 text-lg flex items-center gap-2">
-                        <span>✏️ Fill-in-the-Blank</span>
-                    </div>
-                    {gameState === 'playing' ? (
-                        <div className="text-xs font-mono font-bold bg-amber-50 border border-amber-200 text-amber-800 px-3 py-1.5 rounded-full">
-                            Score: {score} pts
+            {/* Top Bar with Profile Stats */}
+            <GameTopBar
+                title="Fill-in-the-Blank"
+                backHref="/games"
+                backLabel="Games"
+                theme="light"
+                extraPill={
+                    gameState === 'playing' ? (
+                        <div className="text-xs font-mono font-bold bg-amber-50 border border-amber-200 text-amber-800 px-2.5 py-1 rounded-full">
+                            {score} pts
                         </div>
-                    ) : (
-                        <div className="w-16" />
-                    )}
-                </div>
-            </div>
+                    ) : null
+                }
+            />
 
             <div className="flex-1 max-w-2xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-center">
                 <AnimatePresence mode="wait">
@@ -471,7 +498,24 @@ export default function FillInTheBlankGame() {
                                     <span className="text-xs font-mono font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
                                         📖 {currentQ.reference}
                                     </span>
+
+                                    <button
+                                        type="button"
+                                        onClick={handleUseHint}
+                                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 font-bold text-xs shadow-2xs active:scale-95 transition-all cursor-pointer"
+                                        title="Reveal first letter (-10 Talents)"
+                                    >
+                                        <Lightbulb className="w-3.5 h-3.5 text-amber-700" />
+                                        <span>Hint</span>
+                                        <span className="text-[10px] bg-amber-200 px-1.5 py-0.2 rounded-full font-extrabold">-10 🪙</span>
+                                    </button>
                                 </div>
+
+                                {hintNotice && (
+                                    <div className="mb-4 p-2.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-bold text-center animate-bounce">
+                                        {hintNotice}
+                                    </div>
+                                )}
 
                                 <div className="text-xl sm:text-2xl font-serif text-slate-900 leading-relaxed mb-6">
                                     <span>&ldquo;{currentQ.sentenceBefore} </span>
@@ -566,8 +610,23 @@ export default function FillInTheBlankGame() {
                                     {score} <span className="text-2xl text-slate-400 font-medium">pts</span>
                                 </div>
 
-                                <div className="text-xs text-slate-500">
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold mb-3">
+                                    <span>🪙 +20 Talents Earned!</span>
+                                </div>
+
+                                <div className="text-xs text-slate-500 mb-4">
                                     Best Combo Streak: <strong className="text-amber-700">{highestStreak} in a row</strong>
+                                </div>
+
+                                {/* WhatsApp Challenge Share */}
+                                <div className="max-w-sm mx-auto">
+                                    <ShareScoreButton
+                                        gameName="Fill-in-the-Blank"
+                                        resultDetails={`Completed the Scripture Fill-in-the-Blank with ${score} pts and a ${highestStreak}-question streak!`}
+                                        urlPath="/games/fill-blank"
+                                        variant="whatsapp"
+                                        className="w-full"
+                                    />
                                 </div>
                             </div>
 
