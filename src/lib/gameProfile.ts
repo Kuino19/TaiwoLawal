@@ -248,14 +248,14 @@ export const shareScoreWhatsApp = (gameName: string, resultDetails: string, urlP
 
     const domain = window.location.origin;
     const shareUrl = `${domain}${urlPath}`;
-    const text = `🏆 *${gameName} - Foursquare Faith Arcade* ✝️\n\n${resultDetails}\n\nCan you beat my record? Play now:\n👉 ${shareUrl}`;
+    const text = `🏆 *${gameName} - Holy Bible Arcade (KJV)* ✝️\n\n${resultDetails}\n\nCan you beat my record? Play now:\n👉 ${shareUrl}`;
 
     const encoded = encodeURIComponent(text);
     const waUrl = `https://wa.me/?text=${encoded}`;
 
     if (navigator.share && /mobile|android|iphone/i.test(navigator.userAgent)) {
         navigator.share({
-            title: `${gameName} - Foursquare Games`,
+            title: `${gameName} - Bible Games (KJV)`,
             text: text,
             url: shareUrl
         }).catch(() => {

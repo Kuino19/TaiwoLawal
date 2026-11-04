@@ -15,53 +15,65 @@ interface CardPair {
     character: string;
     description: string;
     emoji: string;
-    category: 'heroes' | 'miracles' | 'prophets' | 'foursquare';
+    category: 'patriarchs' | 'prophets' | 'apostles' | 'covenants';
 }
 
 const MASSIVE_PAIRS: CardPair[] = [
-    // Bible Heroes
-    { id: 1, character: "Noah", description: "Built the Ark", emoji: "🚢", category: 'heroes' },
-    { id: 2, character: "David", description: "Defeated Goliath", emoji: "🪨", category: 'heroes' },
-    { id: 3, character: "Moses", description: "Parted the Red Sea", emoji: "🌊", category: 'heroes' },
-    { id: 4, character: "Jonah", description: "Swallowed by a Fish", emoji: "🐋", category: 'heroes' },
-    { id: 5, character: "Daniel", description: "Survived the Lions' Den", emoji: "🦁", category: 'heroes' },
-    { id: 6, character: "Abraham", description: "Father of Many Nations", emoji: "⭐", category: 'heroes' },
-    { id: 7, character: "Joseph", description: "Coat of Many Colors", emoji: "🧥", category: 'heroes' },
-    { id: 8, character: "Samson", description: "Unmatched Strength", emoji: "💪", category: 'heroes' },
-    { id: 9, character: "Ruth", description: "Loyal Daughter-in-law", emoji: "🌾", category: 'heroes' },
-    { id: 10, character: "Esther", description: "Brave Queen of Persia", emoji: "👑", category: 'heroes' },
-    { id: 11, character: "Joshua", description: "Fell the Walls of Jericho", emoji: "🎺", category: 'heroes' },
-    { id: 12, character: "Gideon", description: "300 Brave Warriors", emoji: "🏺", category: 'heroes' },
-    { id: 13, character: "Deborah", description: "Prophetess & Judge of Israel", emoji: "🌴", category: 'heroes' },
-    { id: 14, character: "Nehemiah", description: "Rebuilt Jerusalem's Walls", emoji: "🧱", category: 'heroes' },
-    { id: 15, character: "Shadrach & Friends", description: "Fiery Furnace Survivors", emoji: "🔥", category: 'heroes' },
-
-    // Miracles & New Testament
-    { id: 16, character: "Peter", description: "Walked on Water", emoji: "🚶‍♂️", category: 'miracles' },
-    { id: 17, character: "Paul", description: "Apostle to the Gentiles", emoji: "📜", category: 'miracles' },
-    { id: 18, character: "Lazarus", description: "Raised After 4 Days", emoji: "🪦", category: 'miracles' },
-    { id: 19, character: "Zacchaeus", description: "Climbed a Sycamore Tree", emoji: "🌳", category: 'miracles' },
-    { id: 20, character: "Blind Bartimaeus", description: "Healed by Jesus", emoji: "👁️", category: 'miracles' },
-    { id: 21, character: "Stephen", description: "First Christian Martyr", emoji: "✨", category: 'miracles' },
-    { id: 22, character: "Philip", description: "Preached to Ethiopian Official", emoji: "📖", category: 'miracles' },
-    { id: 23, character: "Timothy", description: "Faithful Young Pastor", emoji: "📜", category: 'miracles' },
-    { id: 24, character: "John the Baptist", description: "Baptized Jesus in Jordan", emoji: "🕊️", category: 'miracles' },
+    // Patriarchs & Judges
+    { id: 1, character: "Noah", description: "Built Ark of Gopher Wood", emoji: "🚢", category: 'patriarchs' },
+    { id: 2, character: "Abraham", description: "Father of the Faithful", emoji: "⭐", category: 'patriarchs' },
+    { id: 3, character: "Isaac", description: "Offered upon Mount Moriah", emoji: "🪵", category: 'patriarchs' },
+    { id: 4, character: "Jacob", description: "Prevailed with God at Peniel", emoji: "🤼", category: 'patriarchs' },
+    { id: 5, character: "Joseph", description: "Coat of Many Colours", emoji: "🧥", category: 'patriarchs' },
+    { id: 6, character: "Moses", description: "Parted the Red Sea", emoji: "🌊", category: 'patriarchs' },
+    { id: 7, character: "Joshua", description: "Walls of Jericho Fell Down", emoji: "🎺", category: 'patriarchs' },
+    { id: 8, character: "Gideon", description: "Defeated Midian with 300 Men", emoji: "🏺", category: 'patriarchs' },
+    { id: 9, character: "Samson", description: "Smote Philistines with Jawbone", emoji: "💪", category: 'patriarchs' },
+    { id: 10, character: "Deborah", description: "Judge Dwelling under Palm Tree", emoji: "🌴", category: 'patriarchs' },
+    { id: 11, character: "Ruth", description: "Thy People Shall Be My People", emoji: "🌾", category: 'patriarchs' },
+    { id: 12, character: "Boaz", description: "The Worthy Kinsman-Redeemer", emoji: "🌾", category: 'patriarchs' },
 
     // Prophets & Kings
-    { id: 25, character: "Elijah", description: "Called Fire from Heaven", emoji: "🔥", category: 'prophets' },
-    { id: 26, character: "Elisha", description: "Double Portion of Spirit", emoji: "⚡", category: 'prophets' },
-    { id: 27, character: "Solomon", description: "Wisest King of Israel", emoji: "🏛️", category: 'prophets' },
-    { id: 28, character: "Hannah", description: "Mother of Prophet Samuel", emoji: "👶", category: 'prophets' },
-    { id: 29, character: "Josiah", description: "Boy King Who Restored the Law", emoji: "👑", category: 'prophets' },
-    { id: 30, character: "Isaiah", description: "Prophesied the Messiah", emoji: "📜", category: 'prophets' },
+    { id: 13, character: "Samuel", description: "Anointed Saul and David", emoji: "🫒", category: 'prophets' },
+    { id: 14, character: "David", description: "Slew Goliath with Sling & Stone", emoji: "🪨", category: 'prophets' },
+    { id: 15, character: "Solomon", description: "Built the Holy Temple in Zion", emoji: "🏛️", category: 'prophets' },
+    { id: 16, character: "Elijah", description: "Fire Fell upon Mount Carmel", emoji: "🔥", category: 'prophets' },
+    { id: 17, character: "Elisha", description: "Double Portion of the Spirit", emoji: "⚡", category: 'prophets' },
+    { id: 18, character: "Isaiah", description: "Saw the Lord High & Lifted Up", emoji: "📜", category: 'prophets' },
+    { id: 19, character: "Jeremiah", description: "Weeping Prophet of Judah", emoji: "💧", category: 'prophets' },
+    { id: 20, character: "Daniel", description: "Delivered from Lions' Den", emoji: "🦁", category: 'prophets' },
+    { id: 21, character: "Ezekiel", description: "Vision of the Valley of Dry Bones", emoji: "🦴", category: 'prophets' },
+    { id: 22, character: "Josiah", description: "Repaired the Temple at Eight Years", emoji: "👑", category: 'prophets' },
+    { id: 23, character: "Nehemiah", description: "Rebuilt Walls in Fifty-Two Days", emoji: "🧱", category: 'prophets' },
+    { id: 24, character: "Esther", description: "If I Perish, I Perish", emoji: "👑", category: 'prophets' },
 
-    // Foursquare Gospel Church Heritage
-    { id: 31, character: "Aimee Semple McPherson", description: "Foursquare Founder (1923)", emoji: "⛪", category: 'foursquare' },
-    { id: 32, character: "Rev. Harold & Faye Curtis", description: "Pioneered Nigeria in 1955", emoji: "🇳🇬", category: 'foursquare' },
-    { id: 33, character: "Rev. (Dr.) Sam Aboyeji", description: "General Overseer Nigeria", emoji: "✝️", category: 'foursquare' },
-    { id: 34, character: "Ajebo Camp", description: "Main National Camp in Ogun", emoji: "⛺", category: 'foursquare' },
-    { id: 35, character: "4-Fold Gospel", description: "Saviour, Baptizer, Healer, King", emoji: "🛡️", category: 'foursquare' },
-    { id: 36, character: "Platinum Jubilee", description: "70th Anniversary in 2025", emoji: "🎉", category: 'foursquare' },
+    // Gospels & Apostles
+    { id: 25, character: "John the Baptist", description: "Voice Crying in the Wilderness", emoji: "🕊️", category: 'apostles' },
+    { id: 26, character: "Peter", description: "Walked on the Sea to Jesus", emoji: "🚶‍♂️", category: 'apostles' },
+    { id: 27, character: "John", description: "The Disciple Whom Jesus Loved", emoji: "🦅", category: 'apostles' },
+    { id: 28, character: "Paul", description: "Apostle unto the Gentiles", emoji: "📜", category: 'apostles' },
+    { id: 29, character: "Stephen", description: "Saw Heaven Opened Being Stoned", emoji: "✨", category: 'apostles' },
+    { id: 30, character: "Philip", description: "Joined the Chariot in Gaza", emoji: "📖", category: 'apostles' },
+    { id: 31, character: "Barnabas", description: "Son of Consolation & Apostle", emoji: "🤝", category: 'apostles' },
+    { id: 32, character: "Lazarus", description: "Came Forth from Grave After 4 Days", emoji: "🪦", category: 'apostles' },
+    { id: 33, character: "Zacchaeus", description: "Climbed the Sycamore-Fig Tree", emoji: "🌳", category: 'apostles' },
+    { id: 34, character: "Blind Bartimaeus", description: "Cried: Son of David, Have Mercy!", emoji: "👁️", category: 'apostles' },
+    { id: 35, character: "Mary Magdalene", description: "First Witness of the Resurrected Lord", emoji: "🌅", category: 'apostles' },
+    { id: 36, character: "Silas", description: "Sang Praises at Midnight in Prison", emoji: "⛓️", category: 'apostles' },
+
+    // Parables, Covenants & Types of Christ
+    { id: 37, character: "Melchizedek", description: "King of Salem, Priest of Most High", emoji: "🍞", category: 'covenants' },
+    { id: 38, character: "The Brazen Serpent", description: "Lifted Up on Pole for Healing", emoji: "⚕️", category: 'covenants' },
+    { id: 39, character: "Ark of the Covenant", description: "Mercy Seat Overshadowed by Cherubim", emoji: "✨", category: 'covenants' },
+    { id: 40, character: "The Passover Lamb", description: "Blood Struck upon the Doorposts", emoji: "🐑", category: 'covenants' },
+    { id: 41, character: "The Rock in Horeb", description: "Smitten Once to Gush Living Waters", emoji: "💧", category: 'covenants' },
+    { id: 42, character: "City of Refuge", description: "Sanctuary for the Manslayer", emoji: "🏰", category: 'covenants' },
+    { id: 43, character: "The Good Samaritan", description: "Bound Wounds Pouring Oil and Wine", emoji: "🩹", category: 'covenants' },
+    { id: 44, character: "The Prodigal Son", description: "Returned Home to Best Robe & Ring", emoji: "🏃‍♂️", category: 'covenants' },
+    { id: 45, character: "Pearl of Great Price", description: "Sold All Possessions to Buy It", emoji: "💎", category: 'covenants' },
+    { id: 46, character: "The Sower", description: "Seed Fell on Good Ground Yielding 100-Fold", emoji: "🌱", category: 'covenants' },
+    { id: 47, character: "The True Vine", description: "Every Branch in Me That Beareth Fruit", emoji: "🍇", category: 'covenants' },
+    { id: 48, character: "The Good Shepherd", description: "Giveth His Life for the Sheep", emoji: "🐑", category: 'covenants' },
 ];
 
 type CardItem = {
@@ -83,7 +95,7 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 export default function MemoryMatchGame() {
-    const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard' | 'expert'>('medium');
+    const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard' | 'expert' | 'scholar'>('medium');
     const [themeFilter, setThemeFilter] = useState<string>('all');
     const [playMode, setPlayMode] = useState<'solo' | 'twoPlayer'>('solo');
     const [gameState, setGameState] = useState<'start' | 'playing' | 'won'>('start');
@@ -107,13 +119,13 @@ export default function MemoryMatchGame() {
         } catch {}
     }, []);
 
-    const pairCount = difficulty === 'easy' ? 6 : difficulty === 'medium' ? 8 : difficulty === 'hard' ? 12 : 15;
+    const pairCount = difficulty === 'easy' ? 6 : difficulty === 'medium' ? 8 : difficulty === 'hard' ? 12 : difficulty === 'expert' ? 16 : 20;
 
     const startNewGame = (diff = difficulty, theme = themeFilter, mode = playMode) => {
         setDifficulty(diff);
         setThemeFilter(theme);
         setPlayMode(mode);
-        const count = diff === 'easy' ? 6 : diff === 'medium' ? 8 : diff === 'hard' ? 12 : 15;
+        const count = diff === 'easy' ? 6 : diff === 'medium' ? 8 : diff === 'hard' ? 12 : diff === 'expert' ? 16 : 20;
 
         let pool = MASSIVE_PAIRS;
         if (theme !== 'all') {
@@ -304,13 +316,13 @@ export default function MemoryMatchGame() {
 
                             <div>
                                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-200 mb-2">
-                                    <Sparkles className="w-3.5 h-3.5 text-emerald-600" /> 36 Bible & Foursquare Pairs
+                                    <Sparkles className="w-3.5 h-3.5 text-emerald-600" /> 48 Holy Scripture Pairs (KJV)
                                 </div>
                                 <h1 className="text-3xl sm:text-4xl font-serif font-bold text-slate-900 mb-2">
                                     Bible Memory Match
                                 </h1>
                                 <p className="text-slate-500 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
-                                    Connect Bible heroes to their miraculous deeds! Play solo or challenge family in 2-Player mode.
+                                    Connect Scripture heroes, parables, and covenants! Play solo or challenge family in 2-Player Pass &amp; Play.
                                 </p>
                             </div>
 
@@ -360,12 +372,13 @@ export default function MemoryMatchGame() {
                                 <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block text-center">
                                     Grid Size & Difficulty
                                 </label>
-                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                                     {[
-                                        { id: 'easy', label: 'Easy (12 Cards)', count: 6 },
-                                        { id: 'medium', label: 'Medium (16 Cards)', count: 8 },
-                                        { id: 'hard', label: 'Hard (24 Cards)', count: 12 },
-                                        { id: 'expert', label: 'Expert (30 Cards)', count: 15 },
+                                        { id: 'easy', label: 'Easy (12)', count: 6 },
+                                        { id: 'medium', label: 'Medium (16)', count: 8 },
+                                        { id: 'hard', label: 'Hard (24)', count: 12 },
+                                        { id: 'expert', label: 'Expert (32)', count: 16 },
+                                        { id: 'scholar', label: 'Scholar (40)', count: 20 },
                                     ].map(d => (
                                         <button
                                             key={d.id}
@@ -375,13 +388,13 @@ export default function MemoryMatchGame() {
                                                 triggerHaptic('tap');
                                                 setDifficulty(d.id as any);
                                             }}
-                                            className={`p-2.5 rounded-2xl border text-center transition-all cursor-pointer ${
+                                            className={`p-2 rounded-2xl border text-center transition-all cursor-pointer ${
                                                 difficulty === d.id
                                                     ? 'bg-emerald-600 text-white border-emerald-700 shadow-md font-bold'
                                                     : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                                             }`}
                                         >
-                                            <div className="text-xs">{d.label}</div>
+                                            <div className="text-xs font-bold">{d.label}</div>
                                         </button>
                                     ))}
                                 </div>
@@ -392,12 +405,13 @@ export default function MemoryMatchGame() {
                                 <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block text-center">
                                     Card Theme
                                 </label>
-                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                     {[
-                                        { id: 'all', label: '✨ All 36 Pairs' },
-                                        { id: 'heroes', label: '🛡️ Bible Heroes' },
-                                        { id: 'miracles', label: '🕊️ Miracles & NT' },
-                                        { id: 'foursquare', label: '⛪ Foursquare' },
+                                        { id: 'all', label: '✨ All 48 Pairs' },
+                                        { id: 'patriarchs', label: '📜 Patriarchs & Judges' },
+                                        { id: 'prophets', label: '👑 Prophets & Kings' },
+                                        { id: 'apostles', label: '🕊️ Gospels & Apostles' },
+                                        { id: 'covenants', label: '✝️ Parables & Covenants' },
                                     ].map(t => (
                                         <button
                                             key={t.id}
@@ -486,7 +500,9 @@ export default function MemoryMatchGame() {
                                     ? 'grid-cols-4 max-w-xl'
                                     : difficulty === 'hard'
                                     ? 'grid-cols-4 sm:grid-cols-6 max-w-2xl'
-                                    : 'grid-cols-5 sm:grid-cols-6 max-w-3xl'
+                                    : difficulty === 'expert'
+                                    ? 'grid-cols-4 sm:grid-cols-8 max-w-3xl'
+                                    : 'grid-cols-5 sm:grid-cols-8 max-w-4xl'
                             }`}>
                                 {cards.map((card, idx) => {
                                     const isRevealed = card.isFlipped || card.isMatched;

@@ -24,272 +24,542 @@ const MASSIVE_BLANK_QUESTIONS: BlankQuestion[] = [
     {
         id: 1,
         sentenceBefore: "In the beginning God created the",
-        blankWord: "heavens",
+        blankWord: "heaven",
         sentenceAfter: "and the earth.",
         reference: "Genesis 1:1",
-        options: ["heavens", "oceans", "angels", "stars"],
-        explanation: "Genesis 1:1 records the foundational act of God speaking the universe into existence!"
+        options: ["heaven", "oceans", "angels", "firmament"],
+        explanation: "Genesis 1:1 (KJV): 'In the beginning God created the heaven and the earth.'"
     },
     {
         id: 2,
-        sentenceBefore: "The LORD is my",
-        blankWord: "shepherd",
-        sentenceAfter: "; I lack nothing.",
+        sentenceBefore: "The LORD is my shepherd; I shall not",
+        blankWord: "want",
+        sentenceAfter: ".",
         reference: "Psalm 23:1",
-        options: ["shepherd", "shield", "tower", "rock"],
-        explanation: "King David reflected on his own shepherd days and saw how tenderly the Lord cares for His people."
+        options: ["want", "fear", "lack", "stumble"],
+        explanation: "Psalm 23:1 (KJV): 'The LORD is my shepherd; I shall not want.'"
     },
     {
         id: 3,
-        sentenceBefore: "For God so loved the",
-        blankWord: "world",
-        sentenceAfter: "that He gave His one and only Son.",
+        sentenceBefore: "For God so loved the world, that he gave his only",
+        blankWord: "begotten",
+        sentenceAfter: "Son, that whosoever believeth in him should not perish, but have everlasting life.",
         reference: "John 3:16",
-        options: ["world", "church", "righteous", "nations"],
-        explanation: "God's love is universal and unconditional — offered freely to all of humanity!"
+        options: ["begotten", "beloved", "holy", "anointed"],
+        explanation: "John 3:16 (KJV): 'that he gave his only begotten Son...'"
     },
     {
         id: 4,
-        sentenceBefore: "I can do all things through Christ who",
-        blankWord: "strengthens",
+        sentenceBefore: "I can do all things through Christ which",
+        blankWord: "strengtheneth",
         sentenceAfter: "me.",
         reference: "Philippians 4:13",
-        options: ["strengthens", "comforts", "chooses", "watches"],
-        explanation: "Apostle Paul discovered supernatural resilience in whatever circumstance he faced."
+        options: ["strengtheneth", "guideth", "comforteth", "healeth"],
+        explanation: "Philippians 4:13 (KJV): 'I can do all things through Christ which strengtheneth me.'"
     },
     {
         id: 5,
-        sentenceBefore: "Your word is a lamp for my feet, a",
+        sentenceBefore: "Thy word is a lamp unto my feet, and a",
         blankWord: "light",
-        sentenceAfter: "on my path.",
+        sentenceAfter: "unto my path.",
         reference: "Psalm 119:105",
         options: ["light", "shield", "guide", "fire"],
-        explanation: "God's Word illuminates each step of our daily walk in this dark world."
+        explanation: "Psalm 119:105 (KJV): 'Thy word is a lamp unto my feet, and a light unto my path.'"
     },
     {
         id: 6,
-        sentenceBefore: "Jesus answered, 'I am the way and the",
-        blankWord: "truth",
-        sentenceAfter: "and the life.'",
+        sentenceBefore: "Jesus saith unto him, I am the way, the truth, and the",
+        blankWord: "life",
+        sentenceAfter: ": no man cometh unto the Father, but by me.",
         reference: "John 14:6",
-        options: ["truth", "light", "door", "rock"],
-        explanation: "No one comes to the Father except through Jesus Christ our Lord!"
+        options: ["life", "door", "rock", "light"],
+        explanation: "John 14:6 (KJV): 'I am the way, the truth, and the life: no man cometh unto the Father, but by me.'"
     },
     {
         id: 7,
-        sentenceBefore: "Be strong and courageous. Do not be",
-        blankWord: "afraid",
-        sentenceAfter: "; do not be discouraged.",
+        sentenceBefore: "Have not I commanded thee? Be strong and of a good",
+        blankWord: "courage",
+        sentenceAfter: "; be not afraid, neither be thou dismayed.",
         reference: "Joshua 1:9",
-        options: ["afraid", "silent", "weary", "troubled"],
-        explanation: "God gave this comforting promise to Joshua as he took leadership over Israel."
+        options: ["courage", "heart", "faith", "hope"],
+        explanation: "Joshua 1:9 (KJV): 'Be strong and of a good courage; be not afraid...'"
     },
     {
         id: 8,
-        sentenceBefore: "Trust in the LORD with all your heart and lean not on your own",
+        sentenceBefore: "Trust in the LORD with all thine heart; and lean not unto thine own",
         blankWord: "understanding",
         sentenceAfter: ".",
         reference: "Proverbs 3:5",
-        options: ["understanding", "strength", "wealth", "knowledge"],
-        explanation: "Human logic is limited, but God's wisdom is infinite and flawless."
+        options: ["understanding", "strength", "wisdom", "counsel"],
+        explanation: "Proverbs 3:5 (KJV): 'Trust in the LORD with all thine heart; and lean not unto thine own understanding.'"
     },
     {
         id: 9,
-        sentenceBefore: "Jesus wept at the tomb of His dear friend",
-        blankWord: "Lazarus",
-        sentenceAfter: ".",
-        reference: "John 11:35",
-        options: ["Lazarus", "John", "Peter", "Zacchaeus"],
-        explanation: "Showing His deep love and compassion before miraculously calling Lazarus out of the grave!"
+        sentenceBefore: "And we know that all things work together for",
+        blankWord: "good",
+        sentenceAfter: "to them that love God, to them who are the called according to his purpose.",
+        reference: "Romans 8:28",
+        options: ["good", "peace", "righteousness", "praise"],
+        explanation: "Romans 8:28 (KJV): 'all things work together for good to them that love God...'"
     },
     {
         id: 10,
-        sentenceBefore: "Foursquare confesses Jesus as Saviour, Baptizer with the Holy Spirit,",
-        blankWord: "Healer",
-        sentenceAfter: ", and Soon-Coming King.",
-        reference: "Foursquare Fourfold Gospel",
-        options: ["Healer", "Teacher", "Provider", "Shepherd"],
-        explanation: "This is the core 4-fold doctrine founded upon Hebrews 13:8!"
+        sentenceBefore: "But the fruit of the Spirit is love, joy, peace,",
+        blankWord: "longsuffering",
+        sentenceAfter: ", gentleness, goodness, faith, meekness, temperance.",
+        reference: "Galatians 5:22-23",
+        options: ["longsuffering", "patience", "forbearance", "righteousness"],
+        explanation: "Galatians 5:22-23 (KJV): 'love, joy, peace, longsuffering, gentleness, goodness, faith...'"
     },
     {
         id: 11,
-        sentenceBefore: "Rev. Harold and Mrs. Faye Curtis brought the Foursquare Gospel to Nigeria in the year",
-        blankWord: "1955",
-        sentenceAfter: ".",
-        reference: "Foursquare History",
-        options: ["1955", "1923", "1960", "1970"],
-        explanation: "The historic revival began right at Yankee Bar in Yaba, Lagos in 1955."
+        sentenceBefore: "They that wait upon the LORD shall renew their strength; they shall mount up with wings as",
+        blankWord: "eagles",
+        sentenceAfter: "; they shall run, and not be weary.",
+        reference: "Isaiah 40:31",
+        options: ["eagles", "doves", "hawks", "angels"],
+        explanation: "Isaiah 40:31 (KJV): 'they shall mount up with wings as eagles; they shall run, and not be weary.'"
     },
     {
         id: 12,
-        sentenceBefore: "The primary national camp ground of Foursquare Nigeria is located at",
-        blankWord: "Ajebo",
-        sentenceAfter: "in Ogun State.",
-        reference: "Church Locations",
-        options: ["Ajebo", "Mowe", "Iba", "Redemption"],
-        explanation: "Situated along the Lagos-Ibadan Expressway near Ajebo."
+        sentenceBefore: "But seek ye first the kingdom of God, and his",
+        blankWord: "righteousness",
+        sentenceAfter: "; and all these things shall be added unto you.",
+        reference: "Matthew 6:33",
+        options: ["righteousness", "holiness", "peace", "grace"],
+        explanation: "Matthew 6:33 (KJV): 'seek ye first the kingdom of God, and his righteousness...'"
     },
     {
         id: 13,
-        sentenceBefore: "The fruit of the Spirit is love, joy, peace, forbearance, kindness, goodness,",
-        blankWord: "faithfulness",
-        sentenceAfter: ", gentleness and self-control.",
-        reference: "Galatians 5:22-23",
-        options: ["faithfulness", "holiness", "wisdom", "patience"],
-        explanation: "These virtues are cultivated naturally as we abide in the Holy Spirit!"
+        sentenceBefore: "The name of the LORD is a strong",
+        blankWord: "tower",
+        sentenceAfter: ": the righteous runneth into it, and is safe.",
+        reference: "Proverbs 18:10",
+        options: ["tower", "shield", "habitation", "rock"],
+        explanation: "Proverbs 18:10 (KJV): 'The name of the LORD is a strong tower: the righteous runneth into it, and is safe.'"
     },
     {
         id: 14,
-        sentenceBefore: "Those who hope in the LORD will renew their strength. They will soar on wings like",
-        blankWord: "eagles",
-        sentenceAfter: ".",
-        reference: "Isaiah 40:31",
-        options: ["eagles", "doves", "falcons", "hawks"],
-        explanation: "They will run and not grow weary, they will walk and not faint!"
+        sentenceBefore: "For God hath not given us the spirit of",
+        blankWord: "fear",
+        sentenceAfter: "; but of power, and of love, and of a sound mind.",
+        reference: "2 Timothy 1:7",
+        options: ["fear", "bondage", "sorrow", "doubt"],
+        explanation: "2 Timothy 1:7 (KJV): 'For God hath not given us the spirit of fear; but of power, and of love, and of a sound mind.'"
     },
     {
         id: 15,
-        sentenceBefore: "Be joyful in hope, patient in affliction, faithful in",
-        blankWord: "prayer",
-        sentenceAfter: ".",
-        reference: "Romans 12:12",
-        options: ["prayer", "giving", "worship", "fasting"],
-        explanation: "A practical tripartite instruction for every Christian believer."
+        sentenceBefore: "Now faith is the",
+        blankWord: "substance",
+        sentenceAfter: "of things hoped for, the evidence of things not seen.",
+        reference: "Hebrews 11:1",
+        options: ["substance", "assurance", "confidence", "foundation"],
+        explanation: "Hebrews 11:1 (KJV): 'Now faith is the substance of things hoped for, the evidence of things not seen.'"
     },
     {
         id: 16,
-        sentenceBefore: "You are the",
-        blankWord: "light",
-        sentenceAfter: "of the world. A town built on a hill cannot be hidden.",
-        reference: "Matthew 5:14",
-        options: ["light", "salt", "joy", "hope"],
-        explanation: "Jesus called His disciples to let their good deeds shine before everyone!"
+        sentenceBefore: "Jesus Christ the same yesterday, and to day, and for",
+        blankWord: "ever",
+        sentenceAfter: ".",
+        reference: "Hebrews 13:8",
+        options: ["ever", "eternity", "always", "ages"],
+        explanation: "Hebrews 13:8 (KJV): 'Jesus Christ the same yesterday, and to day, and for ever.'"
     },
     {
         id: 17,
-        sentenceBefore: "If God is for us, who can be",
-        blankWord: "against",
-        sentenceAfter: "us?",
-        reference: "Romans 8:31",
-        options: ["against", "beside", "above", "behind"],
-        explanation: "Nothing can conquer a child of God when the Almighty stands with them!"
+        sentenceBefore: "For by",
+        blankWord: "grace",
+        sentenceAfter: "are ye saved through faith; and that not of yourselves: it is the gift of God.",
+        reference: "Ephesians 2:8",
+        options: ["grace", "mercy", "works", "love"],
+        explanation: "Ephesians 2:8 (KJV): 'For by grace are ye saved through faith; and that not of yourselves: it is the gift of God.'"
     },
     {
         id: 18,
-        sentenceBefore: "We love because He",
-        blankWord: "first",
-        sentenceAfter: "loved us.",
-        reference: "1 John 4:19",
-        options: ["first", "always", "truly", "freely"],
-        explanation: "Our love for God and others is an overflow of God's prior love for us."
+        sentenceBefore: "God is our refuge and strength, a very",
+        blankWord: "present",
+        sentenceAfter: "help in trouble.",
+        reference: "Psalm 46:1",
+        options: ["present", "mighty", "faithful", "quick"],
+        explanation: "Psalm 46:1 (KJV): 'God is our refuge and strength, a very present help in trouble.'"
     },
     {
         id: 19,
-        sentenceBefore: "The name of the LORD is a fortified",
-        blankWord: "tower",
-        sentenceAfter: "; the righteous run to it and are safe.",
-        reference: "Proverbs 18:10",
-        options: ["tower", "shield", "temple", "mountain"],
-        explanation: "God's holy name is an impenetrable refuge in times of trouble."
+        sentenceBefore: "Casting all your",
+        blankWord: "care",
+        sentenceAfter: "upon him; for he careth for you.",
+        reference: "1 Peter 5:7",
+        options: ["care", "burden", "anxiety", "grief"],
+        explanation: "1 Peter 5:7 (KJV): 'Casting all your care upon him; for he careth for you.'"
     },
     {
         id: 20,
-        sentenceBefore: "Seek first His kingdom and His",
-        blankWord: "righteousness",
-        sentenceAfter: ", and all these things will be given to you as well.",
-        reference: "Matthew 6:33",
-        options: ["righteousness", "holiness", "peace", "grace"],
-        explanation: "Put God's priorities first, and He will provide for every earthly need."
+        sentenceBefore: "Ye are the",
+        blankWord: "light",
+        sentenceAfter: "of the world. A city that is set on an hill cannot be hid.",
+        reference: "Matthew 5:14",
+        options: ["light", "salt", "hope", "glory"],
+        explanation: "Matthew 5:14 (KJV): 'Ye are the light of the world. A city that is set on an hill cannot be hid.'"
     },
     {
         id: 21,
-        sentenceBefore: "Cast all your",
-        blankWord: "anxiety",
-        sentenceAfter: "on Him because He cares for you.",
-        reference: "1 Peter 5:7",
-        options: ["anxiety", "money", "sins", "fears"],
-        explanation: "Do not carry worries alone; cast them upon our compassionate Father!"
+        sentenceBefore: "What shall we then say to these things? If God be for us, who can be",
+        blankWord: "against",
+        sentenceAfter: "us?",
+        reference: "Romans 8:31",
+        options: ["against", "beside", "above", "before"],
+        explanation: "Romans 8:31 (KJV): 'If God be for us, who can be against us?'"
     },
     {
         id: 22,
-        sentenceBefore: "Faith is confidence in what we",
-        blankWord: "hope",
-        sentenceAfter: "for and assurance about what we do not see.",
-        reference: "Hebrews 11:1",
-        options: ["hope", "pray", "ask", "work"],
-        explanation: "Faith turns spiritual promises into present reality."
+        sentenceBefore: "We love him, because he",
+        blankWord: "first",
+        sentenceAfter: "loved us.",
+        reference: "1 John 4:19",
+        options: ["first", "always", "freely", "truly"],
+        explanation: "1 John 4:19 (KJV): 'We love him, because he first loved us.'"
     },
     {
         id: 23,
-        sentenceBefore: "Jesus Christ is the same yesterday and today and",
-        blankWord: "forever",
-        sentenceAfter: ".",
-        reference: "Hebrews 13:8",
-        options: ["forever", "always", "in all things", "to the end"],
-        explanation: "The cornerstone scripture of the Foursquare Gospel movement!"
+        sentenceBefore: "He that dwelleth in the secret place of the most High shall abide under the",
+        blankWord: "shadow",
+        sentenceAfter: "of the Almighty.",
+        reference: "Psalm 91:1",
+        options: ["shadow", "wings", "shield", "pavilion"],
+        explanation: "Psalm 91:1 (KJV): 'shall abide under the shadow of the Almighty.'"
     },
     {
         id: 24,
-        sentenceBefore: "Be completely humble and gentle; be patient, bearing with one another in",
-        blankWord: "love",
-        sentenceAfter: ".",
-        reference: "Ephesians 4:2",
-        options: ["love", "peace", "joy", "truth"],
-        explanation: "Paul urges believers to live worthy of the calling they have received."
+        sentenceBefore: "He was wounded for our transgressions, he was bruised for our iniquities... and with his",
+        blankWord: "stripes",
+        sentenceAfter: "we are healed.",
+        reference: "Isaiah 53:5",
+        options: ["stripes", "blood", "sorrow", "cross"],
+        explanation: "Isaiah 53:5 (KJV): 'and with his stripes we are healed.'"
     },
     {
         id: 25,
-        sentenceBefore: "Foursquare Gospel Church was founded in 1923 by Aimee Semple",
-        blankWord: "McPherson",
-        sentenceAfter: "in Los Angeles.",
-        reference: "Foursquare History",
-        options: ["McPherson", "Curtis", "Moody", "Spurgeon"],
-        explanation: "Sister Aimee conducted revivals and opened the historic Angelus Temple."
+        sentenceBefore: "Thoughts of peace, and not of evil, to give you an",
+        blankWord: "expected",
+        sentenceAfter: "end.",
+        reference: "Jeremiah 29:11",
+        options: ["expected", "glorious", "abundant", "everlasting"],
+        explanation: "Jeremiah 29:11 (KJV): 'thoughts of peace, and not of evil, to give you an expected end.'"
     },
     {
         id: 26,
-        sentenceBefore: "In 2025, Foursquare Nigeria celebrated its",
-        blankWord: "Platinum",
-        sentenceAfter: "Jubilee mark of 70 years of fruitful ministry.",
-        reference: "Foursquare Milestones",
-        options: ["Platinum", "Golden", "Diamond", "Silver"],
-        explanation: "Celebrating 70 years from 1955 to 2025 across Nigeria!"
+        sentenceBefore: "Come unto me, all ye that labour and are heavy laden, and I will give you",
+        blankWord: "rest",
+        sentenceAfter: ".",
+        reference: "Matthew 11:28",
+        options: ["rest", "peace", "joy", "strength"],
+        explanation: "Matthew 11:28 (KJV): 'and I will give you rest.'"
     },
     {
         id: 27,
-        sentenceBefore: "The thief comes only to steal and kill and destroy; I have come that they may have",
-        blankWord: "life",
-        sentenceAfter: ", and have it to the full.",
-        reference: "John 10:10",
-        options: ["life", "joy", "peace", "wealth"],
-        explanation: "Jesus came to give us abundant, eternal life!"
+        sentenceBefore: "In the beginning was the Word, and the Word was with God, and the Word was",
+        blankWord: "God",
+        sentenceAfter: ".",
+        reference: "John 1:1",
+        options: ["God", "Lord", "Spirit", "Light"],
+        explanation: "John 1:1 (KJV): 'and the Word was God.'"
     },
     {
         id: 28,
-        sentenceBefore: "God is our refuge and",
-        blankWord: "strength",
-        sentenceAfter: ", an ever-present help in trouble.",
-        reference: "Psalm 46:1",
-        options: ["strength", "rock", "tower", "healer"],
-        explanation: "Therefore we will not fear, though the earth give way."
+        sentenceBefore: "I am come that they might have",
+        blankWord: "life",
+        sentenceAfter: ", and that they might have it more abundantly.",
+        reference: "John 10:10",
+        options: ["life", "peace", "grace", "joy"],
+        explanation: "John 10:10 (KJV): 'I am come that they might have life, and that they might have it more abundantly.'"
     },
     {
         id: 29,
-        sentenceBefore: "Rejoice in the Lord",
-        blankWord: "always",
-        sentenceAfter: ". I will say it again: Rejoice!",
-        reference: "Philippians 4:4",
-        options: ["always", "daily", "greatly", "forever"],
-        explanation: "True joy is rooted in Christ, not temporary circumstances."
+        sentenceBefore: "Be not conformed to this world: but be ye transformed by the",
+        blankWord: "renewing",
+        sentenceAfter: "of your mind.",
+        reference: "Romans 12:2",
+        options: ["renewing", "cleansing", "power", "sanctifying"],
+        explanation: "Romans 12:2 (KJV): 'but be ye transformed by the renewing of your mind...'"
     },
     {
         id: 30,
-        sentenceBefore: "For where two or three gather in my name, there am I with",
-        blankWord: "them",
+        sentenceBefore: "The LORD is my light and my salvation; whom shall I",
+        blankWord: "fear",
+        sentenceAfter: "? the LORD is the strength of my life; of whom shall I be afraid?",
+        reference: "Psalm 27:1",
+        options: ["fear", "dread", "flee", "doubt"],
+        explanation: "Psalm 27:1 (KJV): 'The LORD is my light and my salvation; whom shall I fear?'"
+    },
+    {
+        id: 31,
+        sentenceBefore: "Pride goeth before destruction, and an haughty spirit before a",
+        blankWord: "fall",
         sentenceAfter: ".",
-        reference: "Matthew 18:20",
-        options: ["them", "you", "the church", "believers"],
-        explanation: "Jesus promises His living presence whenever believers assemble in His name!"
+        reference: "Proverbs 16:18",
+        options: ["fall", "snare", "pit", "loss"],
+        explanation: "Proverbs 16:18 (KJV): 'Pride goeth before destruction, and an haughty spirit before a fall.'"
+    },
+    {
+        id: 32,
+        sentenceBefore: "Pray without",
+        blankWord: "ceasing",
+        sentenceAfter: ".",
+        reference: "1 Thessalonians 5:17",
+        options: ["ceasing", "fainting", "fear", "delay"],
+        explanation: "1 Thessalonians 5:17 (KJV): 'Pray without ceasing.'"
+    },
+    {
+        id: 33,
+        sentenceBefore: "And now abideth faith, hope, charity, these three; but the greatest of these is",
+        blankWord: "charity",
+        sentenceAfter: ".",
+        reference: "1 Corinthians 13:13",
+        options: ["charity", "faith", "hope", "grace"],
+        explanation: "1 Corinthians 13:13 (KJV): 'but the greatest of these is charity.'"
+    },
+    {
+        id: 34,
+        sentenceBefore: "Delight thyself also in the LORD; and he shall give thee the desires of thine",
+        blankWord: "heart",
+        sentenceAfter: ".",
+        reference: "Psalm 37:4",
+        options: ["heart", "soul", "mind", "hands"],
+        explanation: "Psalm 37:4 (KJV): 'and he shall give thee the desires of thine heart.'"
+    },
+    {
+        id: 35,
+        sentenceBefore: "What doth the LORD require of thee, but to do justly, and to love",
+        blankWord: "mercy",
+        sentenceAfter: ", and to walk humbly with thy God?",
+        reference: "Micah 6:8",
+        options: ["mercy", "truth", "righteousness", "peace"],
+        explanation: "Micah 6:8 (KJV): 'to do justly, and to love mercy, and to walk humbly with thy God.'"
+    },
+    {
+        id: 36,
+        sentenceBefore: "The just shall live by his",
+        blankWord: "faith",
+        sentenceAfter: ".",
+        reference: "Habakkuk 2:4",
+        options: ["faith", "works", "righteousness", "prayer"],
+        explanation: "Habakkuk 2:4 (KJV): 'the just shall live by his faith.'"
+    },
+    {
+        id: 37,
+        sentenceBefore: "Not by might, nor by power, but by my",
+        blankWord: "spirit",
+        sentenceAfter: ", saith the LORD of hosts.",
+        reference: "Zechariah 4:6",
+        options: ["spirit", "word", "hand", "glory"],
+        explanation: "Zechariah 4:6 (KJV): 'Not by might, nor by power, but by my spirit, saith the LORD of hosts.'"
+    },
+    {
+        id: 38,
+        sentenceBefore: "Baptizing them in the name of the Father, and of the Son, and of the",
+        blankWord: "Holy Ghost",
+        sentenceAfter: ".",
+        reference: "Matthew 28:19",
+        options: ["Holy Ghost", "Lord", "Church", "Kingdom"],
+        explanation: "Matthew 28:19 (KJV): 'in the name of the Father, and of the Son, and of the Holy Ghost.'"
+    },
+    {
+        id: 39,
+        sentenceBefore: "But ye shall receive",
+        blankWord: "power",
+        sentenceAfter: ", after that the Holy Ghost is come upon you: and ye shall be witnesses unto me.",
+        reference: "Acts 1:8",
+        options: ["power", "wisdom", "grace", "tongues"],
+        explanation: "Acts 1:8 (KJV): 'But ye shall receive power, after that the Holy Ghost is come upon you...'"
+    },
+    {
+        id: 40,
+        sentenceBefore: "For the wages of sin is death; but the gift of God is",
+        blankWord: "eternal life",
+        sentenceAfter: "through Jesus Christ our Lord.",
+        reference: "Romans 6:23",
+        options: ["eternal life", "righteousness", "peace", "heaven"],
+        explanation: "Romans 6:23 (KJV): 'but the gift of God is eternal life through Jesus Christ our Lord.'"
+    },
+    {
+        id: 41,
+        sentenceBefore: "Therefore if any man be in Christ, he is a new creature: old things are passed away; behold, all things are become",
+        blankWord: "new",
+        sentenceAfter: ".",
+        reference: "2 Corinthians 5:17",
+        options: ["new", "holy", "clean", "righteous"],
+        explanation: "2 Corinthians 5:17 (KJV): 'old things are passed away; behold, all things are become new.'"
+    },
+    {
+        id: 42,
+        sentenceBefore: "Set your affection on things",
+        blankWord: "above",
+        sentenceAfter: ", not on things on the earth.",
+        reference: "Colossians 3:2",
+        options: ["above", "heavenly", "eternal", "holy"],
+        explanation: "Colossians 3:2 (KJV): 'Set your affection on things above, not on things on the earth.'"
+    },
+    {
+        id: 43,
+        sentenceBefore: "All scripture is given by",
+        blankWord: "inspiration",
+        sentenceAfter: "of God, and is profitable for doctrine, for reproof, for correction, for instruction in righteousness.",
+        reference: "2 Timothy 3:16",
+        options: ["inspiration", "commandment", "wisdom", "revelation"],
+        explanation: "2 Timothy 3:16 (KJV): 'All scripture is given by inspiration of God...'"
+    },
+    {
+        id: 44,
+        sentenceBefore: "If any of you lack",
+        blankWord: "wisdom",
+        sentenceAfter: ", let him ask of God, that giveth to all men liberally, and upbraideth not.",
+        reference: "James 1:5",
+        options: ["wisdom", "faith", "patience", "strength"],
+        explanation: "James 1:5 (KJV): 'If any of you lack wisdom, let him ask of God, that giveth to all men liberally...'"
+    },
+    {
+        id: 45,
+        sentenceBefore: "If we confess our sins, he is faithful and just to",
+        blankWord: "forgive",
+        sentenceAfter: "us our sins, and to cleanse us from all unrighteousness.",
+        reference: "1 John 1:9",
+        options: ["forgive", "blot out", "pardon", "hide"],
+        explanation: "1 John 1:9 (KJV): 'he is faithful and just to forgive us our sins...'"
+    },
+    {
+        id: 46,
+        sentenceBefore: "Behold, I stand at the",
+        blankWord: "door",
+        sentenceAfter: ", and knock: if any man hear my voice, and open the door, I will come in to him.",
+        reference: "Revelation 3:20",
+        options: ["door", "gate", "threshold", "altar"],
+        explanation: "Revelation 3:20 (KJV): 'Behold, I stand at the door, and knock...'"
+    },
+    {
+        id: 47,
+        sentenceBefore: "And God shall wipe away all",
+        blankWord: "tears",
+        sentenceAfter: "from their eyes; and there shall be no more death, neither sorrow, nor crying.",
+        reference: "Revelation 21:4",
+        options: ["tears", "sin", "darkness", "fear"],
+        explanation: "Revelation 21:4 (KJV): 'And God shall wipe away all tears from their eyes...'"
+    },
+    {
+        id: 48,
+        sentenceBefore: "My help cometh from the LORD, which made heaven and",
+        blankWord: "earth",
+        sentenceAfter: ".",
+        reference: "Psalm 121:2",
+        options: ["earth", "man", "seas", "stars"],
+        explanation: "Psalm 121:2 (KJV): 'My help cometh from the LORD, which made heaven and earth.'"
+    },
+    {
+        id: 49,
+        sentenceBefore: "Enter into his gates with thanksgiving, and into his",
+        blankWord: "courts",
+        sentenceAfter: "with praise: be thankful unto him, and bless his name.",
+        reference: "Psalm 100:4",
+        options: ["courts", "temple", "house", "presence"],
+        explanation: "Psalm 100:4 (KJV): 'and into his courts with praise: be thankful unto him, and bless his name.'"
+    },
+    {
+        id: 50,
+        sentenceBefore: "And his name shall be called Wonderful, Counsellor, The mighty God, The everlasting Father, The Prince of",
+        blankWord: "Peace",
+        sentenceAfter: ".",
+        reference: "Isaiah 9:6",
+        options: ["Peace", "Glory", "Life", "Righteousness"],
+        explanation: "Isaiah 9:6 (KJV): 'The Prince of Peace.'"
+    },
+    {
+        id: 51,
+        sentenceBefore: "Ask, and it shall be given you; seek, and ye shall find; knock, and it shall be",
+        blankWord: "opened",
+        sentenceAfter: "unto you.",
+        reference: "Matthew 7:7",
+        options: ["opened", "revealed", "given", "answered"],
+        explanation: "Matthew 7:7 (KJV): 'knock, and it shall be opened unto you.'"
+    },
+    {
+        id: 52,
+        sentenceBefore: "And ye shall know the truth, and the truth shall make you",
+        blankWord: "free",
+        sentenceAfter: ".",
+        reference: "John 8:32",
+        options: ["free", "clean", "whole", "wise"],
+        explanation: "John 8:32 (KJV): 'and the truth shall make you free.'"
+    },
+    {
+        id: 53,
+        sentenceBefore: "That if thou shalt confess with thy mouth the Lord Jesus, and shalt believe in thine heart that God hath raised him from the dead, thou shalt be",
+        blankWord: "saved",
+        sentenceAfter: ".",
+        reference: "Romans 10:9",
+        options: ["saved", "justified", "blessed", "healed"],
+        explanation: "Romans 10:9 (KJV): 'thou shalt be saved.'"
+    },
+    {
+        id: 54,
+        sentenceBefore: "Put on the whole armour of God, that ye may be able to stand against the",
+        blankWord: "wiles",
+        sentenceAfter: "of the devil.",
+        reference: "Ephesians 6:11",
+        options: ["wiles", "darts", "snare", "power"],
+        explanation: "Ephesians 6:11 (KJV): 'stand against the wiles of the devil.'"
+    },
+    {
+        id: 55,
+        sentenceBefore: "For the word of God is quick, and powerful, and sharper than any twoedged",
+        blankWord: "sword",
+        sentenceAfter: ", piercing even to the dividing asunder of soul and spirit.",
+        reference: "Hebrews 4:12",
+        options: ["sword", "blade", "spear", "arrow"],
+        explanation: "Hebrews 4:12 (KJV): 'sharper than any twoedged sword, piercing even to the dividing asunder of soul and spirit.'"
+    },
+    {
+        id: 56,
+        sentenceBefore: "Looking unto Jesus the author and",
+        blankWord: "finisher",
+        sentenceAfter: "of our faith; who for the joy that was set before him endured the cross.",
+        reference: "Hebrews 12:2",
+        options: ["finisher", "perfecter", "captain", "giver"],
+        explanation: "Hebrews 12:2 (KJV): 'Looking unto Jesus the author and finisher of our faith...'"
+    },
+    {
+        id: 57,
+        sentenceBefore: "Submit yourselves therefore to God. Resist the devil, and he will",
+        blankWord: "flee",
+        sentenceAfter: "from you.",
+        reference: "James 4:7",
+        options: ["flee", "depart", "perish", "fall"],
+        explanation: "James 4:7 (KJV): 'Resist the devil, and he will flee from you.'"
+    },
+    {
+        id: 58,
+        sentenceBefore: "But ye are a chosen generation, a royal",
+        blankWord: "priesthood",
+        sentenceAfter: ", an holy nation, a peculiar people.",
+        reference: "1 Peter 2:9",
+        options: ["priesthood", "army", "temple", "assembly"],
+        explanation: "1 Peter 2:9 (KJV): 'a royal priesthood, an holy nation, a peculiar people...'"
+    },
+    {
+        id: 59,
+        sentenceBefore: "I will bless the LORD at all times: his praise shall continually be in my",
+        blankWord: "mouth",
+        sentenceAfter: ".",
+        reference: "Psalm 34:1",
+        options: ["mouth", "heart", "lips", "spirit"],
+        explanation: "Psalm 34:1 (KJV): 'his praise shall continually be in my mouth.'"
+    },
+    {
+        id: 60,
+        sentenceBefore: "Man shall not live by bread alone, but by every word that proceedeth out of the",
+        blankWord: "mouth",
+        sentenceAfter: "of God.",
+        reference: "Matthew 4:4",
+        options: ["mouth", "throne", "counsel", "heart"],
+        explanation: "Matthew 4:4 (KJV): 'but by every word that proceedeth out of the mouth of God.'"
     }
 ];
 
@@ -422,13 +692,13 @@ export default function FillInTheBlankGame() {
 
                             <div>
                                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200 mb-2">
-                                    <Sparkles className="w-3.5 h-3.5" /> 30+ Sacred Scripture Verses
+                                    <Sparkles className="w-3.5 h-3.5" /> 60 Sacred KJV Verses
                                 </div>
                                 <h1 className="text-3xl sm:text-4xl font-serif font-bold text-slate-900 mb-2">
                                     Fill-in-the-Blank
                                 </h1>
                                 <p className="text-slate-500 text-sm max-w-md mx-auto leading-relaxed">
-                                    Recall and complete holy words in famous scriptures and Foursquare catechisms!
+                                    Recall and complete holy words in timeless King James Version (KJV) scriptures!
                                 </p>
                             </div>
 

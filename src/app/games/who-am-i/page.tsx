@@ -285,47 +285,234 @@ const MASSIVE_MYSTERY_POOL: MysteryCharacter[] = [
     },
     {
         id: 25,
-        name: "Aimee Semple McPherson",
+        name: "Melchizedek",
         clues: [
-            "I was a pioneering Canadian-American female evangelist known for dramatic, illustrated sermons.",
-            "I founded the historic Angelus Temple in Los Angeles with 5,300 seats and the KFSG Christian radio station.",
-            "Under God's divine guidance in 1923, I established the International Church of the Foursquare Gospel."
+            "I am without father, without mother, without descent, having neither beginning of days nor end of life in the sacred record.",
+            "I am called both the King of righteousness and the King of Salem, which is King of peace.",
+            "I brought forth bread and wine to Abram after the slaughter of the kings, and he gave me tithes of all."
         ],
-        funFact: "She proclaimed Jesus as Saviour, Baptizer with the Holy Spirit, Healer, and Soon-Coming King!",
-        options: ["Aimee Semple McPherson", "Kathryn Kuhlman", "Faye Curtis", "Mary Slessor"]
+        funFact: "Jesus Christ is declared a High Priest for ever after the order of Melchisedec in Hebrews 7!",
+        options: ["Melchizedek", "Aaron", "Jethro", "Balaam"]
     },
     {
         id: 26,
-        name: "Rev. Harold Curtis",
+        name: "Josiah",
         clues: [
-            "Together with my wife Faye, I sailed across the ocean to bring the Foursquare message to Africa.",
-            "In 1955, we established the very first Foursquare fellowship in Nigeria.",
-            "Our earliest Nigerian church meetings were held at Yankee Bar in Yaba, Lagos."
+            "I began to reign over Judah when I was only eight years old, and I did that which was right in the sight of the LORD.",
+            "When Hilkiah the high priest found the forgotten book of the law in the house of the LORD, I rent my clothes in repentance.",
+            "I broke down the altars of Baalim, burned the grove, and kept such a Passover as was not held since the days of Samuel."
         ],
-        funFact: "Rev. Harold & Faye Curtis planted the seeds for over 5,000 Foursquare churches in Nigeria today!",
-        options: ["Samuel Odunaike", "Rev. Harold Curtis", "Rev. Sam Aboyeji", "James Boyejo"]
+        funFact: "2 Kings 23:25 says there was no king before him that turned to the LORD with all his heart, soul, and might!",
+        options: ["Hezekiah", "Josiah", "Manasseh", "Jehoshaphat"]
     },
     {
         id: 27,
-        name: "Rev. (Dr.) Sam Aboyeji",
+        name: "Mephibosheth",
         clues: [
-            "I am an anointed servant of God who previously served in petroleum engineering and pastoral leadership.",
-            "I was elected into office as the General Overseer of the Foursquare Gospel Church in Nigeria in 2019.",
-            "I championed the church's strategic 'Decade of SOARING' vision and presided over the 70th Platinum Jubilee in 2025."
+            "When tidings came of my father's death, my nurse took me up and fled, and in her haste I fell and became lame in both my feet.",
+            "I was living quietly in Lodebar until the king sought whether there was any left of the house of Saul to show kindness for Jonathan's sake.",
+            "The king restored unto me all the land of Saul my grandfather, and I did eat bread continually at the king's table as one of his sons."
         ],
-        funFact: "His tenure has emphasized inreach, aggressive church planting outreach, and empowering the next generation!",
-        options: ["Rev. Felix Meduoye", "Rev. (Dr.) Sam Aboyeji", "Rev. Wilson Badejo", "Rev. Samson Alawode"]
+        funFact: "King David showed loyal covenant kindness to Mephibosheth because of his deep covenant with Jonathan!",
+        options: ["Mephibosheth", "Ishbosheth", "Absalom", "Asahel"]
     },
     {
         id: 28,
-        name: "Samuel Odunaike",
+        name: "Ehud",
         clues: [
-            "I was one of the earliest prominent Nigerian converts who embraced the Foursquare Gospel in the 1950s.",
-            "I served as an anointed pioneer leader, eloquent preacher, and General Supervisor of Foursquare Nigeria.",
-            "My godly leadership guided Foursquare Nigeria into national prominence and independence."
+            "The children of Israel cried unto the LORD, and He raised them up a deliverer of the tribe of Benjamin.",
+            "I was a left-handed man, and I fashioned myself a double-edged dagger a cubit in length and girded it under my raiment.",
+            "I came unto Eglon the king of Moab in his summer parlour, said 'I have a message from God unto thee,' and delivered Israel."
         ],
-        funFact: "He was also a respected corporate executive who brought exceptional administrative excellence to the church!",
-        options: ["Samuel Odunaike", "James Boyejo", "Friday Osuwa", "Sam Aboyeji"]
+        funFact: "After Ehud delivered Israel from Moabite oppression, the land had rest for fourscore (80) years!",
+        options: ["Shamgar", "Ehud", "Othniel", "Jephthah"]
+    },
+    {
+        id: 29,
+        name: "Bezalel",
+        clues: [
+            "I was called by name out of the tribe of Judah, the son of Uri, the son of Hur.",
+            "The LORD filled me with the Spirit of God, in wisdom, in understanding, in knowledge, and in all manner of workmanship.",
+            "I was appointed to devise cunning works in gold, silver, and brass, and in cutting of stones to construct the Tabernacle."
+        ],
+        funFact: "Bezalel was the very first person in the Bible specifically described as being 'filled with the Spirit of God'!",
+        options: ["Aholiab", "Bezalel", "Hiram", "Hur"]
+    },
+    {
+        id: 30,
+        name: "Boaz",
+        clues: [
+            "I was a mighty man of wealth of the family of Elimelech in Bethlehem-judah.",
+            "When I came into the field, I greeted my reapers saying: 'The LORD be with you,' and instructed them to drop handfuls of purpose.",
+            "I bought back the inheritance of Naomi and took Ruth the Moabitess to be my wife before the elders at the city gate."
+        ],
+        funFact: "Boaz and Ruth became the great-grandparents of King David and ancestors in the earthly lineage of Jesus Christ!",
+        options: ["Boaz", "Elimelech", "Mahlon", "Jesse"]
+    },
+    {
+        id: 31,
+        name: "Abigail",
+        clues: [
+            "Scripture describes me as a woman of good understanding and of a beautiful countenance, though my husband was churlish and evil in his doings.",
+            "When my husband foolishly insulted David's young men, I made haste and prepared two hundred loaves, two bottles of wine, and five sheep ready dressed.",
+            "I fell at David's feet and prophesied that the LORD would make him a sure house and that the souls of his enemies would be slung out."
+        ],
+        funFact: "David blessed her for her advice that kept him from shedding blood, and after Nabal died, she became David's wife!",
+        options: ["Abigail", "Bathsheba", "Michal", "Abishag"]
+    },
+    {
+        id: 32,
+        name: "Gamaliel",
+        clues: [
+            "I was a respected Pharisee and doctor of the law in Jerusalem, held in high reputation among all the people.",
+            "I was the prominent master teacher at whose feet young Saul of Tarsus was brought up according to the perfect law.",
+            "When the council sought to slay the apostles, I advised them: 'If this work be of men, it will come to nought: but if it be of God, ye cannot overthrow it.'"
+        ],
+        funFact: "Gamaliel's wise counsel spared the apostles from immediate martyrdom in Acts 5!",
+        options: ["Nicodemus", "Gamaliel", "Caiaphas", "Tertullus"]
+    },
+    {
+        id: 33,
+        name: "Apollos",
+        clues: [
+            "I was an eloquent Jew born at Alexandria, mighty in the scriptures, and fervent in the spirit.",
+            "I spoke and taught diligently the things of the Lord, though I initially knew only the baptism of John.",
+            "Aquila and Priscilla heard me speak boldly in the synagogue, took me unto them, and expounded unto me the way of God more perfectly."
+        ],
+        funFact: "Paul wrote in 1 Corinthians 3:6: 'I have planted, Apollos watered; but God gave the increase'!",
+        options: ["Apollos", "Barnabas", "Silas", "Titus"]
+    },
+    {
+        id: 34,
+        name: "Onesimus",
+        clues: [
+            "In times past, I was unprofitable to my master in Colosse, but through the gospel became profitable to Paul.",
+            "I ran away as a bondservant, but while Paul was in chains at Rome, he begat me in the faith as his own son.",
+            "Paul sent me back with an epistle asking my master to receive me not now as a servant, but above a servant, a brother beloved."
+        ],
+        funFact: "The entire Epistle of Philemon was written by Paul as a personal plea of grace and reconciliation for Onesimus!",
+        options: ["Onesimus", "Epaphras", "Tychicus", "Archippus"]
+    },
+    {
+        id: 35,
+        name: "Priscilla",
+        clues: [
+            "Because Emperor Claudius commanded all Jews to depart from Rome, my husband and I relocated to Corinth.",
+            "Since we were of the same trade as the Apostle Paul—tentmakers—he lodged with us and wrought together.",
+            "My husband Aquila and I hosted a church in our house and risked our own necks for Paul's life."
+        ],
+        funFact: "She is frequently mentioned together with her husband Aquila in Acts, Romans, and Corinthians as an apostolic coworker!",
+        options: ["Priscilla", "Phoebe", "Lydia", "Chloe"]
+    },
+    {
+        id: 36,
+        name: "Job",
+        clues: [
+            "I dwelt in the land of Uz, and was perfect and upright, one that feared God and eschewed evil.",
+            "In a single day, messengers brought news that all my oxen, sheep, camels, servants, and ten children were perished.",
+            "I shaved my head, fell down upon the ground, and worshipped, saying: 'The LORD gave, and the LORD hath taken away; blessed be the name of the LORD.'"
+        ],
+        funFact: "The LORD blessed the latter end of Job more than his beginning, giving him twice as much as he had before!",
+        options: ["Job", "Abraham", "Eliphaz", "Bildad"]
+    },
+    {
+        id: 37,
+        name: "Enoch",
+        clues: [
+            "I was the seventh generation from Adam, the father of Methuselah.",
+            "Scripture records that I walked with God after I begat sons and daughters for three hundred years.",
+            "By faith I was translated that I should not see death; and was not found, because God had translated me."
+        ],
+        funFact: "Genesis 5:24 declares: 'And Enoch walked with God: and he was not; for God took him'!",
+        options: ["Enoch", "Elijah", "Noah", "Seth"]
+    },
+    {
+        id: 38,
+        name: "Methuselah",
+        clues: [
+            "I was the son of Enoch and the grandfather of righteous Noah.",
+            "My name is associated with the longest human lifespan ever recorded in sacred Scripture.",
+            "All my days were nine hundred sixty and nine years: and I died in the very year of the Great Flood."
+        ],
+        funFact: "Methuselah lived 969 years—longer than any other recorded human being in world history!",
+        options: ["Methuselah", "Jared", "Adam", "Noah"]
+    },
+    {
+        id: 39,
+        name: "Simeon",
+        clues: [
+            "I lived in Jerusalem, a just and devout elder waiting for the Consolation of Israel, and the Holy Ghost was upon me.",
+            "It was revealed unto me by the Holy Ghost that I should not see death before I had seen the Lord's Christ.",
+            "I took the infant Jesus up in my arms in the temple, blessed God, and prayed: 'Lord, now lettest thou thy servant depart in peace.'"
+        ],
+        funFact: "He uttered the famous prophecy known as the 'Nunc Dimittis' in Luke chapter 2!",
+        options: ["Simeon", "Zechariah", "Nicodemus", "Joseph of Arimathaea"]
+    },
+    {
+        id: 40,
+        name: "Anna",
+        clues: [
+            "I was a prophetess, the daughter of Phanuel of the tribe of Aser, and was of a great age.",
+            "I had lived with a husband seven years from my virginity, and was a widow of about fourscore and four years.",
+            "I departed not from the temple, but served God with fastings and prayers night and day, speaking of Christ to all that looked for redemption."
+        ],
+        funFact: "Anna gave thanks unto the Lord alongside aged Simeon when the infant Jesus was brought into the Temple!",
+        options: ["Anna", "Elisabeth", "Huldah", "Miriam"]
+    },
+    {
+        id: 41,
+        name: "Uriah the Hittite",
+        clues: [
+            "I was a valiant warrior enrolled among King David's elite thirty-seven mighty men.",
+            "When summoned from the battlefront, I slept at the door of the king's house and refused to wash or enjoy my bed while the ark and army encamped in the open field.",
+            "King David sent me back to Joab carrying a secret letter in my own hand commanding that I be placed in the forefront of the hottest battle and retired from."
+        ],
+        funFact: "Uriah's supreme loyalty and integrity are commemorated throughout 2 Samuel and Matthew's gospel genealogy!",
+        options: ["Uriah the Hittite", "Joab", "Abishai", "Benaiah"]
+    },
+    {
+        id: 42,
+        name: "Cornelius",
+        clues: [
+            "I was a centurion of the Italian band stationed in Caesarea, a devout man who feared God with all my house.",
+            "An angel of God appeared to me in a vision at the ninth hour of the day, saying: 'Thy prayers and thine alms are come up for a memorial before God.'",
+            "I sent men to Joppa to fetch Simon Peter, and while he spake, the Holy Ghost fell on all of us Gentiles who heard the word."
+        ],
+        funFact: "Cornelius and his household were the very first Gentile converts baptized into the early Christian church!",
+        options: ["Cornelius", "Julius", "Felix", "Festus"]
+    },
+    {
+        id: 43,
+        name: "Lydia",
+        clues: [
+            "I was a seller of purple fabric from the city of Thyatira who worshipped God in Philippi.",
+            "I went on the Sabbath day out of the city by a river side, where prayer was wont to be made, and heard Paul speak.",
+            "The Lord opened my heart to attend unto the things spoken of Paul, and after I and my household were baptized, I constrained the apostles to lodge in my house."
+        ],
+        funFact: "Lydia was the very first European convert to Christ recorded in the New Testament!",
+        options: ["Lydia", "Priscilla", "Dorcas", "Phoebe"]
+    },
+    {
+        id: 44,
+        name: "Dorcas (Tabitha)",
+        clues: [
+            "I dwelt in the coastal city of Joppa, and was full of good works and almsdeeds which I continually did.",
+            "When I fell sick and died, the weeping widows stood by Peter showing the coats and garments which I had made while with them.",
+            "Peter put them all forth, kneeled down, prayed, and turned to the body saying: 'Tabitha, arise.' And I opened my eyes."
+        ],
+        funFact: "Her resurrection by the Apostle Peter in Acts 9 caused many throughout all Joppa to believe in the Lord!",
+        options: ["Dorcas (Tabitha)", "Rhoda", "Mary mother of Mark", "Salome"]
+    },
+    {
+        id: 45,
+        name: "Elijah",
+        clues: [
+            "I was a Tishbite of the inhabitants of Gilead who boldly stood before wicked King Ahab and shut the heavens from rain.",
+            "I challenged 450 prophets of Baal on Mount Carmel to let the God who answereth by fire be God.",
+            "I parted the Jordan River with my mantle, and was carried up by a whirlwind into heaven in a chariot and horses of fire."
+        ],
+        funFact: "Elijah appeared alongside Moses on the Mount of Transfiguration speaking with Jesus Christ!",
+        options: ["Elijah", "Elisha", "Enoch", "Micah"]
     }
 ];
 

@@ -18,65 +18,77 @@ interface VerseData {
 }
 
 const MASSIVE_VERSES: VerseData[] = [
-    // Pack 1: Faith & Foundations (1-10)
-    { id: 1, pack: "Faith & Foundations", reference: "Philippians 4:13", text: "I can do all things through Christ who strengthens me" },
-    { id: 2, pack: "Faith & Foundations", reference: "Proverbs 3:5", text: "Trust in the LORD with all your heart and lean not on your own understanding" },
-    { id: 3, pack: "Faith & Foundations", reference: "Psalm 23:1", text: "The LORD is my shepherd I lack nothing" },
-    { id: 4, pack: "Faith & Foundations", reference: "Genesis 1:1", text: "In the beginning God created the heavens and the earth" },
-    { id: 5, pack: "Faith & Foundations", reference: "John 14:6", text: "I am the way and the truth and the life" },
-    { id: 6, pack: "Faith & Foundations", reference: "Hebrews 11:1", text: "Now faith is confidence in what we hope for and assurance about what we do not see" },
-    { id: 7, pack: "Faith & Foundations", reference: "Matthew 6:33", text: "Seek first His kingdom and His righteousness and all these things will be given to you" },
-    { id: 8, pack: "Faith & Foundations", reference: "Romans 1:16", text: "For I am not ashamed of the gospel because it is the power of God that brings salvation" },
-    { id: 9, pack: "Faith & Foundations", reference: "Ephesians 2:8", text: "For it is by grace you have been saved through faith and this is not from yourselves" },
-    { id: 10, pack: "Faith & Foundations", reference: "2 Corinthians 5:7", text: "For we live by faith not by sight" },
+    // Pack 1: Foundations of Faith & Salvation (KJV)
+    { id: 1, pack: "Faith & Salvation (KJV)", reference: "Philippians 4:13", text: "I can do all things through Christ which strengtheneth me" },
+    { id: 2, pack: "Faith & Salvation (KJV)", reference: "Proverbs 3:5", text: "Trust in the LORD with all thine heart and lean not unto thine own understanding" },
+    { id: 3, pack: "Faith & Salvation (KJV)", reference: "Psalm 23:1", text: "The LORD is my shepherd I shall not want" },
+    { id: 4, pack: "Faith & Salvation (KJV)", reference: "Genesis 1:1", text: "In the beginning God created the heaven and the earth" },
+    { id: 5, pack: "Faith & Salvation (KJV)", reference: "John 14:6", text: "Jesus saith unto him I am the way the truth and the life no man cometh unto the Father but by me" },
+    { id: 6, pack: "Faith & Salvation (KJV)", reference: "Hebrews 11:1", text: "Now faith is the substance of things hoped for the evidence of things not seen" },
+    { id: 7, pack: "Faith & Salvation (KJV)", reference: "Matthew 6:33", text: "But seek ye first the kingdom of God and his righteousness and all these things shall be added unto you" },
+    { id: 8, pack: "Faith & Salvation (KJV)", reference: "Romans 1:16", text: "For I am not ashamed of the gospel of Christ for it is the power of God unto salvation" },
+    { id: 9, pack: "Faith & Salvation (KJV)", reference: "Ephesians 2:8", text: "For by grace are ye saved through faith and that not of yourselves it is the gift of God" },
+    { id: 10, pack: "Faith & Salvation (KJV)", reference: "2 Corinthians 5:7", text: "For we walk by faith not by sight" },
 
-    // Pack 2: Strength & Courage (11-20)
-    { id: 11, pack: "Strength & Courage", reference: "Joshua 1:9", text: "Be strong and courageous do not be afraid do not be discouraged" },
-    { id: 12, pack: "Strength & Courage", reference: "Isaiah 40:31", text: "Those who hope in the LORD will renew their strength they will soar on wings like eagles" },
-    { id: 13, pack: "Strength & Courage", reference: "Romans 8:31", text: "If God is for us who can be against us" },
-    { id: 14, pack: "Strength & Courage", reference: "Psalm 46:1", text: "God is our refuge and strength an ever present help in trouble" },
-    { id: 15, pack: "Strength & Courage", reference: "Psalm 27:1", text: "The LORD is my light and my salvation whom shall I fear" },
-    { id: 16, pack: "Strength & Courage", reference: "2 Timothy 1:7", text: "For God has not given us a spirit of fear but of power and of love and of a sound mind" },
-    { id: 17, pack: "Strength & Courage", reference: "Deuteronomy 31:6", text: "Be strong and bold do not fear for the LORD your God goes with you" },
-    { id: 18, pack: "Strength & Courage", reference: "Ephesians 6:10", text: "Be strong in the Lord and in His mighty power" },
-    { id: 19, pack: "Strength & Courage", reference: "1 Corinthians 16:13", text: "Be on your guard stand firm in the faith be courageous be strong" },
-    { id: 20, pack: "Strength & Courage", reference: "Psalm 18:2", text: "The LORD is my rock my fortress and my deliverer" },
+    // Pack 2: Spiritual Warfare & Courage (KJV)
+    { id: 11, pack: "Spiritual Warfare (KJV)", reference: "Joshua 1:9", text: "Be strong and of a good courage be not afraid neither be thou dismayed for the LORD thy God is with thee" },
+    { id: 12, pack: "Spiritual Warfare (KJV)", reference: "Ephesians 6:11", text: "Put on the whole armour of God that ye may be able to stand against the wiles of the devil" },
+    { id: 13, pack: "Spiritual Warfare (KJV)", reference: "Ephesians 6:12", text: "For we wrestle not against flesh and blood but against principalities against powers against the rulers of darkness" },
+    { id: 14, pack: "Spiritual Warfare (KJV)", reference: "Isaiah 40:31", text: "They that wait upon the LORD shall renew their strength they shall mount up with wings as eagles" },
+    { id: 15, pack: "Spiritual Warfare (KJV)", reference: "Romans 8:31", text: "What shall we then say to these things If God be for us who can be against us" },
+    { id: 16, pack: "Spiritual Warfare (KJV)", reference: "Psalm 46:1", text: "God is our refuge and strength a very present help in trouble" },
+    { id: 17, pack: "Spiritual Warfare (KJV)", reference: "Psalm 27:1", text: "The LORD is my light and my salvation whom shall I fear the LORD is the strength of my life" },
+    { id: 18, pack: "Spiritual Warfare (KJV)", reference: "2 Timothy 1:7", text: "For God hath not given us the spirit of fear but of power and of love and of a sound mind" },
+    { id: 19, pack: "Spiritual Warfare (KJV)", reference: "1 Corinthians 16:13", text: "Watch ye stand fast in the faith quit you like men be strong" },
+    { id: 20, pack: "Spiritual Warfare (KJV)", reference: "Psalm 18:2", text: "The LORD is my rock and my fortress and my deliverer my God my strength in whom I will trust" },
 
-    // Pack 3: Peace, Love & Wisdom (21-30)
-    { id: 21, pack: "Peace, Love & Wisdom", reference: "1 John 4:19", text: "We love because He first loved us" },
-    { id: 22, pack: "Peace, Love & Wisdom", reference: "Psalm 119:105", text: "Your word is a lamp for my feet a light on my path" },
-    { id: 23, pack: "Peace, Love & Wisdom", reference: "Romans 12:12", text: "Be joyful in hope patient in affliction faithful in prayer" },
-    { id: 24, pack: "Peace, Love & Wisdom", reference: "Galatians 5:22", text: "The fruit of the Spirit is love joy peace forbearance kindness goodness faithfulness" },
-    { id: 25, pack: "Peace, Love & Wisdom", reference: "Ephesians 4:32", text: "Be kind and compassionate to one another forgiving each other" },
-    { id: 26, pack: "Peace, Love & Wisdom", reference: "John 15:12", text: "My command is this Love each other as I have loved you" },
-    { id: 27, pack: "Peace, Love & Wisdom", reference: "Colossians 3:14", text: "And over all these virtues put on love which binds them all together in perfect unity" },
-    { id: 28, pack: "Peace, Love & Wisdom", reference: "James 1:5", text: "If any of you lacks wisdom you should ask God who gives generously to all" },
-    { id: 29, pack: "Peace, Love & Wisdom", reference: "Proverbs 15:1", text: "A gentle answer turns away wrath but a harsh word stirs up anger" },
-    { id: 30, pack: "Peace, Love & Wisdom", reference: "Philippians 4:7", text: "And the peace of God which transcends all understanding will guard your hearts" },
+    // Pack 3: The Psalms of Praise & Refuge (KJV)
+    { id: 21, pack: "Psalms of Refuge (KJV)", reference: "Psalm 91:1", text: "He that dwelleth in the secret place of the most High shall abide under the shadow of the Almighty" },
+    { id: 22, pack: "Psalms of Refuge (KJV)", reference: "Psalm 91:2", text: "I will say of the LORD He is my refuge and my fortress my God in him will I trust" },
+    { id: 23, pack: "Psalms of Refuge (KJV)", reference: "Psalm 119:105", text: "Thy word is a lamp unto my feet and a light unto my path" },
+    { id: 24, pack: "Psalms of Refuge (KJV)", reference: "Psalm 100:1", text: "Make a joyful noise unto the LORD all ye lands Serve the LORD with gladness" },
+    { id: 25, pack: "Psalms of Refuge (KJV)", reference: "Psalm 103:1", text: "Bless the LORD O my soul and all that is within me bless his holy name" },
+    { id: 26, pack: "Psalms of Refuge (KJV)", reference: "Psalm 103:2", text: "Bless the LORD O my soul and forget not all his benefits Who forgiveth all thine iniquities" },
+    { id: 27, pack: "Psalms of Refuge (KJV)", reference: "Psalm 118:24", text: "This is the day which the LORD hath made we will rejoice and be glad in it" },
+    { id: 28, pack: "Psalms of Refuge (KJV)", reference: "Psalm 34:8", text: "O taste and see that the LORD is good blessed is the man that trusteth in him" },
+    { id: 29, pack: "Psalms of Refuge (KJV)", reference: "Psalm 34:18", text: "The LORD is nigh unto them that are of a broken heart and saveth such as be of a contrite spirit" },
+    { id: 30, pack: "Psalms of Refuge (KJV)", reference: "Psalm 139:14", text: "I will praise thee for I am fearfully and wonderfully made marvellous are thy works" },
 
-    // Pack 4: Praise, Joy & Promises (31-40)
-    { id: 31, pack: "Praise, Joy & Promises", reference: "Jeremiah 29:11", text: "For I know the plans I have for you declares the LORD plans to prosper you" },
-    { id: 32, pack: "Praise, Joy & Promises", reference: "Psalm 100:1", text: "Shout for joy to the LORD all the earth worship the LORD with gladness" },
-    { id: 33, pack: "Praise, Joy & Promises", reference: "1 Peter 5:7", text: "Cast all your anxiety on Him because He cares for you" },
-    { id: 34, pack: "Praise, Joy & Promises", reference: "Proverbs 18:10", text: "The name of the LORD is a fortified tower the righteous run to it and are safe" },
-    { id: 35, pack: "Praise, Joy & Promises", reference: "Psalm 139:14", text: "I praise you because I am fearfully and wonderfully made" },
-    { id: 36, pack: "Praise, Joy & Promises", reference: "Psalm 118:24", text: "This is the day the LORD has made let us rejoice and be glad in it" },
-    { id: 37, pack: "Praise, Joy & Promises", reference: "Philippians 4:4", text: "Rejoice in the Lord always I will say it again Rejoice" },
-    { id: 38, pack: "Praise, Joy & Promises", reference: "1 Thessalonians 5:16", text: "Rejoice always pray continually give thanks in all circumstances" },
-    { id: 39, pack: "Praise, Joy & Promises", reference: "Psalm 34:8", text: "Taste and see that the LORD is good blessed is the one who takes refuge in Him" },
-    { id: 40, pack: "Praise, Joy & Promises", reference: "Lamentations 3:23", text: "They are new every morning great is your faithfulness" },
+    // Pack 4: Messianic Prophecy & The Cross (KJV)
+    { id: 31, pack: "Messianic Prophecy (KJV)", reference: "Isaiah 53:5", text: "He was wounded for our transgressions he was bruised for our iniquities the chastisement of our peace was upon him" },
+    { id: 32, pack: "Messianic Prophecy (KJV)", reference: "Isaiah 9:6", text: "For unto us a child is born unto us a son is given and the government shall be upon his shoulder" },
+    { id: 33, pack: "Messianic Prophecy (KJV)", reference: "John 3:16", text: "For God so loved the world that he gave his only begotten Son that whosoever believeth in him should not perish" },
+    { id: 34, pack: "Messianic Prophecy (KJV)", reference: "John 1:1", text: "In the beginning was the Word and the Word was with God and the Word was God" },
+    { id: 35, pack: "Messianic Prophecy (KJV)", reference: "John 1:14", text: "And the Word was made flesh and dwelt among us and we beheld his glory the glory as of the only begotten" },
+    { id: 36, pack: "Messianic Prophecy (KJV)", reference: "Romans 5:8", text: "God commendeth his love toward us in that while we were yet sinners Christ died for us" },
+    { id: 37, pack: "Messianic Prophecy (KJV)", reference: "Hebrews 12:2", text: "Looking unto Jesus the author and finisher of our faith who for the joy set before him endured the cross" },
+    { id: 38, pack: "Messianic Prophecy (KJV)", reference: "1 Corinthians 15:57", text: "Thanks be to God which giveth us the victory through our Lord Jesus Christ" },
+    { id: 39, pack: "Messianic Prophecy (KJV)", reference: "Galatians 2:20", text: "I am crucified with Christ nevertheless I live yet not I but Christ liveth in me" },
+    { id: 40, pack: "Messianic Prophecy (KJV)", reference: "Philippians 2:9", text: "Wherefore God also hath highly exalted him and given him a name which is above every name" },
 
-    // Pack 5: Victory & Eternal Life (41-50)
-    { id: 41, pack: "Victory & Eternal Life", reference: "John 3:16", text: "For God so loved the world that He gave His one and only Son" },
-    { id: 42, pack: "Victory & Eternal Life", reference: "Romans 8:28", text: "And we know that in all things God works for the good of those who love Him" },
-    { id: 43, pack: "Victory & Eternal Life", reference: "1 Corinthians 15:57", text: "Thanks be to God He gives us the victory through our Lord Jesus Christ" },
-    { id: 44, pack: "Victory & Eternal Life", reference: "Romans 6:23", text: "For the wages of sin is death but the gift of God is eternal life in Christ Jesus" },
-    { id: 45, pack: "Victory & Eternal Life", reference: "Revelation 21:4", text: "He will wipe every tear from their eyes there will be no more death or mourning" },
-    { id: 46, pack: "Victory & Eternal Life", reference: "John 10:10", text: "I have come that they may have life and have it to the full" },
-    { id: 47, pack: "Victory & Eternal Life", reference: "Matthew 28:20", text: "And surely I am with you always to the very end of the age" },
-    { id: 48, pack: "Victory & Eternal Life", reference: "Hebrews 13:8", text: "Jesus Christ is the same yesterday and today and forever" },
-    { id: 49, pack: "Victory & Eternal Life", reference: "Colossians 3:23", text: "Whatever you do work at it with all your heart as working for the Lord" },
-    { id: 50, pack: "Victory & Eternal Life", reference: "Romans 8:38", text: "Neither death nor life shall be able to separate us from the love of God" }
+    // Pack 5: Wisdom, Diligence & The Epistles (KJV)
+    { id: 41, pack: "Wisdom & Epistles (KJV)", reference: "Proverbs 18:10", text: "The name of the LORD is a strong tower the righteous runneth into it and is safe" },
+    { id: 42, pack: "Wisdom & Epistles (KJV)", reference: "Proverbs 4:23", text: "Keep thy heart with all diligence for out of it are the issues of life" },
+    { id: 43, pack: "Wisdom & Epistles (KJV)", reference: "Proverbs 15:1", text: "A soft answer turneth away wrath but grievous words stir up anger" },
+    { id: 44, pack: "Wisdom & Epistles (KJV)", reference: "James 1:5", text: "If any of you lack wisdom let him ask of God that giveth to all men liberally and upbraideth not" },
+    { id: 45, pack: "Wisdom & Epistles (KJV)", reference: "1 Corinthians 13:4", text: "Charity suffereth long and is kind charity envieth not charity vaunteth not itself is not puffed up" },
+    { id: 46, pack: "Wisdom & Epistles (KJV)", reference: "Romans 12:12", text: "Rejoicing in hope patient in tribulation continuing instant in prayer" },
+    { id: 47, pack: "Wisdom & Epistles (KJV)", reference: "Galatians 5:22", text: "The fruit of the Spirit is love joy peace longsuffering gentleness goodness faith" },
+    { id: 48, pack: "Wisdom & Epistles (KJV)", reference: "Colossians 3:23", text: "Whatsoever ye do do it heartily as to the Lord and not unto men" },
+    { id: 49, pack: "Wisdom & Epistles (KJV)", reference: "1 Thessalonians 5:16", text: "Rejoice evermore Pray without ceasing In every thing give thanks" },
+    { id: 50, pack: "Wisdom & Epistles (KJV)", reference: "1 John 4:19", text: "We love him because he first loved us" },
+
+    // Pack 6: Eternal Life, Promises & Victory (KJV)
+    { id: 51, pack: "Eternal Promises (KJV)", reference: "Romans 8:28", text: "All things work together for good to them that love God to them who are the called according to his purpose" },
+    { id: 52, pack: "Eternal Promises (KJV)", reference: "Romans 8:38", text: "For I am persuaded that neither death nor life nor angels nor principalities nor powers shall separate us" },
+    { id: 53, pack: "Eternal Promises (KJV)", reference: "Romans 6:23", text: "For the wages of sin is death but the gift of God is eternal life through Jesus Christ our Lord" },
+    { id: 54, pack: "Eternal Promises (KJV)", reference: "John 10:10", text: "The thief cometh not but for to steal and to kill and to destroy I am come that they might have life" },
+    { id: 55, pack: "Eternal Promises (KJV)", reference: "John 11:25", text: "Jesus said unto her I am the resurrection and the life he that believeth in me though he were dead yet shall he live" },
+    { id: 56, pack: "Eternal Promises (KJV)", reference: "Matthew 11:28", text: "Come unto me all ye that labour and are heavy laden and I will give you rest" },
+    { id: 57, pack: "Eternal Promises (KJV)", reference: "Philippians 4:6", text: "Be careful for nothing but in every thing by prayer and supplication with thanksgiving let your requests be made known" },
+    { id: 58, pack: "Eternal Promises (KJV)", reference: "Philippians 4:7", text: "And the peace of God which passeth all understanding shall keep your hearts and minds through Christ Jesus" },
+    { id: 59, pack: "Eternal Promises (KJV)", reference: "Hebrews 13:8", text: "Jesus Christ the same yesterday and to day and for ever" },
+    { id: 60, pack: "Eternal Promises (KJV)", reference: "Revelation 21:4", text: "And God shall wipe away all tears from their eyes and there shall be no more death neither sorrow nor crying" }
 ];
 
 type WordObj = { id: string; word: string };
@@ -235,7 +247,7 @@ export default function VerseScrambleGame() {
                 <div className="text-center mb-5">
                     <div className="flex items-center justify-center gap-2 mb-2">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200">
-                            <Sparkles className="w-3.5 h-3.5 text-amber-600" /> {currentVerse.pack} • {levelIndex + 1}/50
+                            <Sparkles className="w-3.5 h-3.5 text-amber-600" /> {currentVerse.pack} • {levelIndex + 1}/{MASSIVE_VERSES.length}
                         </span>
 
                         {/* Combo Multiplier Badge */}
